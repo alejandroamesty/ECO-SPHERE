@@ -1,0 +1,7 @@
+{
+  "name": "EcoSphere",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
