@@ -1,5 +1,5 @@
 {
-  "name": "EcoSphere",
+  "name": "ecosphere",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -9,7 +9,13 @@
     "preview": "vite preview",
     "test:e2e": "cypress run",
     "test:unit": "vitest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "prettier --write ."
+    ]
   },
   "dependencies": {
     "@capacitor/android": "6.1.2",
@@ -33,7 +39,10 @@
     "cypress": "^13.5.0",
     "eslint": "^8.35.0",
     "eslint-plugin-vue": "^9.9.0",
+    "husky": "^9.1.6",
     "jsdom": "^22.1.0",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
     "terser": "^5.4.0",
     "typescript": "^5.1.6",
     "vite": "~5.2.0",
