@@ -1,0 +1,24 @@
+@font-face {
+	font-family: "BR Omny Medium";
+	src: url("../assets/fonts/BROmny-Medium.otf") format("opentype");
+}
+
+@font-face {
+	font-family: "BR Omny Regular";
+	src: url("../assets/fonts/BROmny-Regular.otf") format("opentype");
+}
+
+@font-face {
+	font-family: "BR Omny SemiBold";
+	src: url("../assets/fonts/BROmny-SemiBold.otf") format("opentype");
+}
+
+@font-face {
+	font-family: "Stolzl Medium";
+	src: url("../assets/fonts/stolzl_medium.otf") format("opentype");
+}
+
+@font-face {
+	font-family: "Stolzl Regular";
+	src: url("../assets/fonts/stolzl_regular.otf") format("opentype");
+}
