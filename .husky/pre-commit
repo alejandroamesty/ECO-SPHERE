@@ -1,0 +1,10 @@
+#!/bin/sh
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$branch" = "master" ]; then
+    echo "No puedes hacer commits directamente a la rama principal (master)."
+    exit 1
+fi
+
+npx lint-staged
