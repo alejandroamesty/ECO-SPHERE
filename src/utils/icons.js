@@ -5,6 +5,8 @@ export const MAP = `${VITE_SVG_ROUTE}menu/map.svg`;
 export const ACTIVITIES = `${VITE_SVG_ROUTE}menu/activities.svg`;
 export const CHATS = `${VITE_SVG_ROUTE}menu/chats.svg`;
 export const PROFILE = `${VITE_SVG_ROUTE}menu/profile.svg`;
+export const SEARCH = `${VITE_SVG_ROUTE}search.svg`;
+export const NOTIFICATIONS = `${VITE_SVG_ROUTE}notifications.svg`;
 
 export const iconsMap = {
 	HOME,
@@ -12,4 +14,6 @@ export const iconsMap = {
 	ACTIVITIES,
 	CHATS,
 	PROFILE,
+	SEARCH,
+	NOTIFICATIONS,
 };
