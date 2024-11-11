@@ -14,8 +14,8 @@
 
 <script setup>
 import { IonPage, IonTabs, IonRouterOutlet } from '@ionic/vue';
-import menuItems from '../utils/menu.json';
-import { iconsMap } from '../utils/icons.js';
+import menuItems from '../../utils/menu.json';
+import { iconsMap } from '../../utils/icons.js';
 
 /**
  * Agrega los iconos a las opciones del menú.
@@ -26,4 +26,4 @@ const menuWithIcons = menuItems.map(item => ({
 }));
 </script>
 
-<style src="../assets/menu.css"></style>
+<style src="../../assets/menu.css"></style>
