@@ -1,0 +1,27 @@
+[
+	{
+		"label": "Home",
+		"icon": "HOME",
+		"to": "/tabs/tab1"
+	},
+	{
+		"label": "Map",
+		"icon": "MAP",
+		"to": "/tabs/tab2"
+	},
+	{
+		"label": "Activities",
+		"icon": "ACTIVITIES",
+		"to": "/tabs/tab3"
+	},
+	{
+		"label": "Chats",
+		"icon": "CHATS",
+		"to": "/tabs/tab4"
+	},
+	{
+		"label": "Profile",
+		"icon": "PROFILE",
+		"to": "/tabs/tab5"
+	}
+]
