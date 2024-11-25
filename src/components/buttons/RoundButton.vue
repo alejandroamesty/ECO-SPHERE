@@ -39,8 +39,12 @@ const iconStyle = computed(() => ({
     filter: invert.value ? 'invert(1) brightness(255%) contrast(100%) grayscale(0)' : 'none'
 }));
 
-const handleClick = () => {
-    onClick.value();
+/**
+ * Gestiona el evento click del botón.
+ * @param event - Evento click.
+ */
+const handleClick = (event) => {
+    onClick.value(event);
 };
 </script>
 
