@@ -19,6 +19,10 @@ const routes = [
 				component: () => import("@/views/home/Feed.vue"),
 			},
 			{
+				path: "tab1/search",
+				component: () => import("@/views/home/Search.vue"),
+			},
+			{
 				path: "tab2",
 				component: () => import("@/views/home/Tab2Page.vue"),
 			},
