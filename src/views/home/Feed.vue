@@ -6,8 +6,8 @@
           <div class="header-layout">
             <span class="title-1">eco<span class="title-2">sphere</span></span>
             <div class="buttons">
-              <RoundButton :icon="SEARCH" size="40" @click="handleClick" />
-              <RoundButton :icon="NOTIFICATIONS" size="40" @click="handleClick" />
+              <RoundButton :icon="SEARCH" :size=40 :onClick="handleSearch" />
+              <RoundButton :icon="NOTIFICATIONS" :size=40 :onClick="handleNotif" />
             </div>
           </div>
           <ToggleButton v-model="toggleValue" leftLabel="Descubre" rightLabel="Siguiendo" />
@@ -20,14 +20,30 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { IonPage, IonContent } from '@ionic/vue';
 import { SEARCH, NOTIFICATIONS } from '../../utils/icons';
 import { RoundButton, ToggleButton } from "../../components/index"
 
 const toggleValue = ref(false);
+const router = useRouter();
+
+/**
+ * Navega a la vista de búsqueda.
+ */
+const handleSearch = () => {
+  router.push('/tabs/tab1/search');
+};
+
+/**
+ * Navega a la vista de notificaciones.
+ */
+const handleNotif = () => {
+  router.push('/tabs/tab1/notifications');
+};
 </script>
 
-<style>
+<style scoped>
 ion-header {
   background-color: #FFFFFF !important;
 }
@@ -38,7 +54,6 @@ ion-toolbar {
 }
 
 ion-content {
-  /* --background: #40A578; */
   border-radius: 0px 0px 0px 50px;
 }
 
