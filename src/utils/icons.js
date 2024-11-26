@@ -10,6 +10,7 @@ export const NOTIFICATIONS = `${VITE_SVG_ROUTE}notifications.svg`;
 export const ARROW_LEFT = `${VITE_SVG_ROUTE}arrow-left.svg`;
 export const COMMUNITY = `${VITE_SVG_ROUTE}community.svg`;
 export const FILTER = `${VITE_SVG_ROUTE}filter.svg`;
+export const HAMBURGER = `${VITE_SVG_ROUTE}hamburger.svg`;
 
 export const iconsMap = {
 	HOME,
@@ -22,4 +23,5 @@ export const iconsMap = {
 	ARROW_LEFT,
 	COMMUNITY,
 	FILTER,
+	HAMBURGER,
 };
