@@ -1,3 +1,5 @@
+/* Fuentes de texto de la aplicación */
+
 @font-face {
 	font-family: "BR Omny Medium";
 	src: url("../assets/fonts/BROmny-Medium.otf") format("opentype");
@@ -21,4 +23,35 @@
 @font-face {
 	font-family: "Stolzl Regular";
 	src: url("../assets/fonts/stolzl_regular.otf") format("opentype");
+}
+
+/* Estilos globales */
+
+.header-layout {
+	display: flex;
+	width: 100%;
+	height: fit-content;
+	justify-content: space-between;
+	position: relative;
+	flex-direction: row;
+	flex-shrink: 0;
+}
+
+.title-1 {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	left: 25px;
+	color: #fff;
+	font-family: "BR Omny SemiBold";
+	font-size: 20px;
+}
+
+.buttons {
+	display: flex;
+	flex-direction: row;
+	position: relative;
+	right: 25px;
+	gap: 8px;
 }

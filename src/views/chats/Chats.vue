@@ -1,20 +1,25 @@
 <template>
     <ion-page>
-        <ion-header>
-            <ion-toolbar>
-                <ion-title>Chats</ion-title>
-            </ion-toolbar>
-        </ion-header>
-        <ion-content :fullscreen="true">
-            <ion-header collapse="condense">
-                <ion-toolbar>
-                    <ion-title size="large">Chats</ion-title>
-                </ion-toolbar>
-            </ion-header>
-        </ion-content>
+        <Header>
+            <template #header-layout>
+                <div class="header-layout">
+                    <span class="title-1">Chats</span>
+                    <div class="buttons">
+                        <RoundButton :icon="SEARCH" :size=40 />
+                    </div>
+                </div>
+                <ToggleButton v-model="toggleValue" leftLabel="Amigos" rightLabel="Comunidades" />
+            </template>
+        </Header>
+        <ion-content></ion-content>
     </ion-page>
 </template>
 
 <script setup>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import { ref } from 'vue';
+import { IonPage, IonContent } from '@ionic/vue';
+import { SEARCH } from '../../utils/icons';
+import { Header, RoundButton, ToggleButton } from "../../components/index"
+
+const toggleValue = ref(false);
 </script>
