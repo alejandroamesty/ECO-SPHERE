@@ -16,27 +16,27 @@ const routes = [
 			},
 			{
 				path: "tab1",
-				component: () => import("@/views/home/Feed.vue"),
+				component: () => import("@/views/feed/Feed.vue"),
 			},
 			{
 				path: "tab1/search",
-				component: () => import("@/views/home/Search.vue"),
+				component: () => import("@/views/feed/Search.vue"),
 			},
 			{
 				path: "tab2",
-				component: () => import("@/views/home/Tab2Page.vue"),
+				component: () => import("@/views/maps/Maps.vue"),
 			},
 			{
 				path: "tab3",
-				component: () => import("@/views/home/Tab3Page.vue"),
+				component: () => import("@/views/activities/Activities.vue"),
 			},
 			{
 				path: "tab4",
-				component: () => import("@/views/home/Tab4Page.vue"),
+				component: () => import("@/views/chats/Chats.vue"),
 			},
 			{
 				path: "tab5",
-				component: () => import("@/views/home/Tab5Page.vue"),
+				component: () => import("@/views/profile/Profile.vue"),
 			},
 		],
 	},
