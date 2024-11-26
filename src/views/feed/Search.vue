@@ -64,7 +64,7 @@ const handleFilterClick = (event) => {
  * Navega a la vista anterior.
  */
 const handleBackClick = () => {
-    router.push('/tabs/tab1');
+    router.push('/tabs/feed');
 };
 
 /**

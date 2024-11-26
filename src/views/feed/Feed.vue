@@ -32,14 +32,14 @@ const router = useRouter();
  * Navega a la vista de búsqueda.
  */
 const handleSearch = () => {
-  router.push('/tabs/tab1/search');
+  router.push('/tabs/feed/search');
 };
 
 /**
  * Navega a la vista de notificaciones.
  */
 const handleNotif = () => {
-  router.push('/tabs/tab1/notifications');
+  router.push('/tabs/feed/notifications');
 };
 </script>
 

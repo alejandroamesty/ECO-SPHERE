@@ -4,7 +4,7 @@ import { NavBar } from "../components/index";
 const routes = [
 	{
 		path: "/",
-		redirect: "/tabs/tab1",
+		redirect: "/tabs/feed",
 	},
 	{
 		path: "/tabs/",
@@ -12,30 +12,30 @@ const routes = [
 		children: [
 			{
 				path: "",
-				redirect: "/tabs/tab1",
+				redirect: "/tabs/feed",
 			},
 			{
-				path: "tab1",
+				path: "feed",
 				component: () => import("@/views/feed/Feed.vue"),
 			},
 			{
-				path: "tab1/search",
+				path: "feed/search",
 				component: () => import("@/views/feed/Search.vue"),
 			},
 			{
-				path: "tab2",
+				path: "maps",
 				component: () => import("@/views/maps/Maps.vue"),
 			},
 			{
-				path: "tab3",
+				path: "activities",
 				component: () => import("@/views/activities/Activities.vue"),
 			},
 			{
-				path: "tab4",
+				path: "chats",
 				component: () => import("@/views/chats/Chats.vue"),
 			},
 			{
-				path: "tab5",
+				path: "profile",
 				component: () => import("@/views/profile/Profile.vue"),
 			},
 		],
