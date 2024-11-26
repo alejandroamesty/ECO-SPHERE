@@ -21,7 +21,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { IonPage, IonContent } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonContent } from '@ionic/vue';
 import { SEARCH, NOTIFICATIONS } from '../../utils/icons';
 import { RoundButton, ToggleButton } from "../../components/index"
 
