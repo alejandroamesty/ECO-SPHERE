@@ -11,6 +11,11 @@ export const ARROW_LEFT = `${VITE_SVG_ROUTE}arrow-left.svg`;
 export const COMMUNITY = `${VITE_SVG_ROUTE}community.svg`;
 export const FILTER = `${VITE_SVG_ROUTE}filter.svg`;
 export const HAMBURGER = `${VITE_SVG_ROUTE}hamburger.svg`;
+export const LEAF = `${VITE_SVG_ROUTE}leaf.svg`;
+export const CALCULATOR = `${VITE_SVG_ROUTE}calculator.svg`;
+export const SETTINGS = `${VITE_SVG_ROUTE}settings.svg`;
+export const LOGOUT = `${VITE_SVG_ROUTE}logout.svg`;
+export const TRASH = `${VITE_SVG_ROUTE}trash.svg`;
 
 export const iconsMap = {
 	HOME,
@@ -24,4 +29,9 @@ export const iconsMap = {
 	COMMUNITY,
 	FILTER,
 	HAMBURGER,
+	LEAF,
+	CALCULATOR,
+	SETTINGS,
+	LOGOUT,
+	TRASH,
 };
