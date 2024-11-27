@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
-import NavBar from "../components/NavBar.vue";
+import { NavBar } from "../components/index";
 
 const routes = [
 	{
 		path: "/",
-		redirect: "/tabs/tab1",
+		redirect: "/tabs/feed",
 	},
 	{
 		path: "/tabs/",
@@ -12,27 +12,31 @@ const routes = [
 		children: [
 			{
 				path: "",
-				redirect: "/tabs/tab1",
+				redirect: "/tabs/feed",
 			},
 			{
-				path: "tab1",
-				component: () => import("@/views/home/Tab1Page.vue"),
+				path: "feed",
+				component: () => import("@/views/feed/Feed.vue"),
 			},
 			{
-				path: "tab2",
-				component: () => import("@/views/home/Tab2Page.vue"),
+				path: "feed/search",
+				component: () => import("@/views/feed/Search.vue"),
 			},
 			{
-				path: "tab3",
-				component: () => import("@/views/home/Tab3Page.vue"),
+				path: "maps",
+				component: () => import("@/views/maps/Maps.vue"),
 			},
 			{
-				path: "tab4",
-				component: () => import("@/views/home/Tab4Page.vue"),
+				path: "activities",
+				component: () => import("@/views/activities/Activities.vue"),
 			},
 			{
-				path: "tab5",
-				component: () => import("@/views/home/Tab5Page.vue"),
+				path: "chats",
+				component: () => import("@/views/chats/Chats.vue"),
+			},
+			{
+				path: "profile",
+				component: () => import("@/views/profile/Profile.vue"),
 			},
 		],
 	},

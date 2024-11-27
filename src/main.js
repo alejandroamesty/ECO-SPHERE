@@ -34,6 +34,12 @@ import "@ionic/vue/css/palettes/dark.system.css";
 /* Theme variables */
 import "./theme/variables.css";
 
+/* Leaflet CSS */
+import "../node_modules/leaflet/dist/leaflet.css";
+
+/* Global styles */
+import "./theme/global.css";
+
 const app = createApp(App).use(IonicVue).use(router);
 
 router.isReady().then(() => {

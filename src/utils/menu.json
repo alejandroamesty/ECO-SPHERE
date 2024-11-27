@@ -2,26 +2,26 @@
 	{
 		"label": "Home",
 		"icon": "HOME",
-		"to": "/tabs/tab1"
+		"to": "/tabs/feed"
 	},
 	{
 		"label": "Map",
 		"icon": "MAP",
-		"to": "/tabs/tab2"
+		"to": "/tabs/maps"
 	},
 	{
 		"label": "Activities",
 		"icon": "ACTIVITIES",
-		"to": "/tabs/tab3"
+		"to": "/tabs/activities"
 	},
 	{
 		"label": "Chats",
 		"icon": "CHATS",
-		"to": "/tabs/tab4"
+		"to": "/tabs/chats"
 	},
 	{
 		"label": "Profile",
 		"icon": "PROFILE",
-		"to": "/tabs/tab5"
+		"to": "/tabs/profile"
 	}
 ]
