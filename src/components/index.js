@@ -6,3 +6,4 @@ export { default as SearchInput } from "./input/SearchInput.vue";
 export { default as Breadcrumb } from "./buttons/Breadcrumb.vue";
 export { default as LeafletMap } from "./others/LeafletMap.vue";
 export { default as Header } from "./others/Header.vue";
+export { default as MenuContainer } from "./menu/MenuContainer.vue";
