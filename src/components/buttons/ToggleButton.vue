@@ -1,17 +1,17 @@
 <template>
-    <div class="toggle-container" @click="toggle">
+    <div class="toggle-container" @touchstart="startTouch" @touchmove="moveTouch" @touchend="endTouch">
         <div class="selected-indicator" :class="{ right: isSelected }"></div>
-        <div class="option">
+        <div class="option" @click="toggle(false)">
             <span class="left-text">{{ leftLabel }}</span>
         </div>
-        <div class="option">
+        <div class="option" @click="toggle(true)">
             <span class="right-text">{{ rightLabel }}</span>
         </div>
     </div>
 </template>
 
 <script setup>
-import { computed, toRefs } from 'vue';
+import { computed, ref, toRefs } from 'vue';
 
 const props = defineProps({
     modelValue: Boolean,
@@ -27,14 +27,55 @@ const props = defineProps({
 
 const { modelValue, leftLabel, rightLabel } = toRefs(props);
 
+const touchStartX = ref(0);
+const isTouching = ref(false);
+
 const emit = defineEmits(['update:modelValue']);
+
 const isSelected = computed({
     get: () => modelValue.value,
     set: (val) => emit('update:modelValue', val)
 });
 
-const toggle = () => {
-    isSelected.value = !isSelected.value;
+/**
+ * Cambia la opción seleccionada.
+ * @param val - Valor asociado a la opción.
+ */
+const toggle = (val) => {
+    if (val !== isSelected.value) {
+        isSelected.value = val;
+    }
+};
+
+/**
+ * Inicia la detección de un toque.
+ */
+const startTouch = (event) => {
+    isTouching.value = true;
+    touchStartX.value = event.touches[0].clientX;
+};
+
+/**
+ * Mueve el toque en la pantalla.
+ */
+const moveTouch = (event) => {
+    if (!isTouching.value) return;
+
+    const touchEndX = event.touches[0].clientX;
+    const movement = touchEndX - touchStartX.value;
+
+    if (Math.abs(movement) > 50) {
+        isSelected.value = movement > 0;
+        isTouching.value = false;
+    }
+};
+
+/**
+ * Finaliza la detección de un toque.
+ */
+const endTouch = () => {
+    if (!isTouching.value) return;
+    isTouching.value = false;
 };
 </script>
 
@@ -73,8 +114,7 @@ const toggle = () => {
     height: 30px;
     border-radius: 10px;
     transition: left 0.3s ease;
-    background: rgba(33, 83, 61, 0.5);
-    backdrop-filter: blur(2px);
+    background: #2A6D4F;
     box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
