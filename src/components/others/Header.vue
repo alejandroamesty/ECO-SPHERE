@@ -5,8 +5,8 @@
                 <slot name="header-layout"></slot>
             </div>
         </ion-toolbar>
+        <div class="leaf-end"></div>
     </ion-header>
-    <div class="leaf-end"></div>
 </template>
 
 <script setup>
@@ -26,7 +26,6 @@ ion-toolbar {
 
 .leaf-header {
     display: flex;
-    position: relative;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -39,8 +38,8 @@ ion-toolbar {
 }
 
 .leaf-end {
-    position: relative;
-    margin-left: auto;
+    position: absolute;
+    right: 0;
     width: 50px;
     height: 50px;
     border-radius: 0 50px 0 0;
