@@ -57,7 +57,8 @@ const handleClick = (event) => {
     border: none;
     outline: none;
     background-color: #348662;
-    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: -5px 5px 10px 0px rgba(47, 121, 88, 0.20) inset, 5px -5px 10px 0px rgba(47, 121, 88, 0.20) inset, -5px -5px 10px 0px rgba(57, 147, 108, 0.90) inset, 5px 5px 13px 0px rgba(47, 121, 88, 0.90) inset;
+    filter: drop-shadow(-1px -1px 2px rgba(47, 121, 88, 0.50)) drop-shadow(1px 1px 2px rgba(57, 147, 108, 0.30));
     cursor: pointer;
 }
 </style>
