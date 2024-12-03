@@ -5,7 +5,7 @@
         <div class="header-layout">
           <span class="title-1">Reportes</span>
           <div class="buttons">
-            <RoundButton :icon="SEARCH" :size=40 :onClick="handleSearch" />
+            <RoundButton :icon="ADD" :size="40" :onClick="handleADD" />
           </div>
         </div>
         <ToggleButton v-model="toggleValue" leftLabel="Mapa" rightLabel="Lista" />
@@ -13,7 +13,8 @@
     </Header>
     <ion-content :fullscreen="true">
       <div class="leaf-map">
-        <LeafletMap :lat="lat" :lng="lng" :zoom="zoom" :shouldInitialize="viewEntered" />
+        <LeafletMap :lat="lat" :lng="lng" :zoom="zoom" :shouldInitialize="viewEntered" :locations="locations"
+          @onPinClick="handlePinClick" />
       </div>
     </ion-content>
   </ion-page>
@@ -24,7 +25,7 @@ import { ref } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
 import { onIonViewDidEnter, onIonViewWillLeave } from '@ionic/vue';
 import { Geolocation } from '@capacitor/geolocation';
-import { SEARCH } from '../../utils/icons';
+import { ADD } from '../../utils/icons';
 import { Header, RoundButton, ToggleButton, LeafletMap } from "../../components/index";
 
 const lat = ref(51.505);
@@ -33,13 +34,19 @@ const zoom = ref(13);
 const toggleValue = ref(false);
 const viewEntered = ref(false);
 
+const locations = [
+  { value: 1, lat: 51.505, lng: -0.09, popupText: 'Ubicación 1' },
+  { value: 2, lat: 51.515, lng: -0.1, popupText: 'Ubicación 2' },
+  { value: 3, lat: 51.525, lng: -0.11, popupText: 'Ubicación 3' }
+];
+
 /**
  * Obtiene la posición actual del usuario y la muestra en el mapa.
  */
 const printCurrentPosition = async () => {
   const coordinates = await Geolocation.getCurrentPosition();
-  lat.value = coordinates.coords.latitude;
-  lng.value = coordinates.coords.longitude;
+  // lat.value = coordinates.coords.latitude;
+  // lng.value = coordinates.coords.longitude;
 };
 
 /**
@@ -56,6 +63,13 @@ onIonViewDidEnter(async () => {
 onIonViewWillLeave(() => {
   viewEntered.value = false;
 });
+
+/**
+ * Maneja el evento cuando se hace clic en un pin (marcador).
+ */
+const handlePinClick = (pinValue) => {
+  console.log('Pin seleccionado con valor:', pinValue);
+};
 </script>
 
 <style scoped>
@@ -63,6 +77,6 @@ onIonViewWillLeave(() => {
   position: absolute;
   top: 0;
   width: 100vw;
-  height: 100vh;
+  height: 110vh;
 }
 </style>
