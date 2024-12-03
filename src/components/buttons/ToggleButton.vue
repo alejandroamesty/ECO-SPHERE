@@ -88,8 +88,8 @@ const endTouch = () => {
     width: 208px;
     height: 45px;
     border-radius: 15px;
-    background: rgba(39, 103, 75, 0.5);
-    backdrop-filter: blur(26.2px);
+    box-shadow: 1px 1px 2px 0px rgba(82, 211, 154, 0.30) inset, -1px -1px 2px 0px rgba(46, 119, 86, 0.50) inset;
+    filter: drop-shadow(5px 5px 13px rgba(46, 119, 86, 0.90)) drop-shadow(-5px -5px 10px rgba(82, 211, 154, 0.90)) drop-shadow(5px -5px 10px rgba(46, 119, 86, 0.20)) drop-shadow(-5px 5px 10px rgba(46, 119, 86, 0.20));
     cursor: pointer;
 }
 
@@ -114,8 +114,8 @@ const endTouch = () => {
     height: 30px;
     border-radius: 10px;
     transition: left 0.3s ease;
-    background: #2A6D4F;
-    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    background: #348662;
+    box-shadow: 1px 1px 2px 0px rgba(57, 147, 108, 0.30), -1px -1px 2px 0px rgba(47, 121, 88, 0.50), -5px 5px 10px 0px rgba(47, 121, 88, 0.20) inset, 5px -5px 10px 0px rgba(47, 121, 88, 0.20) inset, -5px -5px 10px 0px rgba(57, 147, 108, 0.90) inset, 5px 5px 13px 0px rgba(47, 121, 88, 0.90) inset;
 }
 
 .selected-indicator.right {
