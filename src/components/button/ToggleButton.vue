@@ -88,6 +88,7 @@ const endTouch = () => {
     width: 208px;
     height: 45px;
     border-radius: 15px;
+    background: linear-gradient(135deg, #43AD7E 100%, #3D9D72 0%);
     box-shadow: 1px 1px 2px 0px rgba(82, 211, 154, 0.30) inset, -1px -1px 2px 0px rgba(46, 119, 86, 0.50) inset;
     filter: drop-shadow(5px 5px 13px rgba(46, 119, 86, 0.90)) drop-shadow(-5px -5px 10px rgba(82, 211, 154, 0.90)) drop-shadow(5px -5px 10px rgba(46, 119, 86, 0.20)) drop-shadow(-5px 5px 10px rgba(46, 119, 86, 0.20));
     cursor: pointer;
