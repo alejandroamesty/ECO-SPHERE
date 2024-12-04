@@ -12,13 +12,12 @@
                 </div>
             </ion-toolbar>
         </ion-header>
-        <ion-content :fullscreen="true" scroll-y="false">
-            <div class="body" :class="{ active: isActive }">
-                <!-- <SearchInput placeholder="Buscar" /> -->
-            </div>
-        </ion-content>
+        <ion-content :fullscreen="true" scroll-y="false"></ion-content>
         <ContextMenu ref="filterMenu" :options="menuOptions" />
-        <div class="content"></div>
+        <div class="content">
+            <SearchInput placeholder="Buscar" />
+            <ProfileList :profiles="profiles" @update:profiles="updateProfiles" />
+        </div>
     </ion-page>
 </template>
 
@@ -26,9 +25,9 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { IonPage, IonContent, IonHeader, IonToolbar } from '@ionic/vue';
-import { onIonViewWillEnter, onIonViewWillLeave } from '@ionic/vue';
+import { onIonViewWillLeave } from '@ionic/vue';
 import { FILTER, PROFILE, COMMUNITY } from '../../utils/icons';
-import { RoundButton, ContextMenu, SearchInput, Breadcrumb } from '../../components/index';
+import { RoundButton, ContextMenu, SearchInput, Breadcrumb, ProfileList } from '../../components/index';
 
 const router = useRouter();
 
@@ -37,7 +36,21 @@ const menuOptions = [
     { label: 'Comunidades', icon: COMMUNITY },
 ];
 
-const isActive = ref(false);
+const profiles = [
+    {
+        name: 'Juan Pérez',
+        username: '@juanperez',
+        icon: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+        checked: false,
+    },
+    {
+        name: 'María López',
+        username: '@marialopez',
+        icon: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+        checked: true,
+    },
+]
+
 const filterMenu = ref(null);
 
 /**
@@ -68,14 +81,11 @@ const handleBackClick = () => {
 };
 
 /**
- * Activa la animación de entrada.
+ * Actualiza la lista de perfiles.
  */
-onIonViewWillEnter(() => {
-    isActive.value = false;
-    setTimeout(() => {
-        isActive.value = true;
-    }, 100);
-});
+const updateProfiles = (updatedProfiles) => {
+    profiles.value = updatedProfiles;
+};
 
 /**
  * Oculta el menú de filtro al salir de la vista.
@@ -96,21 +106,8 @@ ion-toolbar {
 }
 
 ion-content {
+    --background: #40A578;
     border-radius: 50px 50px 0px 0px;
-}
-
-.body {
-    display: flex;
-    width: 100%;
-    height: 0;
-    background: #40A578;
-    border-radius: 0px 0px 0px 50px;
-    transition: height 0.6s ease-in-out, border-radius 0.6s ease-in-out;
-}
-
-.body.active {
-    height: 100%;
-    border-radius: 0px;
 }
 
 .leaf-header {
@@ -164,13 +161,15 @@ ion-content {
 }
 
 .content {
-    position: absolute;
     display: flex;
     flex-direction: column;
     background-color: #FFFFFF;
     width: 100%;
     height: 100%;
+    gap: 30px;
+    padding: 30px;
     bottom: 0;
     border-radius: 50px 50px 0px 0px;
+    z-index: 5;
 }
 </style>
