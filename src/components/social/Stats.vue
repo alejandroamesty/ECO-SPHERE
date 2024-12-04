@@ -10,7 +10,7 @@
         <div class="stats">
             <div class="section">
                 <div class="co2-reduced">{{ reduced }}</div>
-                <div class="co2-reduced-label">REDUCIDO</div>
+                <div class="co2-reduced-label">CO2 REDUCIDO</div>
             </div>
             <div class="separator"></div>
             <div class="section">
@@ -148,7 +148,6 @@ const { icon, name, reduced, followers, following } = toRefs(props);
     justify-content: center;
     align-items: center;
     text-align: center;
-    width: 78px;
     height: 17px;
     font-family: 'Stolzl Regular';
     font-size: 12px;
