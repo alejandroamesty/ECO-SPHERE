@@ -23,14 +23,21 @@ const props = defineProps({
     invert: {
         type: Boolean,
         default: false
+    },
+    gray: {
+        type: Boolean,
+        default: false
     }
 });
 
-const { icon, size, onClick, invert } = toRefs(props);
+const { icon, size, onClick, invert, gray } = toRefs(props);
 
 const buttonStyle = computed(() => ({
     width: `${size.value}px`,
     height: `${size.value}px`,
+    backgroundColor: gray.value ? 'var(--gray-background-color)' : 'var(--green-background-color)',
+    boxShadow: gray.value ? 'var(--gray-box-shadow-color)' : 'var(--green-box-shadow-color)',
+    filter: gray.value ? 'var(--gray-filter)' : 'var(--green-filter)'
 }));
 
 const iconStyle = computed(() => ({
@@ -48,7 +55,16 @@ const handleClick = (event) => {
 };
 </script>
 
-<style scoped>
+<style>
+:root {
+    --green-background-color: #348662;
+    --green-box-shadow-color: -5px 5px 10px 0px rgba(47, 121, 88, 0.20) inset, 5px -5px 10px 0px rgba(47, 121, 88, 0.20) inset, -5px -5px 10px 0px rgba(57, 147, 108, 0.90) inset, 5px 5px 13px 0px rgba(47, 121, 88, 0.90) inset;
+    --green-filter: drop-shadow(-1px -1px 2px #2f795880) drop-shadow(1px 1px 2px rgba(57, 147, 108, 0.30));
+    --gray-background-color: #949799;
+    --gray-box-shadow-color: -5px 5px 10px 0px rgba(133, 136, 138, 0.20) inset, 5px -5px 10px 0px rgba(133, 136, 138, 0.20) inset, -5px -5px 10px 0px rgba(163, 166, 168, 0.90) inset, 5px 5px 13px 0px rgba(133, 136, 138, 0.90) inset;
+    --gray-filter: drop-shadow(-1px -1px 2px rgba(133, 136, 138, 0.50)) drop-shadow(1px 1px 2px rgba(163, 166, 168, 0.30));
+}
+
 .round-button {
     display: flex;
     align-items: center;
@@ -56,9 +72,6 @@ const handleClick = (event) => {
     border-radius: 50%;
     border: none;
     outline: none;
-    background-color: #348662;
-    box-shadow: -5px 5px 10px 0px rgba(47, 121, 88, 0.20) inset, 5px -5px 10px 0px rgba(47, 121, 88, 0.20) inset, -5px -5px 10px 0px rgba(57, 147, 108, 0.90) inset, 5px 5px 13px 0px rgba(47, 121, 88, 0.90) inset;
-    filter: drop-shadow(-1px -1px 2px rgba(47, 121, 88, 0.50)) drop-shadow(1px 1px 2px rgba(57, 147, 108, 0.30));
     cursor: pointer;
 }
 </style>

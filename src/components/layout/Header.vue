@@ -29,7 +29,7 @@ ion-toolbar {
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 129px;
+    min-height: 129px;
     left: 0px;
     flex-direction: column;
     gap: 20px;

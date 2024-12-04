@@ -1,7 +1,7 @@
 <template>
     <div class="search-input-container">
         <input type="text" v-bind="$attrs" class="search-input" :placeholder="placeholder" @input="onInputChange" />
-        <RoundButton :icon="SEARCH" :size=40 :onClick="handleClick" />
+        <RoundButton :icon="SEARCH" :size=40 :gray="true" :onClick="handleClick" />
     </div>
 </template>
 
@@ -37,14 +37,17 @@ const handleClick = () => {
 
 <style scoped>
 .search-input-container {
-    width: 340px;
+    width: 100%;
     height: 57px;
-    background: #d9d9d9;
     border-radius: 30px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding-left: 27px;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 8px;
+    z-index: 9999;
+    background: #EBEBEB;
+    box-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3), -1px -1px 2px rgba(212, 212, 212, 0.5), inset -5px 5px 10px rgba(212, 212, 212, 0.2), inset 5px -5px 10px rgba(212, 212, 212, 0.2), inset -5px -5px 10px rgba(255, 255, 255, 0.9), inset 5px 5px 13px rgba(212, 212, 212, 0.9);
 }
 
 .search-input {

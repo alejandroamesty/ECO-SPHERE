@@ -68,11 +68,10 @@ const handleTouchEnd = (event) => {
 
 <style scoped>
 .slider-container {
-    overflow: hidden;
     position: relative;
     width: 100%;
     height: calc(100% - 100px);
-    top: 20px;
+    overflow: hidden; 
 }
 
 .slider {
@@ -90,7 +89,6 @@ const handleTouchEnd = (event) => {
 .second {
     display: flex;
     justify-content: center;
-    padding-top: 10px;
 }
 
 .second {
