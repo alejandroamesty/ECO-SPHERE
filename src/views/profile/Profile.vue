@@ -18,10 +18,16 @@
                             <div class="header-layout">
                                 <span class="title-1">Perfil</span>
                                 <div class="buttons">
+                                    <RoundButton :icon="ADD" :size="40" />
                                     <RoundButton :icon="HAMBURGER" :size="40" @click="toggleMenu" />
                                 </div>
                             </div>
-                            <ToggleButton v-model="toggleValue" leftLabel="MySphere" rightLabel="Publicaciones" />
+                            <div class="bottom-layout">
+                                <Stats icon="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"
+                                    name="Alejandro Ávila" username="@alejandroamesty" followers="100" following="200"
+                                    reduced="4.8 tons" />
+                                <ToggleButton v-model="toggleValue" leftLabel="MySphere" rightLabel="Publicaciones" />
+                            </div>
                         </template>
                     </Header>
                     <ion-content></ion-content>
@@ -34,8 +40,8 @@
 <script setup>
 import { ref } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
-import { HAMBURGER } from '../../utils/icons';
-import { Header, RoundButton, ToggleButton, MenuContainer } from '../../components/index';
+import { ADD, HAMBURGER } from '../../utils/icons';
+import { Header, RoundButton, ToggleButton, MenuContainer, Stats } from '../../components/index';
 
 const toggleValue = ref(false);
 const menu = ref();
@@ -82,5 +88,19 @@ const toggleMenu = (event) => {
 .user-status {
     font-size: 12px;
     font-family: 'Stolzl Regular';
+}
+
+.header-layout {
+    margin-top: 12px;
+}
+
+.bottom-layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0 25px;
+    margin-bottom: 12px;
 }
 </style>
