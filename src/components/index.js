@@ -27,6 +27,12 @@ export { default as Breadcrumb } from "./navigation/Breadcrumb.vue";
 
 export { default as Post } from "./social/Post.vue";
 export { default as Profile } from "./social/Profile.vue";
+export { default as Stats } from "./social/Stats.vue";
+
+/* Lists */
+
+// export { default as PostList } from "./list/PostList.vue";
+export { default as ProfileList } from "./list/ProfileList.vue";
 
 /* General */
 
