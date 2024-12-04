@@ -5,7 +5,7 @@
         <div class="header-layout">
           <span class="title-1">Reportes</span>
           <div class="buttons">
-            <RoundButton :icon="ADD" :size="40" :onClick="handleADD" />
+            <RoundButton :icon="ADD" :size="40" :onClick="handleClick" />
           </div>
         </div>
         <ToggleButton v-model="toggleValue" leftLabel="Mapa" rightLabel="Lista" />
@@ -17,6 +17,10 @@
           @onPinClick="handlePinClick" />
       </div>
     </ion-content>
+    <ReportCard ref="report" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec
+                    ultricies." latitude="19.432" longitude="99.13" date="12/12/2021"
+      icon="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png" name="Alejandro Ávila"
+      username="@alejandroamesty" />
   </ion-page>
 </template>
 
@@ -26,13 +30,14 @@ import { IonPage, IonContent } from '@ionic/vue';
 import { onIonViewDidEnter, onIonViewWillLeave } from '@ionic/vue';
 import { Geolocation } from '@capacitor/geolocation';
 import { ADD } from '../../utils/icons';
-import { Header, RoundButton, ToggleButton, LeafletMap } from "../../components/index";
+import { Header, RoundButton, ToggleButton, LeafletMap, ReportCard } from "../../components/index";
 
 const lat = ref(51.505);
 const lng = ref(-0.09);
 const zoom = ref(13);
 const toggleValue = ref(false);
 const viewEntered = ref(false);
+const report = ref();
 
 const locations = [
   { value: 1, lat: 51.505, lng: -0.09, popupText: 'Ubicación 1' },
@@ -68,7 +73,12 @@ onIonViewWillLeave(() => {
  * Maneja el evento cuando se hace clic en un pin (marcador).
  */
 const handlePinClick = (pinValue) => {
+  report.value.showReportCard();
   console.log('Pin seleccionado con valor:', pinValue);
+};
+
+const handleClick = (event) => {
+  event.stopPropagation();
 };
 </script>
 
