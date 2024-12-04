@@ -11,8 +11,8 @@
             <div class="content-text">{{ content }}</div>
         </div>
         <div class="interactions-container">
-            <Badge text="100K" :icon="SEARCH" />
-            <Badge text="100K" :icon="SEARCH" />
+            <Badge text="100K" :icon="LIKE" />
+            <Badge text="100K" :icon="COMMENT" />
         </div>
     </div>
 </template>
@@ -20,7 +20,7 @@
 <script setup>
 import { toRefs } from 'vue';
 import { Badge } from "../index";
-import { SEARCH } from '../../utils/icons';
+import { LIKE, COMMENT } from '../../utils/icons';
 
 const props = defineProps({
     content: {
@@ -52,12 +52,10 @@ const { content, icon, name, username } = toRefs(props);
     align-items: center;
     gap: 24px;
     padding: 24px;
-    width: 340px;
     height: fit-content;
     background: #F6F6F6;
     box-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3), -1px -1px 2px rgba(221, 221, 221, 0.5), inset -5px 5px 10px rgba(221, 221, 221, 0.2), inset 5px -5px 10px rgba(221, 221, 221, 0.2), inset -5px -5px 10px rgba(255, 255, 255, 0.9), inset 5px 5px 13px rgba(221, 221, 221, 0.9);
     border-radius: 30px;
-    /* z-index: 9999; */
 }
 
 .user-container {
@@ -89,7 +87,6 @@ const { content, icon, name, username } = toRefs(props);
     top: 0;
     font-family: 'Stolzl Medium';
     font-size: 14px;
-    line-height: 17px;
     color: #292B2E;
 }
 
@@ -100,7 +97,6 @@ const { content, icon, name, username } = toRefs(props);
     height: 16px;
     font-family: 'Stolzl Regular';
     font-size: 11px;
-    line-height: 13px;
     color: #949799;
 }
 
@@ -117,7 +113,6 @@ const { content, icon, name, username } = toRefs(props);
     height: fit-content;
     font-family: 'Stolzl Regular';
     font-size: 12px;
-    /* line-height: 17px; */
     color: #292B2E;
 }
 

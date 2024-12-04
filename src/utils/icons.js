@@ -17,6 +17,8 @@ export const SETTINGS = `${VITE_SVG_ROUTE}settings.svg`;
 export const LOGOUT = `${VITE_SVG_ROUTE}logout.svg`;
 export const TRASH = `${VITE_SVG_ROUTE}trash.svg`;
 export const ADD = `${VITE_SVG_ROUTE}add.svg`;
+export const LIKE = `${VITE_SVG_ROUTE}like.svg`;
+export const COMMENT = `${VITE_SVG_ROUTE}comment.svg`;
 
 export const iconsMap = {
 	HOME,
@@ -36,4 +38,6 @@ export const iconsMap = {
 	LOGOUT,
 	TRASH,
 	ADD,
+	LIKE,
+	COMMENT,
 };
