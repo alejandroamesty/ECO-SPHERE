@@ -3,10 +3,13 @@
 export { default as RoundButton } from "./button/RoundButton.vue";
 export { default as TextButton } from "./button/TextButton.vue";
 export { default as ToggleButton } from "./button/ToggleButton.vue";
+export { default as BigButton } from "./button/BigButton.vue";
+export { default as CheckButton } from "./button/CheckButton.vue";
 
 /* Inputs */
 
 export { default as SearchInput } from "./input/SearchInput.vue";
+export { default as Counter } from "./input/Counter.vue";
 
 /* Layouts */
 
@@ -34,8 +37,10 @@ export { default as ReportCard } from "./social/ReportCard.vue";
 
 // export { default as PostList } from "./list/PostList.vue";
 export { default as ProfileList } from "./list/ProfileList.vue";
+export { default as ButtonList } from "./list/ButtonList.vue";
 
 /* General */
 
 export { default as Badge } from "./general/Badge.vue";
 export { default as LeafletMap } from "./general/LeafletMap.vue";
+export { default as ProgressBar } from "./general/ProgressBar.vue";
