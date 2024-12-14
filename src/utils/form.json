@@ -1,0 +1,90 @@
+{
+	"questions": [
+		{
+			"id": 1,
+			"category": "Alcance 1",
+			"sub_category": "Emisiones directas",
+			"question": "¿Cuántos vehículos manejas en tu hogar?",
+			"type": "numeric",
+			"carNumber": null,
+			"skipIf": { "equals": 0 }
+		},
+		{
+			"id": 2,
+			"category": "Alcance 1",
+			"sub_category": "Emisiones directas",
+			"question": "¿Cuántos kilómetros recorres por vehículo al mes aproximadamente?",
+			"type": "select",
+			"dependsOn": { "questionId": 1, "notEquals": 0 },
+			"options": [
+				{ "value": 0, "text": "No viajo en coche", "kilometers": 0 },
+				{ "value": 1, "text": "Menos de 500 km", "kilometers": 500 },
+				{ "value": 2, "text": "Entre 500 y 1,000 km", "kilometers": 750 },
+				{ "value": 3, "text": "Más de 1,000 km", "kilometers": 1000 }
+			],
+			"skipIf": { "equals": 0 }
+		},
+		{
+			"id": 3,
+			"category": "Alcance 1",
+			"sub_category": "Emisiones directas",
+			"question": "¿Qué tipo de vehículos manejas más frecuentemente?",
+			"type": "select",
+			"dependsOn": { "questionId": 2, "notEquals": 0 },
+			"options": [
+				{ "value": 1, "text": "Moto", "carType": "motorcycle" },
+				{ "value": 2, "text": "Carro", "carType": "car" },
+				{ "value": 3, "text": "Van, Furgoneta o Camioneta", "carType": "van" },
+				{ "value": 4, "text": "Camión", "carType": "truck" }
+			]
+		},
+		{
+			"id": 4,
+			"category": "Alcance 1",
+			"sub_category": "Emisiones directas",
+			"question": "¿De qué año son los vehículos más comunes en los vehículos que manejas?",
+			"type": "select",
+			"dependsOn": { "questionId": 3 },
+			"options": [
+				{ "value": 1, "text": "1960-1982", "year": "1960-1982" },
+				{ "value": 2, "text": "1983-2006", "year": "1983-2006" },
+				{ "value": 3, "text": "2007-2024", "year": "2007-2024" }
+			]
+		},
+		{
+			"id": 5,
+			"category": "Alcance 1",
+			"sub_category": "Emisiones directas",
+			"question": "¿Cuál es el tipo de motor más común en tu hogar?",
+			"type": "select",
+			"dependsOn": { "questionId": 3 },
+			"options": [
+				{ "value": 1, "text": "Gasolina", "fuelType": "gasoline" },
+				{ "value": 2, "text": "Diésel", "fuelType": "diesel" },
+				{ "value": 3, "text": "Eléctrico", "fuelType": "electric" },
+				{ "value": 4, "text": "Híbrido", "fuelType": "hybrid" }
+			]
+		},
+		{
+			"id": 6,
+			"category": "Alcance 1",
+			"sub_category": "Emisiones directas",
+			"question": "¿Qué tipo de híbrido?",
+			"type": "select",
+			"dependsOn": { "questionId": 5, "equals": 4 },
+			"options": [
+				{ "value": 1, "text": "Eléctrico y Diesel", "subtype": "diesel" },
+				{ "value": 2, "text": "Eléctrico y Gasolina", "subtype": "gasoline" }
+			]
+		},
+		{
+			"id": 7,
+			"category": "Alcance 1",
+			"sub_category": "Emisiones directas",
+			"question": "¿Qué porcentaje de energía eléctrica tiene?",
+			"type": "select",
+			"dependsOn": { "questionId": 5, "equals": 4 },
+			"options": [{ "value": 1, "text": "No lo sé", "electricConsumptionPercentage": 0.4 }]
+		}
+	]
+}
