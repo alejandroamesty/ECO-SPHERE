@@ -8,6 +8,7 @@ export const PROFILE = `${VITE_SVG_ROUTE}menu/profile.svg`;
 export const SEARCH = `${VITE_SVG_ROUTE}search.svg`;
 export const NOTIFICATIONS = `${VITE_SVG_ROUTE}notifications.svg`;
 export const ARROW_LEFT = `${VITE_SVG_ROUTE}arrow-left.svg`;
+export const ARROW_RIGHT = `${VITE_SVG_ROUTE}arrow-right.svg`;
 export const COMMUNITY = `${VITE_SVG_ROUTE}community.svg`;
 export const FILTER = `${VITE_SVG_ROUTE}filter.svg`;
 export const HAMBURGER = `${VITE_SVG_ROUTE}hamburger.svg`;
@@ -17,6 +18,7 @@ export const SETTINGS = `${VITE_SVG_ROUTE}settings.svg`;
 export const LOGOUT = `${VITE_SVG_ROUTE}logout.svg`;
 export const TRASH = `${VITE_SVG_ROUTE}trash.svg`;
 export const ADD = `${VITE_SVG_ROUTE}add.svg`;
+export const MINUS = `${VITE_SVG_ROUTE}minus.svg`;
 export const LIKE = `${VITE_SVG_ROUTE}like.svg`;
 export const COMMENT = `${VITE_SVG_ROUTE}comment.svg`;
 export const ASTERISK = `${VITE_SVG_ROUTE}asterisk.svg`;
@@ -30,6 +32,7 @@ export const iconsMap = {
 	SEARCH,
 	NOTIFICATIONS,
 	ARROW_LEFT,
+	ARROW_RIGHT,
 	COMMUNITY,
 	FILTER,
 	HAMBURGER,
@@ -39,6 +42,7 @@ export const iconsMap = {
 	LOGOUT,
 	TRASH,
 	ADD,
+	MINUS,
 	LIKE,
 	COMMENT,
 	ASTERISK,
