@@ -38,6 +38,10 @@ const routes = [
 				path: "profile",
 				component: () => import("@/views/profile/Profile.vue"),
 			},
+			{
+				path: "profile/carbon-footprint",
+				component: () => import("@/views/carbon-footprint/CarbonFootprint.vue"),
+			},
 		],
 	},
 ];
