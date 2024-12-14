@@ -1,6 +1,6 @@
 <template>
     <div class="title">
-        <div class="subtitle">{{ title }}<span>{{ subtitle }}</span></div>
+        <div class="subtitle">{{ title }}&nbsp;<span>{{ subtitle }}</span></div>
         <div class="question">{{ question }}</div>
     </div>
     <div class="number">
@@ -9,6 +9,7 @@
 </template>
 
 <script setup>
+import { toRef } from "vue";
 import { ButtonList } from "../../components/index";
 
 const props = defineProps({
@@ -18,8 +19,19 @@ const props = defineProps({
     options: { type: Array, required: true },
 });
 
+const options = toRef(props, 'options');
+
+const emit = defineEmits(['next']);
+
 const handleUpdate = (updatedButtons) => {
-    buttonData.value = updatedButtons;
+    options.value = updatedButtons;
+    setTimeout(() => {
+        nextStep();
+    }, 500);
+};
+
+const nextStep = () => {
+    emit('next');
 };
 </script>
 
@@ -40,10 +52,10 @@ const handleUpdate = (updatedButtons) => {
     align-items: center;
     text-align: center;
     width: 328px;
-    height: 15px;
     font-family: 'Stolzl Medium';
     font-size: 12px;
     color: #292B2E;
+    text-transform: uppercase;
 }
 
 .subtitle span {
@@ -52,7 +64,6 @@ const handleUpdate = (updatedButtons) => {
 
 .question {
     width: 318px;
-    height: 90px;
     font-family: 'Stolzl Regular';
     font-size: 25px;
     line-height: 30px;

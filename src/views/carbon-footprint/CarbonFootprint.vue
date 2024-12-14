@@ -9,24 +9,44 @@
             </div>
             <div class="blur-container"></div>
             <div class="steps-container">
-                <ProgressBar :steps="5" :currentStep="currentStep" @update:currentStep="handleStepChange" />
-                <!-- <NumericDialog /> -->
-                <!-- <SelectDialog /> -->
+                <ProgressBar :steps="questions.length" :currentStep="currentStep"
+                    @update:currentStep="handleStepChange" />
+                <template v-for="(question, index) in questions" :key="question.id">
+                    <NumericDialog v-if="currentStep === index + 1 && question.type === 'numeric'"
+                        :title="question.category" :subtitle="question.sub_category" :question="question.question"
+                        @next="handleNextStep" />
+                    <SelectDialog v-if="currentStep === index + 1 && question.type === 'select'"
+                        :title="question.category" :subtitle="question.sub_category" :question="question.question"
+                        :options="question.options" @next="handleNextStep" />
+                </template>
             </div>
         </ion-content>
     </ion-page>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
 import { onIonViewWillEnter, onIonViewWillLeave } from '@ionic/vue';
 import { ProgressBar } from "../../components/index";
 import { StatusBar, Style } from '@capacitor/status-bar';
 import NumericDialog from './NumericDialog.vue';
 import SelectDialog from './SelectDialog.vue';
+import form from '../../utils/form.json';
+
+const currentStep = ref(1);
+const questions = ref(form.questions);
 
 const handleStepChange = (newStep) => {
-    currentStep.value = newStep;
+    if (newStep >= 1 && newStep <= questions.value.length) {
+        currentStep.value = newStep;
+    }
+};
+
+const handleNextStep = () => {
+    if (currentStep.value < questions.value.length) {
+        currentStep.value += 1;
+    }
 };
 
 onIonViewWillEnter(() => {

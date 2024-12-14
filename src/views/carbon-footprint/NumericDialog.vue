@@ -1,6 +1,6 @@
 <template>
     <div class="title">
-        <div class="subtitle">{{ title }}<span>{{ subtitle }}</span></div>
+        <div class="subtitle">{{ title }}&nbsp;<span>{{ subtitle }}</span></div>
         <div class="question">{{ question }}</div>
     </div>
     <div class="number">
@@ -8,7 +8,7 @@
         <div class="caption">Haz click para ingresar un número</div>
     </div>
     <div class="button">
-        <BigButton caption="Continuar" />
+        <BigButton caption="Continuar" @click="nextStep" />
     </div>
 </template>
 
@@ -21,8 +21,14 @@ const props = defineProps({
     question: { type: String, required: true, default: '¿Cuántas hornillas utilizas a la vez en promedio?' },
 });
 
+const emit = defineEmits(['next']);
+
 const handleUpdateNumber = (newNumber) => {
     console.log('Nuevo número:', newNumber);
+};
+
+const nextStep = () => {
+    emit('next');
 };
 </script>
 
@@ -43,10 +49,10 @@ const handleUpdateNumber = (newNumber) => {
     align-items: center;
     text-align: center;
     width: 328px;
-    height: 15px;
     font-family: 'Stolzl Medium';
     font-size: 12px;
     color: #292B2E;
+    text-transform: uppercase;
 }
 
 .subtitle span {
@@ -55,7 +61,6 @@ const handleUpdateNumber = (newNumber) => {
 
 .question {
     width: 318px;
-    height: 90px;
     font-family: 'Stolzl Regular';
     font-size: 25px;
     line-height: 30px;
