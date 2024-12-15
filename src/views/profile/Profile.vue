@@ -30,7 +30,18 @@
                             </div>
                         </template>
                     </Header>
-                    <ion-content></ion-content>
+                    <div class="body">
+                        <div class="sphere-data">
+                            <div class="sphere-title">TOTAL DE EMISIONES DE GEI</div>
+                            <div class="sphere-total">4.5 toneladas de CO2 kg/año</div>
+                        </div>
+                        <div class="chart-container">
+                            <Sphere :key="sphereKey" :options="{ option1: 30, option2: 40, option3: 20, option4: 10 }"
+                                @arcClick="handleArcClick" />
+                        </div>
+                    </div>
+                    <ion-content>
+                    </ion-content>
                 </ion-page>
             </template>
         </MenuContainer>
@@ -40,11 +51,13 @@
 <script setup>
 import { ref } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
+import { onIonViewWillEnter, onIonViewWillLeave } from '@ionic/vue';
 import { ADD, HAMBURGER } from '../../utils/icons';
-import { Header, RoundButton, ToggleButton, MenuContainer, Stats } from '../../components/index';
+import { Header, RoundButton, ToggleButton, MenuContainer, Stats, Sphere } from '../../components/index';
 
 const toggleValue = ref(false);
 const menu = ref();
+const sphereKey = ref(0);
 
 /**
  * Despliega el menú lateral.
@@ -53,6 +66,20 @@ const toggleMenu = (event) => {
     event.stopPropagation();
     menu.value.toggleMenu();
 }
+
+/**
+ * Captura el evento de clic en un arco del gráfico.
+ */
+const handleArcClick = (label) => {
+    console.log('Arco clickeado:', label);
+};
+
+/**
+ * Fuerza la actualización del componente Sphere al entrar a la vista.
+ */
+onIonViewWillEnter(() => {
+    sphereKey.value += 1;
+});
 </script>
 
 <style scoped>
@@ -102,5 +129,39 @@ const toggleMenu = (event) => {
     width: 100%;
     padding: 0 25px;
     margin-bottom: 12px;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+}
+
+.sphere-data {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px 0;
+}
+
+.sphere-title {
+    position: relative;
+    height: 14px;
+    font-family: 'Stolzl Regular';
+    font-size: 12px;
+    color: #747474;
+}
+
+.sphere-total {
+    font-family: 'Stolzl Regular';
+    font-size: 20px;
+    color: #292B2E;
+}
+
+.chart-container {
+    width: 230px;
 }
 </style>
