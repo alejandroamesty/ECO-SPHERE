@@ -4,7 +4,6 @@ export { default as RoundButton } from "./button/RoundButton.vue";
 export { default as TextButton } from "./button/TextButton.vue";
 export { default as ToggleButton } from "./button/ToggleButton.vue";
 export { default as BigButton } from "./button/BigButton.vue";
-export { default as CheckButton } from "./button/CheckButton.vue";
 
 /* Inputs */
 

@@ -34,12 +34,14 @@ const props = defineProps({
 
 const emit = defineEmits(['update:buttons']);
 
-// Toggle selection and ensure only one option is selected
+/**
+ * Cambia el estado de selección de un botón.
+ */
 const toggleSelection = (index) => {
     props.buttons.forEach((button, i) => {
         button.selected = i === index;
     });
-    emit('update:buttons', [...props.buttons]); // Emit a new array to ensure reactivity
+    emit('update:buttons', [...props.buttons]);
 };
 </script>
 

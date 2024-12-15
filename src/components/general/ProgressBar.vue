@@ -33,12 +33,18 @@ const emit = defineEmits(["update:currentStep"]);
 
 const progressPercentage = computed(() => (props.currentStep / props.steps) * 100);
 
+/**
+ * Emite el evento para ir al paso anterior.
+ */
 const goToPreviousStep = () => {
     if (props.currentStep > 1) {
         emit("update:currentStep", props.currentStep - 1);
     }
 };
 
+/**
+ * Emite el evento para ir al siguiente paso.
+ */
 const goToNextStep = () => {
     if (props.currentStep < props.steps) {
         emit("update:currentStep", props.currentStep + 1);
