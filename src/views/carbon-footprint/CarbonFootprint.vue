@@ -2,23 +2,25 @@
     <ion-page>
         <ion-content :fullscreen="true" scroll-y="false">
             <div class="background-circles">
-                <div class="circle circle-1"></div>
-                <div class="circle circle-2"></div>
-                <div class="circle circle-3"></div>
-                <div class="circle circle-4"></div>
+                <div class="circle circle-1" :class="{ 'animate-circle': animate }"></div>
+                <div class="circle circle-2" :class="{ 'animate-circle': animate }"></div>
+                <div class="circle circle-3" :class="{ 'animate-circle': animate }"></div>
+                <div class="circle circle-4" :class="{ 'animate-circle': animate }"></div>
             </div>
             <div class="blur-container"></div>
             <div class="steps-container">
                 <ProgressBar :steps="questions.length" :currentStep="currentStep"
                     @update:currentStep="handleStepChange" />
-                <template v-for="(question, index) in questions" :key="question.id">
-                    <NumericDialog v-if="currentStep === index + 1 && question.type === 'numeric'"
-                        :title="question.category" :subtitle="question.sub_category" :question="question.question"
-                        @next="handleNextStep" />
-                    <SelectDialog v-if="currentStep === index + 1 && question.type === 'select'"
-                        :title="question.category" :subtitle="question.sub_category" :question="question.question"
-                        :options="question.options" @next="handleNextStep" />
-                </template>
+                <div :class="['step-content', { 'animate-fade': isAnimating }]">
+                    <template v-for="(question, index) in questions" :key="question.id">
+                        <NumericDialog v-if="currentStep === index + 1 && question.type === 'numeric'"
+                            :title="question.category" :subtitle="question.sub_category" :question="question.question"
+                            @next="handleNextStep" />
+                        <SelectDialog v-if="currentStep === index + 1 && question.type === 'select'"
+                            :title="question.category" :subtitle="question.sub_category" :question="question.question"
+                            :options="question.options" @next="handleNextStep" />
+                    </template>
+                </div>
             </div>
         </ion-content>
     </ion-page>
@@ -28,31 +30,63 @@
 import { ref } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
 import { onIonViewWillEnter, onIonViewWillLeave } from '@ionic/vue';
-import { ProgressBar } from "../../components/index";
 import { StatusBar, Style } from '@capacitor/status-bar';
+import { ProgressBar } from "../../components/index";
 import NumericDialog from './NumericDialog.vue';
 import SelectDialog from './SelectDialog.vue';
 import form from '../../utils/form.json';
 
 const currentStep = ref(1);
 const questions = ref(form.questions);
+const animate = ref(false);
+const isAnimating = ref(false);
 
+/**
+ * Controla el cambio de paso en la barra de progreso.
+ */
 const handleStepChange = (newStep) => {
     if (newStep >= 1 && newStep <= questions.value.length) {
-        currentStep.value = newStep;
+        triggerAnimation();
+        setTimeout(() => {
+            currentStep.value = newStep;
+        }, 500);
     }
 };
 
+/**
+ * Controla el paso siguiente en la barra de progreso.
+ */
 const handleNextStep = () => {
     if (currentStep.value < questions.value.length) {
-        currentStep.value += 1;
+        triggerAnimation();
+        setTimeout(() => {
+            currentStep.value += 1;
+        }, 500);
     }
 };
 
+/**
+ * Activa la animación de las circunferencias y el desvanecimiento de los pasos.
+ */
+const triggerAnimation = () => {
+    animate.value = true;
+    isAnimating.value = true;
+
+    setTimeout(() => {
+        animate.value = false;
+    }, 500);
+
+    setTimeout(() => {
+        isAnimating.value = false;
+    }, 500);
+};
+
+/**
+ * Cambia el estilo de la barra de estado al entrar y salir de la vista.
+ */
 onIonViewWillEnter(() => {
     StatusBar.setStyle({ style: Style.Light });
 });
-
 onIonViewWillLeave(() => {
     StatusBar.setStyle({ style: Style.Dark });
 });
@@ -69,7 +103,7 @@ onIonViewWillLeave(() => {
 .circle {
     position: absolute;
     border-radius: 50%;
-    transition: all 3s ease-in-out;
+    transition: transform 0.5s ease, background-color 0.5s ease;
 }
 
 .circle-1 {
@@ -108,6 +142,11 @@ onIonViewWillLeave(() => {
     z-index: 1;
 }
 
+.animate-circle {
+    transform: scale(1.2);
+    background-color: #9DDE8B !important;
+}
+
 .blur-container {
     position: absolute;
     top: 0;
@@ -127,5 +166,16 @@ onIonViewWillLeave(() => {
     position: relative;
     top: 58px;
     z-index: 6;
+}
+
+.step-content {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.step-content.animate-fade {
+    opacity: 0;
+    transform: translateY(20px);
 }
 </style>
