@@ -31,6 +31,7 @@ export { default as Post } from "./social/Post.vue";
 export { default as Profile } from "./social/Profile.vue";
 export { default as Stats } from "./social/Stats.vue";
 export { default as ReportCard } from "./social/ReportCard.vue";
+export { default as Sphere } from "./social/Sphere.vue";
 
 /* Lists */
 
