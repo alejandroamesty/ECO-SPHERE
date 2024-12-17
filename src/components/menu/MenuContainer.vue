@@ -104,7 +104,7 @@ defineExpose({ isOpen, toggleMenu });
     transition: transform 0.3s ease, border-radius 0.3s ease, box-shadow 0.3s ease, left 0.5s ease;
     z-index: 2;
     background: white;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .view-container.menu-open {
