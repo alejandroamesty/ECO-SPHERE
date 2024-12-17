@@ -6,7 +6,7 @@
           <span class="title-1">eco<span class="title-2">sphere</span></span>
           <div class="buttons">
             <RoundButton :icon="SEARCH" :size=40 :onClick="handleSearch" />
-            <RoundButton :icon="NOTIFICATIONS" :size=40 :onClick="handleNotif" />
+            <!-- <RoundButton :icon="NOTIFICATIONS" :size=40 :onClick="handleNotif" /> -->
           </div>
         </div>
         <ToggleButton v-model="toggleValue" leftLabel="Descubre" rightLabel="Siguiendo" />
