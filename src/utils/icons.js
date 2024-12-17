@@ -22,6 +22,8 @@ export const MINUS = `${VITE_SVG_ROUTE}minus.svg`;
 export const LIKE = `${VITE_SVG_ROUTE}like.svg`;
 export const COMMENT = `${VITE_SVG_ROUTE}comment.svg`;
 export const ASTERISK = `${VITE_SVG_ROUTE}asterisk.svg`;
+export const BACK = `${VITE_SVG_ROUTE}back.svg`;
+export const ARROW_DIAGONAL = `${VITE_SVG_ROUTE}arrow-diagonal.svg`;
 
 export const iconsMap = {
 	HOME,
@@ -46,4 +48,6 @@ export const iconsMap = {
 	LIKE,
 	COMMENT,
 	ASTERISK,
+	BACK,
+	ARROW_DIAGONAL,
 };
