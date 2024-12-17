@@ -30,7 +30,7 @@ const chartData = computed(() => {
     const total = option1 + option2 + option3 + option4;
 
     return {
-        labels: ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
+        labels: ['Option1', 'Option2', 'Option3', 'Option4'],
         datasets: [
             {
                 data: [
@@ -39,8 +39,8 @@ const chartData = computed(() => {
                     (option3 / total) * 100,
                     (option4 / total) * 100,
                 ],
-                backgroundColor: ['#E7F994', '#006869', '#40A578', '#9DDE8B'],
-                hoverBackgroundColor: ['#E7F994', '#006869', '#40A578', '#9DDE8B'],
+                backgroundColor: ['#9DDE8B', '#40A578', '#006869', '#E7F994'],
+                hoverBackgroundColor: ['#9DDE8B', '#40A578', '#006869', '#E7F994'],
                 borderRadius: 33,
                 borderWidth: 0,
             },

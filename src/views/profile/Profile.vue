@@ -39,13 +39,10 @@
                                         <div class="sphere-total">4.5 toneladas de CO2 kg/año</div>
                                     </div>
                                     <div class="chart-container">
-                                        <Sphere :key="sphereKey"
-                                            :options="{ option1: 30, option2: 40, option3: 20, option4: 10 }"
-                                            @arcClick="handleArcClick" />
+                                        <Sphere :key="sphereKey" :options="sphereOptions" @arcClick="handleArcClick" />
                                     </div>
                                     <div class="sphere-dropdown">
-                                        <FootprintList
-                                            :options="{ first: true, second: false, third: true, fourth: false }" />
+                                        <FootprintList :options="footprintOptions" />
                                     </div>
                                 </div>
                             </template>
@@ -76,6 +73,20 @@ const toggleValue = ref(false);
 const menu = ref();
 const sphereKey = ref(0);
 
+const sphereOptions = ref({
+    option1: 10,
+    option2: 20,
+    option3: 30,
+    option4: 40,
+});
+
+const footprintOptions = ref({
+    first: false,
+    second: false,
+    third: false,
+    fourth: false,
+});
+
 /**
  * Despliega el menú lateral.
  */
@@ -88,7 +99,28 @@ const toggleMenu = (event) => {
  * Captura el evento de clic en un arco del gráfico.
  */
 const handleArcClick = (label) => {
-    console.log('Arco clickeado:', label);
+    const selectedLabel = label.toLowerCase();
+
+    const currentState = {
+        option1: footprintOptions.value.first,
+        option2: footprintOptions.value.second,
+        option3: footprintOptions.value.third,
+        option4: footprintOptions.value.fourth,
+    };
+
+    Object.keys(footprintOptions.value).forEach((key) => {
+        footprintOptions.value[key] = false;
+    });
+
+    if (selectedLabel === 'option1') {
+        footprintOptions.value.first = !currentState.option1;
+    } else if (selectedLabel === 'option2') {
+        footprintOptions.value.second = !currentState.option2;
+    } else if (selectedLabel === 'option3') {
+        footprintOptions.value.third = !currentState.option3;
+    } else if (selectedLabel === 'option4') {
+        footprintOptions.value.fourth = !currentState.option4;
+    }
 };
 
 /**
