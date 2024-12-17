@@ -1,7 +1,7 @@
 <template>
-    <Teleport to="body">
+    <Teleport v-if="isModal" to="body">
         <div class="overlay" v-if="isVisible" @click="handleOutsideClick">
-            <div class="card-container" @click.stop>
+            <div class="card-container" :class="{ 'modal': isModal }" @click.stop>
                 <div class="report-image">
                     <div class="report-badge">
                         <Badge text="REPORTE" :icon="ASTERISK" />
@@ -35,13 +35,45 @@
             </div>
         </div>
     </Teleport>
+    <div v-else class="card-container">
+        <div class="report-image">
+            <div class="report-badge">
+                <Badge text="REPORTE" :icon="ASTERISK" />
+            </div>
+            <img :src="image" alt="Report Image">
+        </div>
+        <div class="report-container">
+            <div class="report-description">{{ description }}</div>
+            <div class="report-detail">
+                <div class="latitude">
+                    <span class="label">LATITUD</span>
+                    <span class="value">{{ latitude }}</span>
+                </div>
+                <div class="longitude">
+                    <span class="label">LONGITUD</span>
+                    <span class="value">{{ longitude }}</span>
+                </div>
+                <div class="date">
+                    <span class="label">FECHA</span>
+                    <span class="value">{{ date }}</span>
+                </div>
+            </div>
+            <div class="user-container">
+                <img class="user-icon" :src="icon" alt="User Icon" />
+                <div class="user-info">
+                    <div class="name">{{ name }}</div>
+                    <div class="username">{{ username }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup>
 import { ref, toRefs } from 'vue';
 import { Badge } from '..';
 import { ASTERISK } from '../../utils/icons';
-import example from "../../../public/images/png/example.jpg"
+import example from "../../../public/images/png/example.jpg";
 
 const props = defineProps({
     image: { type: String, required: true, default: example },
@@ -52,9 +84,10 @@ const props = defineProps({
     icon: { type: String, required: true },
     name: { type: String, required: true },
     username: { type: String, required: true },
+    isModal: { type: Boolean, default: false }, // Nueva prop para saber si es modal o no
 });
 
-const { image, description, latitude, longitude, date, icon, name, username } = toRefs(props);
+const { image, description, latitude, longitude, date, icon, name, username, isModal } = toRefs(props);
 
 const isVisible = ref(false);
 
@@ -84,23 +117,19 @@ defineExpose({
     justify-content: center;
     width: 100%;
     height: 100%;
-    /* background: rgba(0, 0, 0, 0.5); */
-
-    /* background: rgba(41, 43, 46, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(6.3px); */
-
     backdrop-filter: blur(23px) saturate(1) opacity(70%) !important;
-
     animation: fadeIn 0.3s ease-out;
 }
 
 .card-container {
     display: flex;
     flex-direction: column;
-    position: fixed;
     background-color: #FFFFFF;
     border-radius: 30px;
+}
+
+.modal {
+    position: fixed;
     bottom: -100px;
     animation: slideUp 0.5s forwards;
 }
@@ -203,7 +232,6 @@ defineExpose({
     align-items: center;
     width: 114px;
     height: 16px;
-    top: 0;
     font-family: 'Stolzl Medium';
     font-size: 14px;
     color: #292B2E;
