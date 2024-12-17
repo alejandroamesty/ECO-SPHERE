@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <Header>
+    <Header ref="header">
       <template #header-layout>
         <div class="header-layout">
           <span class="title-1">Reportes</span>
@@ -12,25 +12,37 @@
       </template>
     </Header>
     <ion-content :fullscreen="true">
-      <div class="leaf-map">
-        <LeafletMap :lat="lat" :lng="lng" :zoom="zoom" :shouldInitialize="viewEntered" :locations="locations"
-          @onPinClick="handlePinClick" />
-      </div>
+      <Slider :currentIndex="toggleValue" @update:currentIndex="toggleValue = $event" :fullscreen="true">
+        <template #slide1>
+          <div class="leaf-map">
+            <LeafletMap :lat="lat" :lng="lng" :zoom="zoom" :shouldInitialize="viewEntered" :locations="locations"
+              @onPinClick="handlePinClick" />
+          </div>
+        </template>
+        <template #slide2>
+          <div class="content" :style="{ marginTop: headerHeight + 'px' }">
+            <ReportCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec
+                    ultricies." latitude="19.432" longitude="99.13" date="12/12/2021"
+              icon="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png" name="Alejandro Ávila"
+              username="@alejandroamesty" />
+          </div>
+        </template>
+      </Slider>
     </ion-content>
     <ReportCard ref="report" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec
                     ultricies." latitude="19.432" longitude="99.13" date="12/12/2021"
       icon="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png" name="Alejandro Ávila"
-      username="@alejandroamesty" />
+      username="@alejandroamesty" :is-modal="true" />
   </ion-page>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
-import { onIonViewDidEnter, onIonViewWillLeave } from '@ionic/vue';
+import { onIonViewWillEnter, onIonViewDidEnter, onIonViewWillLeave } from '@ionic/vue';
 import { Geolocation } from '@capacitor/geolocation';
 import { ADD } from '../../utils/icons';
-import { Header, RoundButton, ToggleButton, LeafletMap, ReportCard } from "../../components/index";
+import { Header, RoundButton, ToggleButton, LeafletMap, ReportCard, Slider, FootprintList } from "../../components/index";
 
 const lat = ref(51.505);
 const lng = ref(-0.09);
@@ -38,6 +50,7 @@ const zoom = ref(13);
 const toggleValue = ref(false);
 const viewEntered = ref(false);
 const report = ref();
+const headerHeight = ref(0);
 
 const locations = [
   { value: 1, lat: 51.505, lng: -0.09, popupText: 'Ubicación 1' },
@@ -80,6 +93,24 @@ const handlePinClick = (pinValue) => {
 const handleClick = (event) => {
   event.stopPropagation();
 };
+
+/**
+ * Calcula la altura del header al montar el componente.
+ */
+onIonViewWillEnter(() => {
+  setTimeout(() => {
+    const headerElement = document.querySelector('ion-toolbar');
+    const rect = headerElement?.getBoundingClientRect();
+    if (rect) {
+      if (rect.height > 0) {
+        headerHeight.value = rect.height;
+      } else {
+        headerHeight.value = 182;
+      }
+    }
+  }, 0);
+});
+
 </script>
 
 <style scoped>
@@ -88,5 +119,13 @@ const handleClick = (event) => {
   top: 0;
   width: 100vw;
   height: 110vh;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  padding: 30px;
+  color: black;
 }
 </style>
