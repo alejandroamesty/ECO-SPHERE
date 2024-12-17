@@ -70,10 +70,10 @@ const handleClick = (event) => {
     align-items: center;
     width: 100%;
     padding: 22px;
-    /* gap: 22px; */
+    border-radius: 37px;
     background: #F6F6F6;
     box-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3), -1px -1px 2px rgba(221, 221, 221, 0.5), inset -5px 5px 10px rgba(221, 221, 221, 0.2), inset 5px -5px 10px rgba(221, 221, 221, 0.2), inset -5px -5px 10px rgba(255, 255, 255, 0.9), inset 5px 5px 13px rgba(221, 221, 221, 0.9);
-    border-radius: 37px;
+    transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out, filter 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .scope-data {
@@ -107,6 +107,7 @@ const handleClick = (event) => {
     border-radius: 100px;
     background: #949799;
     box-shadow: 1px 1px 2px rgba(163, 166, 168, 0.3), -1px -1px 2px rgba(133, 136, 138, 0.5), inset -5px 5px 10px rgba(133, 136, 138, 0.2), inset 5px -5px 10px rgba(133, 136, 138, 0.2), inset -5px -5px 10px rgba(163, 166, 168, 0.9), inset 5px 5px 13px rgba(133, 136, 138, 0.9);
+    transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out, filter 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .scope-button img {
