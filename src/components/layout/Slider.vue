@@ -1,6 +1,6 @@
 <template>
-    <div class="slider-container" @touchstart="handleTouchStart" @touchmove="handleTouchMove"
-        @touchend="handleTouchEnd">
+    <div :class="['slider-container', { 'absolute-position': fullscreen }]" @touchstart="handleTouchStart"
+        @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div class="slider" :class="{ 'slide-left': currentIndex, 'slide-right': !currentIndex }">
             <div class="slide first">
                 <slot name="slide1"></slot>
@@ -18,6 +18,10 @@ const props = defineProps({
         type: Boolean,
         required: true,
     },
+    fullscreen: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const emit = defineEmits(['update:currentIndex']);
@@ -31,6 +35,8 @@ let isHorizontalSwipe = false;
  * Maneja el evento de inicio de un toque.
  */
 const handleTouchStart = (event) => {
+    if (props.fullscreen) return;
+
     touchStartX = event.touches[0].clientX;
     touchStartY = event.touches[0].clientY;
     isHorizontalSwipe = false;
@@ -40,6 +46,8 @@ const handleTouchStart = (event) => {
  * Determina si el movimiento es principalmente horizontal o vertical.
  */
 const handleTouchMove = (event) => {
+    if (props.fullscreen) return;
+
     const deltaX = event.touches[0].clientX - touchStartX;
     const deltaY = event.touches[0].clientY - touchStartY;
 
@@ -52,9 +60,7 @@ const handleTouchMove = (event) => {
  * Actualiza el índice actual del slider si el swipe fue horizontal.
  */
 const handleTouchEnd = (event) => {
-    if (!isHorizontalSwipe) {
-        return;
-    }
+    if (props.fullscreen || !isHorizontalSwipe) return;
 
     touchEndX = event.changedTouches[0].clientX;
 
@@ -71,6 +77,11 @@ const handleTouchEnd = (event) => {
     position: relative;
     width: 100%;
     height: calc(100% - 100px);
+}
+
+.slider-container.absolute-position {
+    position: absolute;
+    top: 0;
 }
 
 .slider {
