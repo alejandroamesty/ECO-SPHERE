@@ -7,7 +7,9 @@ export { default as BigButton } from "./button/BigButton.vue";
 
 /* Inputs */
 
+export { default as TextInput } from "./input/TextInput.vue";
 export { default as SearchInput } from "./input/SearchInput.vue";
+export { default as VerificationInput } from "./input/VerificationInput.vue";
 export { default as Counter } from "./input/Counter.vue";
 
 /* Layouts */
@@ -38,6 +40,8 @@ export { default as Sphere } from "./social/Sphere.vue";
 // export { default as PostList } from "./list/PostList.vue";
 export { default as ProfileList } from "./list/ProfileList.vue";
 export { default as ButtonList } from "./list/ButtonList.vue";
+export { default as ChatList } from "./list/ChatList.vue";
+export { default as FootprintList } from "./list/FootprintList.vue";
 
 /* General */
 
