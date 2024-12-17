@@ -4,7 +4,35 @@ import { NavBar } from "../components/index";
 const routes = [
 	{
 		path: "/",
-		redirect: "/tabs/feed",
+		redirect: "/auth/on-boarding",
+	},
+	{
+		path: "/auth/on-boarding",
+		component: () => import("@/views/auth/OnBoarding.vue"),
+	},
+	{
+		path: "/auth/login",
+		component: () => import("@/views/auth/Login.vue"),
+	},
+	{
+		path: "/auth/forgot-password",
+		component: () => import("@/views/auth/forgot-password/ForgotPassword.vue"),
+	},
+	{
+		path: "/auth/verify-code",
+		component: () => import("@/views/auth/forgot-password/VerifyCode.vue"),
+	},
+	{
+		path: "/auth/reset-password",
+		component: () => import("@/views/auth/forgot-password/ResetPassword.vue"),
+	},
+	{
+		path: "/auth/register",
+		component: () => import("@/views/auth/Register.vue"),
+	},
+	{
+		path: "/carbon-footprint",
+		component: () => import("@/views/carbon-footprint/CarbonFootprint.vue"),
 	},
 	{
 		path: "/tabs/",
@@ -38,11 +66,15 @@ const routes = [
 				path: "profile",
 				component: () => import("@/views/profile/Profile.vue"),
 			},
-			{
-				path: "profile/carbon-footprint",
-				component: () => import("@/views/carbon-footprint/CarbonFootprint.vue"),
-			},
 		],
+	},
+	{
+		path: "/private-chat",
+		component: () => import("@/views/chats/PrivateChat.vue"),
+	},
+	{
+		path: "/community-chat",
+		component: () => import("@/views/chats/CommunityChat.vue"),
 	},
 ];
 
