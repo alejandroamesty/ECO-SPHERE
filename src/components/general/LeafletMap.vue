@@ -4,7 +4,7 @@
 
 <script setup>
 import * as L from 'leaflet';
-import { ref, watch, defineEmits } from 'vue';
+import { ref, watch, defineEmits, onBeforeMount } from 'vue';
 import { MAP } from '../../utils/icons';
 
 const { lat, lng, zoom, shouldInitialize, locations } = defineProps({
@@ -80,6 +80,15 @@ const initMap = () => {
         }
     });
 };
+
+/**
+ * Inicializa el mapa al montar el componente.
+ */
+onBeforeMount(() => {
+    setTimeout(() => {
+        initMap();
+    }, 0);
+});
 
 /**
  * Observa si se debe inicializar el mapa.
