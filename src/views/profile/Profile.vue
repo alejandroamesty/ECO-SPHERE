@@ -30,17 +30,32 @@
                             </div>
                         </template>
                     </Header>
-                    <div class="body">
-                        <div class="sphere-data">
-                            <div class="sphere-title">TOTAL DE EMISIONES DE GEI</div>
-                            <div class="sphere-total">4.5 toneladas de CO2 kg/año</div>
-                        </div>
-                        <div class="chart-container">
-                            <Sphere :key="sphereKey" :options="{ option1: 30, option2: 40, option3: 20, option4: 10 }"
-                                @arcClick="handleArcClick" />
-                        </div>
-                    </div>
-                    <ion-content>
+                    <ion-content :fullscreen="true">
+                        <Slider :currentIndex="toggleValue" @update:currentIndex="toggleValue = $event">
+                            <template #slide1>
+                                <div class="body sphere">
+                                    <div class="sphere-data">
+                                        <div class="sphere-title">TOTAL DE EMISIONES DE GEI</div>
+                                        <div class="sphere-total">4.5 toneladas de CO2 kg/año</div>
+                                    </div>
+                                    <div class="chart-container">
+                                        <Sphere :key="sphereKey"
+                                            :options="{ option1: 30, option2: 40, option3: 20, option4: 10 }"
+                                            @arcClick="handleArcClick" />
+                                    </div>
+                                    <div class="sphere-dropdown">
+                                        <FootprintList
+                                            :options="{ first: true, second: false, third: true, fourth: false }" />
+                                    </div>
+                                </div>
+                            </template>
+                            <template #slide2>
+                                <div class="body posts">
+                                    <Post :icon="SEARCH" name="Alejandro Ávila" username="@alejandroamesty"
+                                        :content="text2" />
+                                </div>
+                            </template>
+                        </Slider>
                     </ion-content>
                 </ion-page>
             </template>
@@ -51,9 +66,11 @@
 <script setup>
 import { ref } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
-import { onIonViewWillEnter, onIonViewWillLeave } from '@ionic/vue';
+import { onIonViewWillEnter } from '@ionic/vue';
 import { ADD, HAMBURGER } from '../../utils/icons';
-import { Header, RoundButton, ToggleButton, MenuContainer, Stats, Sphere } from '../../components/index';
+import { Header, RoundButton, ToggleButton, MenuContainer, Slider, Stats, Sphere, Post, FootprintList } from '../../components/index';
+
+const text2 = 'Test'
 
 const toggleValue = ref(false);
 const menu = ref();
@@ -134,10 +151,17 @@ onIonViewWillEnter(() => {
 .body {
     display: flex;
     flex-direction: column;
-    align-items: center;
     width: 100%;
     height: 100%;
     z-index: 9;
+}
+
+.sphere {
+    align-items: center;
+}
+
+.posts {
+    padding: 30px;
 }
 
 .sphere-data {
@@ -163,5 +187,14 @@ onIonViewWillEnter(() => {
 
 .chart-container {
     width: 230px;
+}
+
+.sphere-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 30px;
+    margin-bottom: 70px;
 }
 </style>
