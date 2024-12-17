@@ -71,7 +71,6 @@ const handleTouchEnd = (event) => {
     position: relative;
     width: 100%;
     height: calc(100% - 100px);
-    overflow: hidden; 
 }
 
 .slider {
@@ -83,6 +82,9 @@ const handleTouchEnd = (event) => {
 .slide {
     flex: 0 0 calc(50% - 30px);
     margin-right: 30px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: 100%;
 }
 
 .first,
