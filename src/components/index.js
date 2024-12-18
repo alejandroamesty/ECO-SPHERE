@@ -49,3 +49,4 @@ export { default as FootprintList } from "./list/FootprintList.vue";
 export { default as Badge } from "./general/Badge.vue";
 export { default as LeafletMap } from "./general/LeafletMap.vue";
 export { default as ProgressBar } from "./general/ProgressBar.vue";
+export { default as Modal } from "./general/Modal.vue";
