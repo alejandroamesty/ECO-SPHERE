@@ -11,16 +11,16 @@
             <div class="content-text">{{ content }}</div>
         </div>
         <div class="interactions-container">
-            <Badge text="100K" :icon="LIKE" />
+            <Badge text="100K" :is-like-mode="true" v-model:liked="likedState" />
             <Badge text="100K" :icon="COMMENT" />
         </div>
     </div>
 </template>
 
 <script setup>
-import { toRefs } from 'vue';
+import { ref } from 'vue';
 import { Badge } from "../index";
-import { LIKE, COMMENT } from '../../utils/icons';
+import { COMMENT } from '../../utils/icons';
 
 const props = defineProps({
     content: {
@@ -39,9 +39,13 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    liked: {
+        type: Boolean,
+        default: true,
+    },
 });
 
-const { content, icon, name, username } = toRefs(props);
+const likedState = ref(props.liked);
 </script>
 
 <style scoped>
