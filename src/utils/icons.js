@@ -19,11 +19,13 @@ export const LOGOUT = `${VITE_SVG_ROUTE}logout.svg`;
 export const TRASH = `${VITE_SVG_ROUTE}trash.svg`;
 export const ADD = `${VITE_SVG_ROUTE}add.svg`;
 export const MINUS = `${VITE_SVG_ROUTE}minus.svg`;
-export const LIKE = `${VITE_SVG_ROUTE}like.svg`;
+export const LIKED = `${VITE_SVG_ROUTE}liked.svg`;
+export const UNLIKED = `${VITE_SVG_ROUTE}unliked.svg`;
 export const COMMENT = `${VITE_SVG_ROUTE}comment.svg`;
 export const ASTERISK = `${VITE_SVG_ROUTE}asterisk.svg`;
 export const BACK = `${VITE_SVG_ROUTE}back.svg`;
 export const ARROW_DIAGONAL = `${VITE_SVG_ROUTE}arrow-diagonal.svg`;
+export const CHECK = `${VITE_SVG_ROUTE}check.svg`;
 
 export const iconsMap = {
 	HOME,
@@ -45,9 +47,11 @@ export const iconsMap = {
 	TRASH,
 	ADD,
 	MINUS,
-	LIKE,
+	LIKED,
+	UNLIKED,
 	COMMENT,
 	ASTERISK,
 	BACK,
 	ARROW_DIAGONAL,
+	CHECK,
 };
