@@ -26,6 +26,7 @@ export const ASTERISK = `${VITE_SVG_ROUTE}asterisk.svg`;
 export const BACK = `${VITE_SVG_ROUTE}back.svg`;
 export const ARROW_DIAGONAL = `${VITE_SVG_ROUTE}arrow-diagonal.svg`;
 export const CHECK = `${VITE_SVG_ROUTE}check.svg`;
+export const EDIT = `${VITE_SVG_ROUTE}edit.svg`;
 
 export const iconsMap = {
 	HOME,
@@ -54,4 +55,5 @@ export const iconsMap = {
 	BACK,
 	ARROW_DIAGONAL,
 	CHECK,
+	EDIT,
 };

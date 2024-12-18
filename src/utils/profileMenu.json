@@ -1,17 +1,12 @@
 [
 	{
-		"label": "Medidor de impacto ambiental",
-		"icon": "LEAF",
-		"to": "/tabs/feed"
-	},
-	{
 		"label": "Calculadora de huella de carbono",
 		"icon": "CALCULATOR",
 		"to": "/tabs/maps"
 	},
 	{
-		"label": "Configuración",
-		"icon": "SETTINGS",
+		"label": "Editar perfil",
+		"icon": "EDIT",
 		"to": "/tabs/activities"
 	},
 	{
