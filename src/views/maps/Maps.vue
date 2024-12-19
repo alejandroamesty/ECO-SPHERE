@@ -21,10 +21,9 @@
         </template>
         <template #slide2>
           <div class="content" :style="{ marginTop: headerHeight + 'px' }">
-            <ReportCard description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec
-                    ultricies." latitude="19.432" longitude="99.13" date="12/12/2021"
-              icon="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png" name="Alejandro Ávila"
-              username="@alejandroamesty" />
+            <div class="report-list">
+              <ReportList :reports="reports" />
+            </div>
           </div>
         </template>
       </Slider>
@@ -33,6 +32,20 @@
                     ultricies." latitude="19.432" longitude="99.13" date="12/12/2021"
       icon="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png" name="Alejandro Ávila"
       username="@alejandroamesty" :is-modal="true" />
+    <Modal title="Crear reporte" :isOpen="showModal" :onClose="closeModal" :backButton="closeModal"
+      :nextButton="closeModal">
+      <div class="modal-content">
+        <span class="label">Título</span>
+        <TextInput placeholder="Ingresa un título" :neumorphism="false" />
+        <span class="label">Descripción</span>
+        <TextInput placeholder="Ingresa una descripción" :neumorphism="false" :paragraph="true" />
+        <span class="label">Imagen</span>
+        <div class="options">
+          <BoxButton :icon="CAMERA" caption="Desde cámara del dispositivo" :onClick="openCamera" />
+          <BoxButton :icon="GALLERY" caption="Desde galería de fotos" :onClick="openGallery" />
+        </div>
+      </div>
+    </Modal>
   </ion-page>
 </template>
 
@@ -41,8 +54,9 @@ import { ref } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
 import { onIonViewWillEnter, onIonViewDidEnter, onIonViewWillLeave } from '@ionic/vue';
 import { Geolocation } from '@capacitor/geolocation';
-import { ADD } from '../../utils/icons';
-import { Header, RoundButton, ToggleButton, LeafletMap, ReportCard, Slider, FootprintList } from "../../components/index";
+import { ADD, CAMERA, GALLERY } from '../../utils/icons';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Header, RoundButton, ToggleButton, LeafletMap, ReportCard, Slider, Modal, ReportList, TextInput, BoxButton } from "../../components/index";
 
 const lat = ref(51.505);
 const lng = ref(-0.09);
@@ -51,11 +65,24 @@ const toggleValue = ref(false);
 const viewEntered = ref(false);
 const report = ref();
 const headerHeight = ref(0);
+const showModal = ref(false);
 
 const locations = [
   { value: 1, lat: 51.505, lng: -0.09, popupText: 'Ubicación 1' },
   { value: 2, lat: 51.515, lng: -0.1, popupText: 'Ubicación 2' },
   { value: 3, lat: 51.525, lng: -0.11, popupText: 'Ubicación 3' }
+];
+
+const reports = [
+  {
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec ultricies.',
+    latitude: '19.432',
+    longitude: '99.13',
+    date: '12/12/2021',
+    icon: 'https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png',
+    name: 'Alejandro Ávila',
+    username: '@alejandroamesty',
+  }
 ];
 
 /**
@@ -90,8 +117,19 @@ const handlePinClick = (pinValue) => {
   console.log('Pin seleccionado con valor:', pinValue);
 };
 
+/**
+ * Muestra el modal para crear un reporte.
+ */
 const handleClick = (event) => {
   event.stopPropagation();
+  showModal.value = true;
+};
+
+/**
+ * Cierra el modal.
+ */
+const closeModal = () => {
+  showModal.value = false;
 };
 
 /**
@@ -111,6 +149,37 @@ onIonViewWillEnter(() => {
   }, 0);
 });
 
+/**
+ * Abre la cámara del dispositivo para tomar una foto.
+ */
+const openCamera = async () => {
+  try {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Camera
+    });
+    console.log("Imagen desde la cámara:", image);
+  } catch (error) {
+    console.error("Error al abrir la cámara:", error);
+  }
+};
+
+/**
+ * Abre la galería de fotos del dispositivo.
+ */
+const openGallery = async () => {
+  try {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Photos
+    });
+    console.log("Imagen desde la galería:", image);
+  } catch (error) {
+    console.error("Error al abrir la galería:", error);
+  }
+};
 </script>
 
 <style scoped>
@@ -126,6 +195,31 @@ onIonViewWillEnter(() => {
   justify-content: center;
   overflow: hidden;
   padding: 30px;
-  color: black;
+}
+
+.report-list {
+  width: 100%;
+  margin-bottom: 70px;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  gap: 20px;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  font-family: 'Stolzl Regular';
+  font-size: 13px;
+  color: #292B2E;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
 }
 </style>
