@@ -6,7 +6,6 @@
           <span class="title-1">eco<span class="title-2">sphere</span></span>
           <div class="buttons">
             <RoundButton :icon="SEARCH" :size=40 :onClick="handleSearch" />
-            <!-- <RoundButton :icon="NOTIFICATIONS" :size=40 :onClick="handleNotif" /> -->
           </div>
         </div>
         <ToggleButton v-model="toggleValue" leftLabel="Descubre" rightLabel="Siguiendo" />
@@ -16,12 +15,12 @@
       <Slider :currentIndex="toggleValue" @update:currentIndex="toggleValue = $event">
         <template #slide1>
           <div class="discover">
-            <Post :icon="SEARCH" name="Alejandro Ávila" username="@alejandroamesty" :content="text" />
+            <PostList :posts="posts" />
           </div>
         </template>
         <template #slide2>
           <div class="following">
-            <Post :icon="SEARCH" name="Alejandro Ávila" username="@alejandroamesty" :content="text2" />
+            <PostList :posts="posts" />
           </div>
         </template>
       </Slider>
@@ -33,27 +32,34 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { IonPage, IonContent } from '@ionic/vue';
-import { SEARCH, NOTIFICATIONS } from '../../utils/icons';
-import { Header, RoundButton, ToggleButton, Post, Slider } from "../../components/index"
-
-const text = 'Hoy planté mi primer árbol y entendí lo poderosa que puede ser una acción individual. Cada paso cuenta cuando cuidamos nuestro planeta. ¿Qué harás tú hoy por el medio ambiente?'
-const text2 = 'Test'
+import { SEARCH } from '../../utils/icons';
+import { Header, RoundButton, ToggleButton, PostList, Slider } from "../../components/index"
 
 const toggleValue = ref(false);
 const router = useRouter();
+
+const posts = ref([
+  {
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et sapien at purus.',
+    icon: 'https://via.placeholder.com/48',
+    name: 'John Doe',
+    username: '@johndoe',
+    liked: true,
+  },
+  {
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et sapien at purus.',
+    icon: 'https://via.placeholder.com/48',
+    name: 'Jane Doe',
+    username: '@janedoe',
+    liked: false,
+  },
+]);
 
 /**
  * Navega a la vista de búsqueda.
  */
 const handleSearch = () => {
   router.push('/tabs/feed/search');
-};
-
-/**
- * Navega a la vista de notificaciones.
- */
-const handleNotif = () => {
-  router.push('/tabs/feed/notifications');
 };
 </script>
 
