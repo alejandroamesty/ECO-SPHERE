@@ -65,7 +65,7 @@ defineExpose({ isOpen, toggleMenu });
 .options {
     position: absolute;
     height: 535px;
-    top: 25%;
+    top: 23%;
     right: 13px;
 }
 
@@ -109,7 +109,7 @@ defineExpose({ isOpen, toggleMenu });
 
 .view-container.menu-open {
     left: -92px;
-    transform: translate3d(0, 20%, 0) scale(0.6);
+    transform: translate3d(0, 16%, 0) scale(0.6);
     will-change: transform;
     border-radius: 0px 30px 30px 0px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
