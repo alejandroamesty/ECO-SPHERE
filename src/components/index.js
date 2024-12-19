@@ -50,6 +50,7 @@ export { default as ReportList } from "./list/ReportList.vue";
 export { default as ContentBoxes } from "./list/ContentBoxes.vue";
 export { default as CheckList } from "./list/CheckList.vue";
 export { default as ActivityList } from "./list/ActivityList.vue";
+export { default as CategoryBoxes } from "./list/CategoryBoxes.vue";
 
 /* General */
 
