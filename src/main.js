@@ -1,4 +1,6 @@
 import { createApp } from "vue";
+import { createPinia } from "pinia";
+import piniaPersistedstate from "pinia-plugin-persistedstate";
 import App from "./App.vue";
 import router from "./router";
 
@@ -40,7 +42,10 @@ import "../node_modules/leaflet/dist/leaflet.css";
 /* Global styles */
 import "./theme/global.css";
 
-const app = createApp(App).use(IonicVue).use(router);
+const pinia = createPinia();
+pinia.use(piniaPersistedstate);
+
+const app = createApp(App).use(IonicVue).use(router).use(pinia);
 
 router.isReady().then(() => {
 	app.mount("#app");
