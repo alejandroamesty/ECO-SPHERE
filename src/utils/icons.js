@@ -27,6 +27,9 @@ export const BACK = `${VITE_SVG_ROUTE}back.svg`;
 export const ARROW_DIAGONAL = `${VITE_SVG_ROUTE}arrow-diagonal.svg`;
 export const CHECK = `${VITE_SVG_ROUTE}check.svg`;
 export const EDIT = `${VITE_SVG_ROUTE}edit.svg`;
+export const CAMERA = `${VITE_SVG_ROUTE}camera.svg`;
+export const GALLERY = `${VITE_SVG_ROUTE}gallery.svg`;
+export const CIRCLE_ADD = `${VITE_SVG_ROUTE}circle-add.svg`;
 
 export const iconsMap = {
 	HOME,
@@ -56,4 +59,7 @@ export const iconsMap = {
 	ARROW_DIAGONAL,
 	CHECK,
 	EDIT,
+	CAMERA,
+	GALLERY,
+	CIRCLE_ADD,
 };
