@@ -37,6 +37,5 @@ const boxes = ref([
 	display: grid;
 	grid-template-columns: repeat(3, 99px);
 	gap: 20px;
-	margin-top: 20px;
 }
 </style>

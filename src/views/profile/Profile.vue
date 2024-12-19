@@ -1,9 +1,6 @@
 <template>
 	<ion-page>
 		<MenuContainer ref="menu">
-			<template #menu>
-				<!-- <div class="menu-title">Menú de configuración</div> -->
-			</template>
 			<template #view>
 				<ion-page>
 					<Header>
