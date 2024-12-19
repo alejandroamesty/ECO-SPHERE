@@ -4,6 +4,7 @@ export { default as RoundButton } from "./button/RoundButton.vue";
 export { default as TextButton } from "./button/TextButton.vue";
 export { default as ToggleButton } from "./button/ToggleButton.vue";
 export { default as BigButton } from "./button/BigButton.vue";
+export { default as BoxButton } from "./button/BoxButton.vue";
 
 /* Inputs */
 
@@ -38,11 +39,13 @@ export { default as Message } from "./social/Message.vue";
 
 /* Lists */
 
-// export { default as PostList } from "./list/PostList.vue";
+export { default as PostList } from "./list/PostList.vue";
 export { default as ProfileList } from "./list/ProfileList.vue";
 export { default as ButtonList } from "./list/ButtonList.vue";
 export { default as ChatList } from "./list/ChatList.vue";
 export { default as FootprintList } from "./list/FootprintList.vue";
+export { default as ReportList } from "./list/ReportList.vue";
+export { default as CheckList } from "./list/CheckList.vue";
 
 /* General */
 
