@@ -31,6 +31,10 @@ export const CAMERA = `${VITE_SVG_ROUTE}camera.svg`;
 export const GALLERY = `${VITE_SVG_ROUTE}gallery.svg`;
 export const CIRCLE_ADD = `${VITE_SVG_ROUTE}circle-add.svg`;
 export const CIRCLE_CHECK = `${VITE_SVG_ROUTE}circle-check.svg`;
+export const CAR = `${VITE_SVG_ROUTE}/activities/car.svg`;
+export const ENERGY = `${VITE_SVG_ROUTE}/activities/energy.svg`;
+export const FOOD = `${VITE_SVG_ROUTE}/activities/food.svg`;
+export const CUSTOM = `${VITE_SVG_ROUTE}/activities/custom.svg`;
 
 export const iconsMap = {
 	HOME,
@@ -64,4 +68,8 @@ export const iconsMap = {
 	GALLERY,
 	CIRCLE_ADD,
 	CIRCLE_CHECK,
+	CAR,
+	ENERGY,
+	FOOD,
+	CUSTOM,
 };
