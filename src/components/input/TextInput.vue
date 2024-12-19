@@ -1,6 +1,12 @@
 <template>
-    <div class="text-input-container">
-        <input type="text" class="text-input" :placeholder="placeholder" v-model="value" @input="handleInput" />
+    <div class="text-input-container" :class="{ 'neumorphism': neumorphism, 'paragraph': paragraph }">
+        <template v-if="paragraph">
+            <textarea class="text-input paragraph" :placeholder="placeholder" v-model="value"
+                @input="handleInput"></textarea>
+        </template>
+        <template v-else>
+            <input type="text" class="text-input" :placeholder="placeholder" v-model="value" @input="handleInput" />
+        </template>
     </div>
 </template>
 
@@ -15,6 +21,14 @@ const props = defineProps({
     placeholder: {
         type: String,
         default: 'Ingrese texto...',
+    },
+    neumorphism: {
+        type: Boolean,
+        default: true,
+    },
+    paragraph: {
+        type: Boolean,
+        default: false,
     },
 });
 
@@ -36,21 +50,36 @@ const handleInput = (event) => {
     align-items: center;
     width: 333px;
     height: 55px;
-    padding: 0 12px;
+    padding: 0 17px;
     border-radius: 100px;
+    background: #EDEEF0;
+}
+
+.text-input-container.neumorphism {
     background: #ebebeb;
     box-shadow: -5px 5px 10px 0px rgba(212, 212, 212, 0.20) inset, 5px -5px 10px 0px rgba(212, 212, 212, 0.20) inset, -5px -5px 10px 0px rgba(255, 255, 255, 0.90) inset, 5px 5px 13px 0px rgba(212, 212, 212, 0.90) inset;
 }
 
+.text-input-container.paragraph {
+    align-items: flex-start;
+    border-radius: 30px;
+    height: 108px;
+    padding: 17px;
+}
+
 .text-input {
     width: 100%;
-    height: 22px;
     font-family: 'Stolzl Regular';
     font-size: 13px;
     color: #292b2e;
     background: none;
     border: none;
     outline: none;
+    resize: none;
+}
+
+.text-input.paragraph {
+    height: 100%;
 }
 
 .text-input::placeholder {

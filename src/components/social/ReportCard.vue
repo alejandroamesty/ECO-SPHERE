@@ -35,7 +35,7 @@
             </div>
         </div>
     </Teleport>
-    <div v-else class="card-container">
+    <div v-else class="card-container neumorphism">
         <div class="report-image">
             <div class="report-badge">
                 <Badge text="REPORTE" :icon="ASTERISK" />
@@ -84,7 +84,7 @@ const props = defineProps({
     icon: { type: String, required: true },
     name: { type: String, required: true },
     username: { type: String, required: true },
-    isModal: { type: Boolean, default: false }, // Nueva prop para saber si es modal o no
+    isModal: { type: Boolean, default: false },
 });
 
 const { image, description, latitude, longitude, date, icon, name, username, isModal } = toRefs(props);
@@ -128,6 +128,10 @@ defineExpose({
     border-radius: 30px;
 }
 
+.card-container.neumorphism {
+    box-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3), -1px -1px 2px rgba(230, 230, 230, 0.5), inset -5px 5px 10px rgba(230, 230, 230, 0.2), inset 5px -5px 10px rgba(230, 230, 230, 0.2), inset -5px -5px 10px rgba(255, 255, 255, 0.9), inset 5px 5px 13px rgba(230, 230, 230, 0.9);
+}
+
 .modal {
     position: fixed;
     bottom: -100px;
@@ -140,7 +144,6 @@ defineExpose({
     align-items: center;
     width: 338px;
     height: fit-content;
-    background: #FFFFFF;
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
     gap: 22px;
