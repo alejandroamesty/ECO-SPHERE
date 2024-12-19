@@ -37,6 +37,7 @@ export { default as Stats } from "./social/Stats.vue";
 export { default as ReportCard } from "./social/ReportCard.vue";
 export { default as Sphere } from "./social/Sphere.vue";
 export { default as Message } from "./social/Message.vue";
+export { default as GraphicCard } from "./social/GraphicCard.vue";
 
 /* Lists */
 
@@ -48,10 +49,12 @@ export { default as FootprintList } from "./list/FootprintList.vue";
 export { default as ReportList } from "./list/ReportList.vue";
 export { default as ContentBoxes } from "./list/ContentBoxes.vue";
 export { default as CheckList } from "./list/CheckList.vue";
+export { default as ActivityList } from "./list/ActivityList.vue";
 
 /* General */
 
 export { default as Badge } from "./general/Badge.vue";
 export { default as LeafletMap } from "./general/LeafletMap.vue";
 export { default as ProgressBar } from "./general/ProgressBar.vue";
+export { default as GraphicBar } from "./general/GraphicBar.vue";
 export { default as Modal } from "./general/Modal.vue";
