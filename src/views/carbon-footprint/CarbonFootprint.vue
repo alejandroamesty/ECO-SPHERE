@@ -34,7 +34,7 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 import { ProgressBar } from "../../components/index";
 import NumericDialog from './NumericDialog.vue';
 import SelectDialog from './SelectDialog.vue';
-import form from '../../utils/form.json';
+import form from '../../utils/emissions.json';
 
 const currentStep = ref(1);
 const questions = ref(form.questions);
