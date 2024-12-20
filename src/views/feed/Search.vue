@@ -12,16 +12,16 @@
 			</ion-toolbar>
 		</ion-header>
 		<ion-content :fullscreen="true" scroll-y="false"></ion-content>
-		<ContextMenu ref="filterMenu" :options="menuOptions" />
+		<ContextMenu ref="filterMenu" :options="menuOptions" @selected="filterSearch" />
 		<div class="content">
-			<SearchInput v-model="searchValue" placeholder="Buscar por nombre de usuario" :onClick="search" />
-			<ProfileList :profiles="profiles" />
+			<SearchInput v-model="searchValue" placeholder="Buscar por nombre de usuario" :onClick="search" @input="debouncedSearch" />
+			<ProfileList :profiles="filteredProfiles" />
 		</div>
 	</ion-page>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { IonPage, IonContent, IonHeader, IonToolbar } from '@ionic/vue';
 import { onIonViewWillLeave } from '@ionic/vue';
@@ -34,19 +34,23 @@ const router = useRouter();
 const store = useGlobalStore();
 
 const searchValue = ref('');
+const filterValue = ref('');
+
+const profiles = ref([]);
+const filteredProfiles = ref([]);
+
+const filterMenu = ref(null);
+
+let debounceTimeout = null;
 
 const menuOptions = [
 	{ label: 'Perfiles', icon: PROFILE },
 	{ label: 'Comunidades', icon: COMMUNITY },
 ];
 
-const profiles = ref([]);
-
-const filterMenu = ref(null);
-
 /**
- * Posiciona el menú de filtro en la pantalla.
- * @param event
+ * Muestra u oculta el menú contextual al hacer clic en el botón de filtro.
+ * @param event - Evento click.
  */
 const handleFilterClick = (event) => {
 	if (filterMenu.value.isVisible) {
@@ -56,45 +60,92 @@ const handleFilterClick = (event) => {
 
 	const rect = event.currentTarget.getBoundingClientRect();
 	const menuWidth = 160;
-
 	const x = window.innerWidth - menuWidth - 25;
 	const y = rect.bottom + 10;
-
-	const position = { x, y };
-	filterMenu.value.showMenu(position);
+	filterMenu.value.showMenu({ x, y });
 };
 
-/**
- * Navega a la vista anterior.
- */
 const handleBackClick = () => {
 	router.push('/tabs/feed');
 };
 
 /**
- * Realiza una solicitud de red para obtener los perfiles que coincidan con el valor de búsqueda.
+ * Realiza una búsqueda de perfiles al escribir en el campo de búsqueda.
+ */
+const debouncedSearch = () => {
+	if (debounceTimeout) {
+		clearTimeout(debounceTimeout);
+	}
+
+	debounceTimeout = setTimeout(() => {
+		search();
+	}, 500);
+};
+
+/**
+ * Realiza una solicitud de red para obtener perfiles que coincidan con el valor de búsqueda.
  */
 const search = async () => {
-	try {
-		const { data } = await api.setMethod('get').setEndpoint(`users/username/${searchValue.value}`).send();
-		const username = store.user.username;
+	if (!searchValue.value) return;
 
+	try {
+		const { data } = await api.setMethod('get').setEndpoint(`search?parameter=${searchValue.value}&page=1`).send();
+		const username = store.user.username;
 		const profilesData = [];
-		if (data && data.user) {
-			if (data.user.username !== username) {
+
+		if (data && data.users) {
+			data.users.forEach((user) => {
+				if (user.username !== username) {
+					profilesData.push({
+						name: `${user.fname} ${user.lname}`,
+						username: `@${user.username}`,
+						icon: user.image || 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+						checked: false,
+						type: 'user',
+					});
+				}
+			});
+		}
+
+		if (data && data.communities) {
+			data.communities.forEach((community) => {
 				profilesData.push({
-					name: `${data.user.fname} ${data.user.lname}`,
-					username: `@${data.user.username}`,
-					icon: data.user.image || 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+					name: community.name,
+					username: 'Comunidad',
+					icon: community.image || 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
 					checked: false,
+					type: 'community',
 				});
-			}
+			});
 		}
 
 		if (!profilesData.length) profiles.value = [];
-		if (profilesData.length > 0) profiles.value = profilesData;
+		if (profilesData.length > 0) {
+			profiles.value = profilesData;
+			filteredProfiles.value = profilesData;
+		}
 	} catch (error) {
 		console.log(error);
+	}
+};
+
+/**
+ * Filtra la búsqueda de perfiles por tipo.
+ * @param option - Opción seleccionada.
+ */
+const filterSearch = (option) => {
+	if (filterValue.value === option.label) {
+		filteredProfiles.value = profiles.value;
+		filterValue.value = '';
+		return;
+	}
+
+	if (option.label === 'Perfiles') {
+		filterValue.value = 'Perfiles';
+		filteredProfiles.value = profiles.value.filter((profile) => profile.type === 'user');
+	} else if (option.label === 'Comunidades') {
+		filterValue.value = 'Comunidades';
+		filteredProfiles.value = profiles.value.filter((profile) => profile.type === 'community');
 	}
 };
 
@@ -103,6 +154,17 @@ const search = async () => {
  */
 onIonViewWillLeave(() => {
 	filterMenu.value.hideMenu();
+	filteredProfiles.value = [];
+});
+
+/**
+ * Limpia la lista de perfiles al borrar el campo de búsqueda.
+ */
+watch(searchValue, (newValue) => {
+	if (newValue === '') {
+		filteredProfiles.value = [];
+		profiles.value = [];
+	}
 });
 </script>
 
@@ -147,28 +209,6 @@ ion-content {
 	position: relative;
 	flex-direction: row;
 	flex-shrink: 0;
-}
-
-.title-1 {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-	left: 25px;
-	color: #fff;
-	font-family: 'BR Omny SemiBold';
-	font-size: 20px;
-}
-
-.title-2 {
-	font-family: 'BR Omny Regular';
-}
-
-.buttons {
-	display: flex;
-	flex-direction: row;
-	position: relative;
-	gap: 8px;
 }
 
 .content {
