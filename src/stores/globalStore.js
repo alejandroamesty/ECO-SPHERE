@@ -1,13 +1,18 @@
-import { defineStore } from "pinia";
-import { ref } from "vue";
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
 export const useGlobalStore = defineStore(
-	"auth",
+	'auth',
 	() => {
 		const token = ref(null);
+		const user = ref(null);
 
-		const setToken = (token) => {
-			token.value = token;
+		const setToken = (newToken) => {
+			token.value = newToken;
+		};
+
+		const setUser = (newUser) => {
+			user.value = newUser;
 		};
 
 		const $reset = () => {
@@ -17,6 +22,8 @@ export const useGlobalStore = defineStore(
 		return {
 			token,
 			setToken,
+			user,
+			setUser,
 			$reset,
 		};
 	},
@@ -25,11 +32,11 @@ export const useGlobalStore = defineStore(
 			enabled: true,
 			strategies: [
 				{
-					key: "auth",
+					key: 'auth',
 					storage: localStorage,
-					paths: ["token"],
+					paths: ['token', 'user'],
 				},
 			],
 		},
-	}
+	},
 );
