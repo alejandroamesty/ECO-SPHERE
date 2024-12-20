@@ -1,12 +1,12 @@
-import axios from "axios";
+import axios from 'axios';
 
 class Communication {
-	constructor({ baseURL = "", fetchOptions = {}, token = "" } = {}) {
+	constructor({ baseURL = '', fetchOptions = {}, token = '' } = {}) {
 		this.baseURL = baseURL;
 		this.fetchOptions = fetchOptions;
 		this.token = token;
-		this.method = "get";
-		this.endpoint = "";
+		this.method = 'get';
+		this.endpoint = '';
 		this.params = {};
 	}
 
@@ -15,7 +15,7 @@ class Communication {
 	 * @param {String} method
 	 * @returns {Communication} Instancia de la clase.
 	 */
-	method(method) {
+	setMethod(method) {
 		this.method = method;
 		return this;
 	}
@@ -25,7 +25,7 @@ class Communication {
 	 * @param {String} endpoint
 	 * @returns {Communication} Instancia de la clase.
 	 */
-	endpoint(endpoint) {
+	setEndpoint(endpoint) {
 		this.endpoint = endpoint;
 		return this;
 	}
@@ -35,7 +35,7 @@ class Communication {
 	 * @param {Object} params
 	 * @returns {Communication} Instancia de la clase.
 	 */
-	params(params) {
+	setParams(params) {
 		this.params = params;
 		return this;
 	}
@@ -44,8 +44,8 @@ class Communication {
 	 * Limpia los datos de la instancia.
 	 */
 	clear() {
-		this.method = "get";
-		this.endpoint = "";
+		this.method = 'get';
+		this.endpoint = '';
 		this.params = {};
 		this.fetchOptions = {};
 	}
