@@ -13,19 +13,8 @@
 								</div>
 							</div>
 							<div class="bottom-layout">
-								<Stats
-									icon="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"
-									name="Alejandro Ávila"
-									username="@alejandroamesty"
-									followers="100"
-									following="200"
-									reduced="4.8 tons"
-								/>
-								<ToggleButton
-									v-model="toggleValue"
-									leftLabel="MySphere"
-									rightLabel="Publicaciones"
-								/>
+								<Stats icon="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png" :name="name" :username="username" :followers="followers" :following="followers" reduced="4.8 tons" />
+								<ToggleButton v-model="toggleValue" leftLabel="MySphere" rightLabel="Publicaciones" />
 							</div>
 						</template>
 					</Header>
@@ -47,30 +36,15 @@
 							</template>
 							<template #slide2>
 								<div class="body posts">
-									<Post
-										:icon="SEARCH"
-										name="Alejandro Ávila"
-										username="@alejandroamesty"
-										:content="text2"
-									/>
+									<Post :icon="SEARCH" name="Alejandro Ávila" username="@alejandroamesty" :content="text2" />
 								</div>
 							</template>
 						</Slider>
 					</ion-content>
-					<Modal
-						title="Publicación"
-						:isOpen="showModal"
-						:onClose="closeModal"
-						:backButton="closeModal"
-						:nextButton="closeModal"
-					>
+					<Modal title="Publicación" :isOpen="showModal" :onClose="closeModal" :backButton="closeModal" :nextButton="closeModal">
 						<div class="modal-content">
 							<span class="label">Descripción</span>
-							<TextInput
-								placeholder="Ingresa una descripción"
-								:neumorphism="false"
-								:paragraph="true"
-							/>
+							<TextInput placeholder="Ingresa una descripción" :neumorphism="false" :paragraph="true" />
 							<span class="label">Contenido</span>
 							<ContentBoxes :boxes="boxes" @select-content="selectContent" />
 						</div>
@@ -82,26 +56,22 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { IonPage, IonContent } from "@ionic/vue";
-import { onIonViewWillEnter } from "@ionic/vue";
-import { ADD, HAMBURGER } from "../../utils/icons";
-import {
-	Header,
-	RoundButton,
-	ToggleButton,
-	MenuContainer,
-	Slider,
-	Stats,
-	Sphere,
-	Post,
-	FootprintList,
-	Modal,
-	TextInput,
-	ContentBoxes,
-} from "../../components/index";
+import { ref } from 'vue';
+import { IonPage, IonContent } from '@ionic/vue';
+import { onIonViewWillEnter } from '@ionic/vue';
+import { ADD, HAMBURGER } from '../../utils/icons';
+import { Header, RoundButton, ToggleButton, MenuContainer, Slider, Stats, Sphere, Post, FootprintList, Modal, TextInput, ContentBoxes } from '../../components/index';
+import { useGlobalStore } from '../../stores/globalStore';
+import { api } from '../../api/api';
 
-const text2 = "Test";
+const store = useGlobalStore();
+
+const name = `${store.user.fname} ${store.user.lname}`;
+const username = `@${store.user.username.toLowerCase()}`;
+const followers = ref(0);
+const following = ref(0);
+
+const text2 = 'Test';
 
 const toggleValue = ref(false);
 const menu = ref();
@@ -147,13 +117,13 @@ const handleArcClick = (label) => {
 		footprintOptions.value[key] = false;
 	});
 
-	if (selectedLabel === "option1") {
+	if (selectedLabel === 'option1') {
 		footprintOptions.value.first = !currentState.option1;
-	} else if (selectedLabel === "option2") {
+	} else if (selectedLabel === 'option2') {
 		footprintOptions.value.second = !currentState.option2;
-	} else if (selectedLabel === "option3") {
+	} else if (selectedLabel === 'option3') {
 		footprintOptions.value.third = !currentState.option3;
-	} else if (selectedLabel === "option4") {
+	} else if (selectedLabel === 'option4') {
 		footprintOptions.value.fourth = !currentState.option4;
 	}
 };
@@ -173,10 +143,25 @@ const closeModal = () => {
 };
 
 /**
+ * Realiza una solicitud de red para obtener la información del usuario.
+ */
+const getUser = async () => {
+	try {
+		const { data } = await api.setMethod('get').setEndpoint(`users/${store.user.id}`).send();
+		console.log(data);
+		followers.value = data.user.followers_nu;
+		following.value = data.user.following_nu;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+/**
  * Fuerza la actualización del componente Sphere al entrar a la vista.
  */
 onIonViewWillEnter(() => {
 	sphereKey.value += 1;
+	getUser();
 });
 </script>
 
@@ -189,7 +174,7 @@ onIonViewWillEnter(() => {
 	top: 5%;
 	width: 100%;
 	font-size: 20px;
-	font-family: "Stolzl Medium";
+	font-family: 'Stolzl Medium';
 	color: #ffffff;
 	padding: 40px;
 	text-align: center;
@@ -221,12 +206,12 @@ onIonViewWillEnter(() => {
 
 .user-name {
 	font-size: 16px;
-	font-family: "Stolzl Medium";
+	font-family: 'Stolzl Medium';
 }
 
 .user-status {
 	font-size: 12px;
-	font-family: "Stolzl Regular";
+	font-family: 'Stolzl Regular';
 }
 
 .header-layout {
@@ -269,13 +254,13 @@ onIonViewWillEnter(() => {
 .sphere-title {
 	position: relative;
 	height: 14px;
-	font-family: "Stolzl Regular";
+	font-family: 'Stolzl Regular';
 	font-size: 12px;
 	color: #747474;
 }
 
 .sphere-total {
-	font-family: "Stolzl Regular";
+	font-family: 'Stolzl Regular';
 	font-size: 20px;
 	color: #292b2e;
 }
@@ -303,7 +288,7 @@ onIonViewWillEnter(() => {
 .label {
 	display: flex;
 	align-items: center;
-	font-family: "Stolzl Regular";
+	font-family: 'Stolzl Regular';
 	font-size: 13px;
 	color: #292b2e;
 }
