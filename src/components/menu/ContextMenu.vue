@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, defineEmits } from 'vue';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 const { options } = defineProps({
@@ -25,6 +25,9 @@ const position = ref({ x: 0, y: 0 });
 const activeOption = ref(null);
 const isDragging = ref(false);
 const contextMenuRef = ref(null);
+let hasEmitted = ref(false);
+
+const emit = defineEmits(['selected']);
 
 /**
  * Muestra el menú contextual en la posición especificada.
@@ -58,11 +61,14 @@ const startDragging = (index) => {
  * Detiene el arrastre de una opción del menú.
  */
 const stopDragging = () => {
-	if (isDragging.value) {
-		isDragging.value = false;
-		if (activeOption.value !== null) {
-			handleOptionClick(options[activeOption.value]);
-		}
+	if (!isDragging.value || hasEmitted.value) return;
+
+	isDragging.value = false;
+
+	if (activeOption.value !== null) {
+		handleOptionClick(options[activeOption.value]);
+		hasEmitted.value = true;
+		setTimeout(() => (hasEmitted.value = false), 200);
 	}
 };
 
@@ -71,7 +77,11 @@ const stopDragging = () => {
  * @param option - Opción seleccionada.
  */
 const handleOptionClick = (option) => {
-	console.log('Opción seleccionada:', option);
+	if (hasEmitted.value) return;
+
+	emit('selected', option);
+	hasEmitted.value = true;
+	setTimeout(() => (hasEmitted.value = false), 200);
 	setTimeout(hideMenu, 100);
 };
 
