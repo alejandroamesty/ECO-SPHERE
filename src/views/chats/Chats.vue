@@ -27,13 +27,7 @@
 			</Slider>
 		</ion-content>
 		<template>
-			<Modal
-				title="Comunidad"
-				:isOpen="showModal"
-				:onClose="resetModal"
-				:backButton="previousStep"
-				:nextButton="nextStep"
-			>
+			<Modal title="Comunidad" :isOpen="showModal" :onClose="resetModal" :backButton="previousStep" :nextButton="nextStep">
 				<transition name="fade-slide" mode="out-in">
 					<div v-if="currentStep === 1" key="step1" class="modal-content">
 						<span class="label">Agrega miembros a tu nueva comunidad</span>
@@ -47,11 +41,7 @@
 						<span class="label">Nombre</span>
 						<TextInput placeholder="Ingresa un nombre" :neumorphism="false" />
 						<span class="label">Descripción</span>
-						<TextInput
-							placeholder="Ingresa una descripción"
-							:neumorphism="false"
-							:paragraph="true"
-						/>
+						<TextInput placeholder="Ingresa una descripción" :neumorphism="false" :paragraph="true" />
 					</div>
 				</transition>
 			</Modal>
@@ -60,20 +50,11 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { IonPage, IonContent } from "@ionic/vue";
-import { ADD, SEARCH, CIRCLE_ADD } from "../../utils/icons";
-import {
-	Header,
-	RoundButton,
-	ToggleButton,
-	ChatList,
-	Slider,
-	Modal,
-	TextInput,
-	CheckList,
-} from "../../components/index";
-import { useRouter } from "vue-router";
+import { ref } from 'vue';
+import { IonPage, IonContent } from '@ionic/vue';
+import { ADD, SEARCH, CIRCLE_ADD } from '../../utils/icons';
+import { Header, RoundButton, ToggleButton, ChatList, Slider, Modal, TextInput, CheckList } from '../../components/index';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
@@ -85,33 +66,33 @@ const isAnimating = ref(false);
 const chatData = [
 	{
 		id: 1,
-		image: "https://via.placeholder.com/48",
-		name: "John Doe",
-		latest: "Hello, how are you?",
-		time: "10:45 AM",
+		image: 'https://via.placeholder.com/48',
+		name: 'John Doe',
+		latest: 'Hello, how are you?',
+		time: '10:45 AM',
 	},
 	{
 		id: 2,
-		image: "https://via.placeholder.com/48",
-		name: "Jane Smith",
-		latest: "Lets catch up later.",
-		time: "Yesterday",
+		image: 'https://via.placeholder.com/48',
+		name: 'Jane Smith',
+		latest: 'Lets catch up later.',
+		time: 'Yesterday',
 	},
 ];
 
 const options = ref([
-	{ value: 1, option: "Option", checked: false },
-	{ value: 2, option: "Option", checked: false },
-	{ value: 3, option: "Apple", checked: false },
-	{ value: 4, option: "Banana", checked: false },
+	{ value: 1, option: 'Option', checked: false },
+	{ value: 2, option: 'Option', checked: false },
+	{ value: 3, option: 'Apple', checked: false },
+	{ value: 4, option: 'Banana', checked: false },
 ]);
 
 /**
  * Abre la vista de chat privado.
  */
 const handleChatClick = (chat) => {
-	console.log("Chat clicked:", chat);
-	router.push("/private-chat");
+	console.log('Chat clicked:', chat);
+	router.push('/private-chat');
 };
 
 /**
@@ -132,7 +113,7 @@ const closeModal = () => {
  * Maneja las opciones chequeadas.
  */
 const handleCheckedOptions = (checkedOptions) => {
-	console.log("Opciones chequeadas:", checkedOptions);
+	console.log('Opciones chequeadas:', checkedOptions);
 };
 
 /**
@@ -212,7 +193,7 @@ const triggerAnimation = () => {
 .label {
 	display: flex;
 	align-self: flex-start;
-	font-family: "Stolzl Regular";
+	font-family: 'Stolzl Regular';
 	font-size: 13px;
 	color: #292b2e;
 }

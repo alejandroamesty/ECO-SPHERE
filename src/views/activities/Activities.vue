@@ -33,13 +33,7 @@
 				<template #slide2></template>
 			</Slider>
 		</ion-content>
-		<Modal
-			title="Actividad"
-			:isOpen="showModal"
-			:onClose="resetModal"
-			:backButton="previousStep"
-			:nextButton="nextStep"
-		>
+		<Modal title="Actividad" :isOpen="showModal" :onClose="resetModal" :backButton="previousStep" :nextButton="nextStep">
 			<transition name="fade-slide" mode="out-in">
 				<div v-if="currentStep === 1" key="step1" class="modal-content">
 					<span class="label">Selecciona una categoría</span>
@@ -59,43 +53,32 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { IonPage, IonContent } from "@ionic/vue";
-import { ADD } from "../../utils/icons";
-import {
-	Header,
-	RoundButton,
-	ToggleButton,
-	Slider,
-	GraphicCard,
-	GraphicBar,
-	ActivityList,
-	Modal,
-	TextInput,
-	CategoryBoxes,
-} from "../../components/index";
-import { CAR, ENERGY, FOOD, CUSTOM } from "../../utils/icons";
+import { ref } from 'vue';
+import { IonPage, IonContent } from '@ionic/vue';
+import { ADD } from '../../utils/icons';
+import { Header, RoundButton, ToggleButton, Slider, GraphicCard, GraphicBar, ActivityList, Modal, TextInput, CategoryBoxes } from '../../components/index';
+import { CAR, ENERGY, FOOD, CUSTOM } from '../../utils/icons';
 
 const toggleValue = ref(false);
 const showModal = ref(false);
 const currentStep = ref(1);
 const isAnimating = ref(false);
 
-const month = "Septiembre";
-const year = "2021";
+const month = 'Septiembre';
+const year = '2021';
 
 const options = ref([
 	{
 		value: 1,
-		option: "Usa el carro menos",
+		option: 'Usa el carro menos',
 		checked: true,
-		category: "Transporte",
+		category: 'Transporte',
 	},
 	{
 		value: 2,
-		option: "Usa transporte público",
+		option: 'Usa transporte público',
 		checked: false,
-		category: "Transporte",
+		category: 'Transporte',
 	},
 ]);
 
@@ -117,26 +100,26 @@ const months = {
 const categories = [
 	{
 		value: 1,
-		option: "Transporte",
-		description: "16 sugerencias",
+		option: 'Transporte',
+		description: '16 sugerencias',
 		icon: CAR,
 	},
 	{
 		value: 2,
-		option: "Energía",
-		description: "16 sugerencias",
+		option: 'Energía',
+		description: '16 sugerencias',
 		icon: ENERGY,
 	},
 	{
 		value: 3,
-		option: "Alimentación",
-		description: "16 sugerencias",
+		option: 'Alimentación',
+		description: '16 sugerencias',
 		icon: FOOD,
 	},
 	{
 		value: 4,
-		option: "Personalizada",
-		description: "16 sugerencias",
+		option: 'Personalizada',
+		description: '16 sugerencias',
 		icon: CUSTOM,
 	},
 ];
@@ -220,7 +203,7 @@ const handleClick = (category) => {
 	display: flex;
 	align-items: center;
 	width: 100%;
-	font-family: "Stolzl Medium";
+	font-family: 'Stolzl Medium';
 	font-size: 16px;
 	color: #292b2e;
 }
@@ -229,7 +212,7 @@ const handleClick = (category) => {
 	display: flex;
 	align-items: center;
 	width: 100%;
-	font-family: "Stolzl Regular";
+	font-family: 'Stolzl Regular';
 	font-size: 13px;
 	color: #a0a0a0;
 }
@@ -257,7 +240,7 @@ const handleClick = (category) => {
 .label {
 	display: flex;
 	align-items: center;
-	font-family: "Stolzl Regular";
+	font-family: 'Stolzl Regular';
 	font-size: 13px;
 	color: #292b2e;
 }

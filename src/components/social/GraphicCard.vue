@@ -12,8 +12,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { ref, onMounted, watch } from 'vue';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -21,7 +21,7 @@ const props = defineProps({
 	name: {
 		type: String,
 		required: true,
-		default: "usuario",
+		default: 'usuario',
 	},
 	value: {
 		type: Number,
@@ -33,8 +33,8 @@ const props = defineProps({
 	},
 });
 
-const description = ref("");
-const percentage = ref("");
+const description = ref('');
+const percentage = ref('');
 const chartRef = ref(null);
 let chartInstance = null;
 
@@ -60,31 +60,31 @@ const renderChart = () => {
 	percentage.value = progress.toFixed(0);
 
 	if (progress < 30) {
-		description.value = "¡Es hora de empezar! Aún tienes mucho por hacer.";
+		description.value = '¡Es hora de empezar! Aún tienes mucho por hacer.';
 	} else if (progress < 50) {
-		description.value = "Vas por buen camino, sigue así.";
+		description.value = 'Vas por buen camino, sigue así.';
 	} else if (progress < 80) {
-		description.value = "Recuerda completar tus actividades del mes.";
+		description.value = 'Recuerda completar tus actividades del mes.';
 	} else if (progress < 100) {
-		description.value = "¡Casi lo logras! Un último esfuerzo.";
+		description.value = '¡Casi lo logras! Un último esfuerzo.';
 	} else {
-		description.value = "¡Felicidades! Has completado tus actividades.";
+		description.value = '¡Felicidades! Has completado tus actividades.';
 	}
 
 	const data = {
 		datasets: [
 			{
 				data: [progress, 100 - progress],
-				backgroundColor: ["#9DDE8B", "#9DDE8B50"],
+				backgroundColor: ['#9DDE8B', '#9DDE8B50'],
 				borderWidth: 0,
 				borderRadius: 33,
-				cutout: "85%",
+				cutout: '85%',
 			},
 		],
 	};
 
 	chartInstance = new ChartJS(chartRef.value, {
-		type: "doughnut",
+		type: 'doughnut',
 		data,
 		options: {
 			plugins: {
@@ -120,7 +120,7 @@ const renderChart = () => {
 	display: flex;
 	align-items: center;
 	width: 215px;
-	font-family: "Stolzl Medium";
+	font-family: 'Stolzl Medium';
 	font-size: 16px;
 	color: #40a578;
 }
@@ -129,7 +129,7 @@ const renderChart = () => {
 	display: flex;
 	align-items: center;
 	width: 215px;
-	font-family: "Stolzl Regular";
+	font-family: 'Stolzl Regular';
 	font-size: 13px;
 	color: #a0a0a0;
 }
@@ -148,7 +148,7 @@ const renderChart = () => {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	font-family: "Stolzl Regular";
+	font-family: 'Stolzl Regular';
 	font-size: 13px;
 	color: #a0a0a0;
 }

@@ -2,12 +2,7 @@
 	<div class="checklist-container">
 		<div v-for="(group, letter) in sortedGroupedOptions" :key="letter" class="letter-group">
 			<div class="letter">{{ letter }}</div>
-			<div
-				v-for="option in group"
-				:key="option.value"
-				class="option-container"
-				@click="toggleCheck(option)"
-			>
+			<div v-for="option in group" :key="option.value" class="option-container" @click="toggleCheck(option)">
 				<div class="option-text">{{ option.option }}</div>
 				<div class="icon-container">
 					<div v-if="option.checked" class="icon checked">
@@ -22,8 +17,8 @@
 </template>
 
 <script setup>
-import { ref, watchEffect, computed } from "vue";
-import { CIRCLE_CHECK } from "../../utils/icons";
+import { ref, watchEffect, computed } from 'vue';
+import { CIRCLE_CHECK } from '../../utils/icons';
 
 const props = defineProps({
 	options: {
@@ -32,7 +27,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["update:checkedOptions"]);
+const emit = defineEmits(['update:checkedOptions']);
 
 const options = ref([...props.options]);
 
@@ -76,7 +71,7 @@ const sortedGroupedOptions = computed(() => {
  */
 const toggleCheck = (option) => {
 	option.checked = !option.checked;
-	emit("update:checkedOptions", getCheckedOptions());
+	emit('update:checkedOptions', getCheckedOptions());
 };
 
 /**
@@ -101,7 +96,7 @@ const getCheckedOptions = () => {
 }
 
 .letter {
-	font-family: "Stolzl Regular", sans-serif;
+	font-family: 'Stolzl Regular', sans-serif;
 	font-size: 14px;
 	color: #7d7d7d;
 	margin-bottom: 8px;
@@ -115,7 +110,7 @@ const getCheckedOptions = () => {
 }
 
 .option-text {
-	font-family: "Stolzl Regular", sans-serif;
+	font-family: 'Stolzl Regular', sans-serif;
 	font-size: 14px;
 	color: #000000;
 	flex-grow: 1;

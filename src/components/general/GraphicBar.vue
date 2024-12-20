@@ -5,8 +5,8 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from "vue";
-import { Chart, BarElement, CategoryScale, LinearScale, Title, Tooltip } from "chart.js";
+import { ref, watch, onMounted } from 'vue';
+import { Chart, BarElement, CategoryScale, LinearScale, Title, Tooltip } from 'chart.js';
 
 Chart.register(BarElement, CategoryScale, LinearScale, Title, Tooltip);
 
@@ -29,9 +29,7 @@ const createChart = () => {
 		chartInstance.destroy();
 	}
 
-	const monthNames = Object.keys(props.months).map(
-		(month) => month.charAt(0).toUpperCase() + month.slice(1)
-	);
+	const monthNames = Object.keys(props.months).map((month) => month.charAt(0).toUpperCase() + month.slice(1));
 	const monthValues = Object.values(props.months);
 	const maxValue = Math.max(...monthValues);
 
@@ -40,8 +38,8 @@ const createChart = () => {
 		datasets: [
 			{
 				data: monthValues,
-				backgroundColor: "#9DDE8B",
-				hoverBackgroundColor: "#9DDE8B",
+				backgroundColor: '#9DDE8B',
+				hoverBackgroundColor: '#9DDE8B',
 				borderWidth: 0,
 			},
 		],
@@ -58,9 +56,9 @@ const createChart = () => {
 				ticks: {
 					font: {
 						size: 12,
-						family: "Stolzl Regular, sans-serif",
+						family: 'Stolzl Regular, sans-serif',
 					},
-					color: "#292B2E",
+					color: '#292B2E',
 				},
 			},
 			y: {
@@ -72,9 +70,9 @@ const createChart = () => {
 				ticks: {
 					font: {
 						size: 12,
-						family: "Stolzl Regular, sans-serif",
+						family: 'Stolzl Regular, sans-serif',
 					},
-					color: "#A0A0A0",
+					color: '#A0A0A0',
 				},
 			},
 		},
@@ -94,7 +92,7 @@ const createChart = () => {
 	};
 
 	chartInstance = new Chart(chartCanvas.value, {
-		type: "bar",
+		type: 'bar',
 		data,
 		options,
 	});
@@ -108,7 +106,7 @@ watch(
 	() => {
 		createChart();
 	},
-	{ deep: true, immediate: true }
+	{ deep: true, immediate: true },
 );
 
 onMounted(() => {

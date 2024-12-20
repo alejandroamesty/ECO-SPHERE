@@ -1,11 +1,6 @@
 <template>
 	<div class="category-boxes-container">
-		<div
-			class="category-box"
-			v-for="category in options"
-			:key="category.value"
-			@click="handleClick(category)"
-		>
+		<div class="category-box" v-for="category in options" :key="category.value" @click="handleClick(category)">
 			<div class="icon-container">
 				<img :src="category.icon" alt="Icon" class="icon" />
 			</div>
@@ -26,10 +21,10 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["selected"]);
+const emit = defineEmits(['selected']);
 
 const handleClick = (category) => {
-	emit("selected", category);
+	emit('selected', category);
 };
 </script>
 
@@ -52,7 +47,7 @@ const handleClick = (category) => {
 	background: #edeef0;
 	border-radius: 30px;
 	padding: 25px;
-	cursor: pointer; 
+	cursor: pointer;
 }
 
 .icon-container {
@@ -84,7 +79,7 @@ const handleClick = (category) => {
 	color: #292b2e;
 	text-align: center;
 	width: 109px;
-	font-family: "Stolzl Regular", sans-serif;
+	font-family: 'Stolzl Regular', sans-serif;
 	font-size: 14px;
 }
 
@@ -92,7 +87,7 @@ const handleClick = (category) => {
 	display: flex;
 	align-items: center;
 	width: 109px;
-	font-family: "Stolzl Regular", sans-serif;
+	font-family: 'Stolzl Regular', sans-serif;
 	font-size: 12px;
 	color: #949799;
 	text-align: left;

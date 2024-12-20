@@ -13,9 +13,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
-import { CIRCLE_ADD } from "../../utils/icons";
+import { ref } from 'vue';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { CIRCLE_ADD } from '../../utils/icons';
 
 const props = defineProps({
 	order: {
@@ -36,7 +36,7 @@ const handleClick = async () => {
 
 		content.value = image.webPath;
 	} catch (error) {
-		console.error("Error al seleccionar contenido:", error);
+		console.error('Error al seleccionar contenido:', error);
 	}
 };
 </script>

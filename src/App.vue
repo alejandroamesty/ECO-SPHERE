@@ -1,7 +1,7 @@
 <template>
-  <ion-app>
-    <ion-router-outlet />
-  </ion-app>
+	<ion-app>
+		<ion-router-outlet />
+	</ion-app>
 </template>
 
 <script setup>
@@ -14,12 +14,12 @@ import { StatusBar, Style } from '@capacitor/status-bar';
  * Configura los estilos de la barra de estado.
  */
 onMounted(async () => {
-  Keyboard.setResizeMode({
-    mode: 'none',
-  });
-  await StatusBar.setStyle({ style: Style.Dark });
-  await StatusBar.setBackgroundColor({
-    color: '#40A578'
-  });
+	Keyboard.setResizeMode({
+		mode: 'none',
+	});
+	await StatusBar.setStyle({ style: Style.Dark });
+	await StatusBar.setBackgroundColor({
+		color: '#40A578',
+	});
 });
 </script>

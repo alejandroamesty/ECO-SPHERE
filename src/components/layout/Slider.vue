@@ -1,27 +1,26 @@
 <template>
-    <div :class="['slider-container', { 'absolute-position': fullscreen }]" @touchstart="handleTouchStart"
-        @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-        <div class="slider" :class="{ 'slide-left': currentIndex, 'slide-right': !currentIndex }">
-            <div class="slide first">
-                <slot name="slide1"></slot>
-            </div>
-            <div class="slide second">
-                <slot name="slide2"></slot>
-            </div>
-        </div>
-    </div>
+	<div :class="['slider-container', { 'absolute-position': fullscreen }]" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+		<div class="slider" :class="{ 'slide-left': currentIndex, 'slide-right': !currentIndex }">
+			<div class="slide first">
+				<slot name="slide1"></slot>
+			</div>
+			<div class="slide second">
+				<slot name="slide2"></slot>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script setup>
 const props = defineProps({
-    currentIndex: {
-        type: Boolean,
-        required: true,
-    },
-    fullscreen: {
-        type: Boolean,
-        default: false,
-    },
+	currentIndex: {
+		type: Boolean,
+		required: true,
+	},
+	fullscreen: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits(['update:currentIndex']);
@@ -35,84 +34,84 @@ let isHorizontalSwipe = false;
  * Maneja el evento de inicio de un toque.
  */
 const handleTouchStart = (event) => {
-    if (props.fullscreen) return;
+	if (props.fullscreen) return;
 
-    touchStartX = event.touches[0].clientX;
-    touchStartY = event.touches[0].clientY;
-    isHorizontalSwipe = false;
+	touchStartX = event.touches[0].clientX;
+	touchStartY = event.touches[0].clientY;
+	isHorizontalSwipe = false;
 };
 
 /**
  * Determina si el movimiento es principalmente horizontal o vertical.
  */
 const handleTouchMove = (event) => {
-    if (props.fullscreen) return;
+	if (props.fullscreen) return;
 
-    const deltaX = event.touches[0].clientX - touchStartX;
-    const deltaY = event.touches[0].clientY - touchStartY;
+	const deltaX = event.touches[0].clientX - touchStartX;
+	const deltaY = event.touches[0].clientY - touchStartY;
 
-    if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        isHorizontalSwipe = true;
-    }
+	if (Math.abs(deltaX) > Math.abs(deltaY)) {
+		isHorizontalSwipe = true;
+	}
 };
 
 /**
  * Actualiza el índice actual del slider si el swipe fue horizontal.
  */
 const handleTouchEnd = (event) => {
-    if (props.fullscreen || !isHorizontalSwipe) return;
+	if (props.fullscreen || !isHorizontalSwipe) return;
 
-    touchEndX = event.changedTouches[0].clientX;
+	touchEndX = event.changedTouches[0].clientX;
 
-    if (touchStartX > touchEndX) {
-        emit('update:currentIndex', true);
-    } else if (touchStartX < touchEndX) {
-        emit('update:currentIndex', false);
-    }
+	if (touchStartX > touchEndX) {
+		emit('update:currentIndex', true);
+	} else if (touchStartX < touchEndX) {
+		emit('update:currentIndex', false);
+	}
 };
 </script>
 
 <style scoped>
 .slider-container {
-    position: relative;
-    width: 100%;
-    height: calc(100% - 100px);
+	position: relative;
+	width: 100%;
+	height: calc(100% - 100px);
 }
 
 .slider-container.absolute-position {
-    position: absolute;
-    top: 0;
+	position: absolute;
+	top: 0;
 }
 
 .slider {
-    display: flex;
-    width: calc(200% + 60px);
-    transition: transform 0.3s ease-in-out;
+	display: flex;
+	width: calc(200% + 60px);
+	transition: transform 0.3s ease-in-out;
 }
 
 .slide {
-    flex: 0 0 calc(50% - 30px);
-    margin-right: 30px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    max-height: 100%;
+	flex: 0 0 calc(50% - 30px);
+	margin-right: 30px;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	max-height: 100%;
 }
 
 .first,
 .second {
-    display: flex;
-    justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 .second {
-    margin-left: 30px;
+	margin-left: 30px;
 }
 
 .slider.slide-left {
-    transform: translateX(calc(-50% - 30px));
+	transform: translateX(calc(-50% - 30px));
 }
 
 .slider.slide-right {
-    transform: translateX(0);
+	transform: translateX(0);
 }
 </style>

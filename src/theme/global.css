@@ -6,28 +6,28 @@
 /* Fuentes de texto de la aplicación */
 
 @font-face {
-	font-family: "BR Omny Medium";
-	src: url("../assets/fonts/BROmny-Medium.otf") format("opentype");
+	font-family: 'BR Omny Medium';
+	src: url('../assets/fonts/BROmny-Medium.otf') format('opentype');
 }
 
 @font-face {
-	font-family: "BR Omny Regular";
-	src: url("../assets/fonts/BROmny-Regular.otf") format("opentype");
+	font-family: 'BR Omny Regular';
+	src: url('../assets/fonts/BROmny-Regular.otf') format('opentype');
 }
 
 @font-face {
-	font-family: "BR Omny SemiBold";
-	src: url("../assets/fonts/BROmny-SemiBold.otf") format("opentype");
+	font-family: 'BR Omny SemiBold';
+	src: url('../assets/fonts/BROmny-SemiBold.otf') format('opentype');
 }
 
 @font-face {
-	font-family: "Stolzl Medium";
-	src: url("../assets/fonts/stolzl_medium.otf") format("opentype");
+	font-family: 'Stolzl Medium';
+	src: url('../assets/fonts/stolzl_medium.otf') format('opentype');
 }
 
 @font-face {
-	font-family: "Stolzl Regular";
-	src: url("../assets/fonts/stolzl_regular.otf") format("opentype");
+	font-family: 'Stolzl Regular';
+	src: url('../assets/fonts/stolzl_regular.otf') format('opentype');
 }
 
 /* Estilos globales */
@@ -57,7 +57,7 @@ ion-content {
 	position: relative;
 	left: 25px;
 	color: #fff;
-	font-family: "BR Omny SemiBold";
+	font-family: 'BR Omny SemiBold';
 	font-size: 20px;
 }
 
