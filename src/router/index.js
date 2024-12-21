@@ -76,6 +76,14 @@ const routes = [
 		path: '/community-chat',
 		component: () => import('@/views/chats/CommunityChat.vue'),
 	},
+	{
+		path: '/user-profile',
+		component: () => import('@/views/feed/User.vue'),
+	},
+	{
+		path: '/community-profile',
+		component: () => import('@/views/feed/Community.vue'),
+	},
 ];
 
 const router = createRouter({
