@@ -15,7 +15,7 @@
 		<ContextMenu ref="filterMenu" :options="menuOptions" @selected="filterSearch" />
 		<div class="content">
 			<SearchInput v-model="searchValue" placeholder="Buscar por nombre de usuario" :onClick="search" @input="debouncedSearch" />
-			<ProfileList :profiles="filteredProfiles" />
+			<ProfileList :profiles="filteredProfiles" @profile-selected="handleProfileClick" />
 		</div>
 	</ion-page>
 </template>
@@ -97,6 +97,7 @@ const search = async () => {
 			data.users.forEach((user) => {
 				if (user.username !== username) {
 					profilesData.push({
+						id: user.id,
 						name: `${user.fname} ${user.lname}`,
 						username: `@${user.username}`,
 						icon: user.image || 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
@@ -110,6 +111,7 @@ const search = async () => {
 		if (data && data.communities) {
 			data.communities.forEach((community) => {
 				profilesData.push({
+					id: community.id,
 					name: community.name,
 					username: 'Comunidad',
 					icon: community.image || 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
@@ -146,6 +148,18 @@ const filterSearch = (option) => {
 	} else if (option.label === 'Comunidades') {
 		filterValue.value = 'Comunidades';
 		filteredProfiles.value = profiles.value.filter((profile) => profile.type === 'community');
+	}
+};
+
+/**
+ * Maneja el perfil seleccionado.
+ * @param profile - Datos del perfil seleccionado.
+ */
+const handleProfileClick = (profile) => {
+	if (profile.type === 'user') {
+		router.push({ path: '/user-profile', query: { id: profile.id } });
+	} else if (profile.type === 'community') {
+		router.push({ path: '/community-profile', query: { id: profile.id } });
 	}
 };
 
