@@ -1,5 +1,5 @@
 <template>
-	<div class="profile-container">
+	<div class="profile-container" @click="handleClick">
 		<div class="user-container">
 			<img class="user-icon" :src="icon" alt="User Icon" />
 			<div class="user-info">
@@ -7,15 +7,17 @@
 				<div class="username">{{ username }}</div>
 			</div>
 		</div>
-		<TextButton v-model:checked="isButtonSelected" :caption="isButtonSelected ? 'SIGUIENDO' : 'SEGUIR'" />
 	</div>
 </template>
 
 <script setup>
-import { ref, toRefs, watch } from 'vue';
-import { TextButton } from '..';
+import { toRefs } from 'vue';
 
 const props = defineProps({
+	id: {
+		type: String,
+		required: true,
+	},
 	icon: {
 		type: String,
 		required: true,
@@ -28,31 +30,22 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
-	checked: {
-		type: Boolean,
-		default: false,
+	type: {
+		type: String,
+		required: true,
 	},
 });
 
-const emit = defineEmits(['update:checked']);
+const emit = defineEmits(['select-profile']);
 
-const { icon, name, username } = toRefs(props);
+const { id, icon, name, username, type } = toRefs(props);
 
-const isButtonSelected = ref(props.checked);
-
-watch(
-	() => props.checked,
-	(newValue) => {
-		isButtonSelected.value = newValue;
-	},
-);
-
-watch(
-	() => isButtonSelected.value,
-	(newValue) => {
-		emit('update:checked', newValue);
-	},
-);
+/**
+ * Emite un evento con los datos del perfil seleccionado.
+ */
+const handleClick = () => {
+	emit('select-profile', { id: id.value, icon: icon.value, name: name.value, username: username.value, type: type.value });
+};
 </script>
 
 <style scoped>

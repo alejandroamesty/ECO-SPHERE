@@ -1,6 +1,6 @@
 <template>
 	<div class="profile-list-container">
-		<Profile v-for="(profile, index) in profiles" :key="index" :icon="profile.icon" :name="profile.name" :username="profile.username" :checked="profile.checked" @update:checked="(value) => handleCheckedChange(index, value)" />
+		<Profile v-for="(profile, index) in profiles" :key="index" :id="profile.id" :icon="profile.icon" :name="profile.name" :username="profile.username" :type="profile.type" @select-profile="handleProfileSelect" />
 	</div>
 </template>
 
@@ -14,17 +14,14 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(['update:profiles']);
+const emit = defineEmits(['profile-selected']);
 
 /**
- * Maneja el cambio de la propiedad checked de un perfil.
- * @param index - Índice del perfil en el array de perfiles.
- * @param value - Nuevo valor de la propiedad checked.
+ * Emite un evento con el perfil seleccionado del listado.
+ * @param profile - Datos del perfil seleccionado.
  */
-const handleCheckedChange = (index, value) => {
-	const updatedProfiles = [...props.profiles];
-	updatedProfiles[index].checked = value;
-	emit('update:profiles', updatedProfiles);
+const handleProfileSelect = (profile) => {
+	emit('profile-selected', profile);
 };
 </script>
 
