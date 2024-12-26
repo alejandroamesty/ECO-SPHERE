@@ -3,7 +3,7 @@
 		<ion-header class="ion-no-border">
 			<ion-toolbar>
 				<div class="header">
-					<RoundButton :icon="SEARCH" :size="40" />
+					<RoundButton :icon="BACK" :size="40" :onClick="goBack" />
 					<div class="container">
 						<div class="title">Nueva contraseña</div>
 						<div class="subtitle">Renueva tu acceso hacia un futuro sostenible.</div>
@@ -15,11 +15,11 @@
 			<div class="body">
 				<div class="content">
 					<div class="label">Nueva contraseña</div>
-					<TextInput v-model="inputValue" placeholder="Ingresa tu contraseña" />
+					<TextInput v-model="password" placeholder="Ingresa tu contraseña" />
 					<div class="label">Confirmar contraseña</div>
-					<TextInput v-model="inputValue" placeholder="Reingresa tu contraseña" />
+					<TextInput v-model="confirmPassword" placeholder="Reingresa tu contraseña" />
 					<div class="button">
-						<BigButton caption="Continuar" @click="openLogin" />
+						<BigButton caption="Continuar" @click="resetPassword" />
 					</div>
 				</div>
 			</div>
@@ -28,19 +28,43 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { IonPage, IonToolbar, IonContent } from '@ionic/vue';
-import { SEARCH } from '../../../utils/icons';
+import { BACK } from '../../../utils/icons';
 import { RoundButton, TextInput, BigButton } from '../../../components/index';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { authApi } from '../../../api/api';
 
+const route = useRoute();
 const router = useRouter();
 
-const openVerifyCode = () => {
-	router.push('/auth/verify-code');
+const password = ref('');
+const confirmPassword = ref('');
+
+/**
+ * Realiza una solicitud de red para cambiar la contraseña.
+ */
+const resetPassword = async () => {
+	if (password.value !== confirmPassword.value) {
+		return;
+	}
+
+	try {
+		await authApi
+			.setMethod('put')
+			.setEndpoint('reset-password')
+			.send({ email: route.query.email, key: Number(route.query.key), password: password.value });
+		router.push('/auth/login');
+	} catch (error) {
+		console.log(error);
+	}
 };
 
-const openLogin = () => {
-	router.push('/auth/login');
+/**
+ * Regresa a la vista anterior.
+ */
+const goBack = () => {
+	router.back();
 };
 </script>
 

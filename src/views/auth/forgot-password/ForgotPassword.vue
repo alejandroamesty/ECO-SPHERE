@@ -3,7 +3,7 @@
 		<ion-header class="ion-no-border">
 			<ion-toolbar>
 				<div class="header">
-					<RoundButton :icon="SEARCH" :size="40" />
+					<RoundButton :icon="BACK" :size="40" :onClick="goBack" />
 					<div class="container">
 						<div class="title">¿No puedes acceder?</div>
 						<div class="subtitle">Te ayudamos a volver al camino verde.</div>
@@ -29,7 +29,7 @@
 <script setup>
 import { ref } from 'vue';
 import { IonPage, IonToolbar, IonContent } from '@ionic/vue';
-import { SEARCH } from '../../../utils/icons';
+import { BACK } from '../../../utils/icons';
 import { RoundButton, TextInput, BigButton } from '../../../components/index';
 import { useRouter } from 'vue-router';
 import { authApi } from '../../../api/api';
@@ -38,6 +38,9 @@ const router = useRouter();
 
 const email = ref('');
 
+/**
+ * Abre la vista de registro.
+ */
 const openRegister = () => {
 	router.push('/auth/register');
 };
@@ -48,10 +51,17 @@ const openRegister = () => {
 const forgotPassword = async () => {
 	try {
 		await authApi.setMethod('post').setEndpoint('forgot-password').send({ email: email.value });
-		router.push('/auth/verify-code');
+		router.push({ path: '/auth/verify-code', query: { email: email.value } });
 	} catch (error) {
 		console.log(error);
 	}
+};
+
+/**
+ * Regresa a la vista anterior.
+ */
+const goBack = () => {
+	router.back();
 };
 </script>
 
