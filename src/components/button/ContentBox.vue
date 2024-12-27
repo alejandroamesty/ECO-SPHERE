@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { CIRCLE_ADD } from '../../utils/icons';
 
@@ -22,19 +22,28 @@ const props = defineProps({
 		type: Number,
 		required: true,
 	},
+	modelValue: {
+		type: String,
+		default: null,
+	},
 });
 
-const content = ref(null);
+const emit = defineEmits(['update:modelValue']);
+const content = ref(props.modelValue);
+
+watch(content, (newValue) => {
+	emit('update:modelValue', newValue);
+});
 
 const handleClick = async () => {
 	try {
 		const image = await Camera.getPhoto({
 			quality: 90,
 			source: CameraSource.Prompt,
-			resultType: CameraResultType.Uri,
+			resultType: CameraResultType.DataUrl,
 		});
 
-		content.value = image.webPath;
+		content.value = image.dataUrl;
 	} catch (error) {
 		console.error('Error al seleccionar contenido:', error);
 	}

@@ -180,7 +180,7 @@ defineExpose({
 
 .report-description {
 	width: 293px;
-	height: 48px;
+	max-height: 48px;
 	font-family: 'Stolzl Regular';
 	font-size: 13px;
 	color: #292b2e;
@@ -239,7 +239,7 @@ defineExpose({
 .name {
 	display: flex;
 	align-items: center;
-	width: 114px;
+	/* width: 114px; */
 	height: 16px;
 	font-family: 'Stolzl Medium';
 	font-size: 14px;
@@ -249,7 +249,7 @@ defineExpose({
 .username {
 	display: flex;
 	align-items: center;
-	width: 129px;
+	/* width: 129px; */
 	height: 16px;
 	font-family: 'Stolzl Regular';
 	font-size: 11px;

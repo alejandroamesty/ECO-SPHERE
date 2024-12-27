@@ -1,7 +1,7 @@
 <template>
 	<div class="post-content">
 		<div class="boxes-container">
-			<ContentBox v-for="(box, index) in boxes" :key="index" :order="box.order" :content="box.content" />
+			<ContentBox v-for="(box, index) in boxes" :key="index" :order="box.order" v-model="boxes[index].content" @update:modelValue="updateBoxContent(index, $event)" />
 		</div>
 	</div>
 </template>
@@ -10,7 +10,21 @@
 import { ref } from 'vue';
 import ContentBox from '../button/ContentBox.vue';
 
-const boxes = ref([{ order: 1 }, { order: 2 }, { order: 3 }, { order: 4 }, { order: 5 }, { order: 6 }]);
+const props = defineProps({
+	modelValue: {
+		type: Array,
+		required: true,
+	},
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const boxes = ref(props.modelValue);
+
+const updateBoxContent = (index, content) => {
+	boxes.value[index].content = content;
+	emit('update:modelValue', [...boxes.value]);
+};
 </script>
 
 <style scoped>

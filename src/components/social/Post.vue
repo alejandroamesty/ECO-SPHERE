@@ -1,5 +1,5 @@
 <template>
-	<div class="post-container">
+	<div class="post-container" @click="handleClick">
 		<div class="user-container">
 			<img :src="icon" alt="icon" class="user-icon" />
 			<div class="user-info">
@@ -11,18 +11,22 @@
 			<div class="content-text">{{ content }}</div>
 		</div>
 		<div class="interactions-container">
-			<Badge text="100K" :is-like-mode="true" v-model:liked="likedState" />
-			<Badge text="100K" :icon="COMMENT" />
+			<Badge :text="likes" :is-like-mode="true" v-model:liked="likedState" />
+			<Badge :text="comments" :icon="COMMENT" />
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, toRefs } from 'vue';
 import { Badge } from '../index';
 import { COMMENT } from '../../utils/icons';
 
 const props = defineProps({
+	value: {
+		type: Number,
+		required: true,
+	},
 	content: {
 		type: String,
 		required: true,
@@ -39,13 +43,33 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
+	likes: {
+		type: String,
+		required: true,
+		default: '0',
+	},
+	comments: {
+		type: String,
+		required: true,
+		default: '0',
+	},
 	liked: {
 		type: Boolean,
 		default: true,
 	},
+	onClick: {
+		type: Function,
+		default: () => {},
+	},
 });
 
+const { value, onClick } = toRefs(props);
+
 const likedState = ref(props.liked);
+
+const handleClick = () => {
+	onClick.value(value.value);
+};
 </script>
 
 <style scoped>
@@ -92,7 +116,7 @@ const likedState = ref(props.liked);
 .name {
 	display: flex;
 	align-items: center;
-	width: 114px;
+	/* width: 114px; */
 	height: 16px;
 	top: 0;
 	font-family: 'Stolzl Medium';
@@ -103,7 +127,7 @@ const likedState = ref(props.liked);
 .username {
 	display: flex;
 	align-items: center;
-	width: 129px;
+	/* width: 129px; */
 	height: 16px;
 	font-family: 'Stolzl Regular';
 	font-size: 11px;

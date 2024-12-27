@@ -34,7 +34,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(['update:options']);
+const emit = defineEmits(['update:options', 'select:option']);
 
 /**
  * Cambia el estado de la opción.
@@ -42,6 +42,7 @@ const emit = defineEmits(['update:options']);
 const toggleCheck = (index) => {
 	props.options[index].checked = !props.options[index].checked;
 	emit('update:options', [...props.options]);
+	emit('select:option', { ...props.options[index] });
 };
 
 /**

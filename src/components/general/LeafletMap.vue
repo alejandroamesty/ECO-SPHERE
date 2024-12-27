@@ -4,7 +4,7 @@
 
 <script setup>
 import * as L from 'leaflet';
-import { ref, watch, defineEmits, onBeforeMount } from 'vue';
+import { ref, watch, defineEmits } from 'vue';
 import { MAP } from '../../utils/icons';
 
 const { lat, lng, zoom, shouldInitialize, locations } = defineProps({
@@ -39,21 +39,13 @@ const emit = defineEmits(['onPinClick']);
 const map = ref(null);
 
 /**
- * Agrega un icono personalizado para los marcadores.
- */
-const customIcon = L.icon({
-	iconUrl: MAP,
-	// shadowUrl: 'leaf-shadow.png',
-	iconSize: [32, 32],
-	iconAnchor: [16, 32],
-	popupAnchor: [0, -32],
-});
-
-/**
  * Inicializa el mapa de Leaflet.
  */
 const initMap = () => {
-	if (map.value) return;
+	if (map.value) {
+		map.value.setView([lat, lng], zoom);
+		return;
+	}
 
 	map.value = L.map('map').setView([lat, lng], zoom);
 
@@ -61,7 +53,14 @@ const initMap = () => {
 		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 	}).addTo(map.value);
 
-	L.marker([lat, lng], { icon: customIcon }).addTo(map.value).bindPopup('Estás aquí.').openPopup();
+	const customIcon = L.icon({
+		iconUrl: MAP,
+		iconSize: [32, 32],
+		iconAnchor: [16, 32],
+		popupAnchor: [0, -32],
+	});
+
+	// L.marker([lat, lng], { icon: customIcon }).addTo(map.value).bindPopup('Estás aquí.').openPopup();
 
 	locations.forEach((location) => {
 		if (location.lat && location.lng) {
@@ -69,25 +68,23 @@ const initMap = () => {
 				.addTo(map.value)
 				.bindPopup(location.popupText || 'Ubicación');
 
-			marker.on('click', () => {
-				emit('onPinClick', location.value);
-			});
-
-			if (location.lat === lat && location.lng === lng) {
-				marker.openPopup();
-			}
+			marker.on('click', () => emit('onPinClick', location.value));
 		}
 	});
 };
 
 /**
- * Inicializa el mapa al montar el componente.
+ * Observa cambios en las coordenadas y actualiza el mapa.
  */
-onBeforeMount(() => {
-	setTimeout(() => {
-		initMap();
-	}, 0);
-});
+watch(
+	() => [lat, lng],
+	([newLat, newLng]) => {
+		if (map.value && (newLat !== 0 || newLng !== 0)) {
+			map.value.setView([newLat, newLng], zoom);
+		}
+	},
+	{ immediate: true },
+);
 
 /**
  * Observa si se debe inicializar el mapa.
@@ -99,6 +96,7 @@ watch(
 			initMap();
 		}
 	},
+	{ immediate: true },
 );
 </script>
 

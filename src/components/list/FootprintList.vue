@@ -1,31 +1,31 @@
 <template>
 	<div class="list">
-		<div class="scope" :class="{ first: options.first }">
+		<div class="scope" :class="{ first: options.first.checked }">
 			<div class="scope-data">
 				<span class="title">ALCANCE 1: EMISIONES DIRECTAS</span>
-				<a class="subtitle">4.5 toneladas de CO2 kg/año</a>
+				<a class="subtitle">{{ options.first.value }} toneladas de CO2 kg/año</a>
 			</div>
-			<button @click="handleClick" class="scope-button" :class="{ first: options.first }">
+			<button @click="handleClick" class="scope-button" :class="{ first: options.first.checked }">
 				<img :src="ARROW_DIAGONAL" alt="button-icon" />
 			</button>
 		</div>
 
-		<div class="scope" :class="{ second: options.second }">
+		<div class="scope" :class="{ second: options.second.checked }">
 			<div class="scope-data">
 				<span class="title">ALCANCE 2: EMISIONES INDIRECTAS</span>
-				<a class="subtitle">3.2 toneladas de CO2 kg/año</a>
+				<a class="subtitle">{{ options.second.value }} toneladas de CO2 kg/año</a>
 			</div>
-			<button @click="handleClick" class="scope-button" :class="{ second: options.second }">
+			<button @click="handleClick" class="scope-button" :class="{ second: options.second.checked }">
 				<img :src="ARROW_DIAGONAL" alt="button-icon" />
 			</button>
 		</div>
 
-		<div class="scope" :class="{ third: options.third }">
+		<div class="scope" :class="{ third: options.third.checked }">
 			<div class="scope-data">
 				<span class="title">ALCANCE 3: OTRAS EMISIONES INDIRECTAS</span>
-				<a class="subtitle">5.6 toneladas de CO2 kg/año</a>
+				<a class="subtitle">{{ options.third.value }} toneladas de CO2 kg/año</a>
 			</div>
-			<button @click="handleClick" class="scope-button" :class="{ third: options.third }">
+			<button @click="handleClick" class="scope-button" :class="{ third: options.third.checked }">
 				<img :src="ARROW_DIAGONAL" alt="button-icon" />
 			</button>
 		</div>
