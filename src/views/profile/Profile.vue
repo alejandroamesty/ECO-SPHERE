@@ -24,7 +24,7 @@
 								<div class="body sphere">
 									<div class="sphere-data">
 										<div class="sphere-title">TOTAL DE EMISIONES DE GEI</div>
-										<div class="sphere-total">4.5 toneladas de CO2 kg/año</div>
+										<div class="sphere-total">{{ emissions }} toneladas de CO2 kg/año</div>
 									</div>
 									<div class="chart-container">
 										<Sphere :key="sphereKey" :options="sphereOptions" @arcClick="handleArcClick" />
@@ -36,17 +36,17 @@
 							</template>
 							<template #slide2>
 								<div class="body posts">
-									<Post :icon="SEARCH" name="Alejandro Ávila" username="@alejandroamesty" :content="text2" />
+									<PostList :posts="posts" />
 								</div>
 							</template>
 						</Slider>
 					</ion-content>
-					<Modal title="Publicación" :isOpen="showModal" :onClose="closeModal" :backButton="closeModal" :nextButton="closeModal">
+					<Modal title="Publicación" :isOpen="showModal" :onClose="closeModal" :backButton="closeModal" :nextButton="post">
 						<div class="modal-content">
 							<span class="label">Descripción</span>
-							<TextInput placeholder="Ingresa una descripción" :neumorphism="false" :paragraph="true" />
+							<TextInput v-model="description" placeholder="Ingresa una descripción" :neumorphism="false" :paragraph="true" />
 							<span class="label">Contenido</span>
-							<ContentBoxes :boxes="boxes" @select-content="selectContent" />
+							<ContentBoxes v-model="boxesContent" />
 						</div>
 					</Modal>
 				</ion-page>
@@ -60,9 +60,9 @@ import { ref } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
 import { onIonViewWillEnter } from '@ionic/vue';
 import { ADD, HAMBURGER } from '../../utils/icons';
-import { Header, RoundButton, ToggleButton, MenuContainer, Slider, Stats, Sphere, Post, FootprintList, Modal, TextInput, ContentBoxes } from '../../components/index';
+import { Header, RoundButton, ToggleButton, MenuContainer, Slider, Stats, Sphere, PostList, FootprintList, Modal, TextInput, ContentBoxes } from '../../components/index';
 import { useGlobalStore } from '../../stores/globalStore';
-import { api } from '../../api/api';
+import { api, fileUploaderApi, fileReaderApi } from '../../api/api';
 
 const store = useGlobalStore();
 
@@ -71,26 +71,37 @@ const username = `@${store.user.username.toLowerCase()}`;
 const followers = ref(0);
 const following = ref(0);
 
-const text2 = 'Test';
-
 const toggleValue = ref(false);
 const menu = ref();
 const sphereKey = ref(0);
 const showModal = ref(false);
 
-const sphereOptions = ref({
-	option1: 10,
-	option2: 20,
-	option3: 30,
-	option4: 40,
+const emissions = ref('');
+const posts = ref([]);
+
+/**
+ * Datos de las opciones de la esfera y la huella de carbono.
+ */
+const sphereOptions = ref({});
+const footprintOptions = ref({
+	first: { value: 0, checked: false },
+	second: { value: 0, checked: false },
+	third: { value: 0, checked: false },
+	fourth: { value: 0, checked: false },
 });
 
-const footprintOptions = ref({
-	first: false,
-	second: false,
-	third: false,
-	fourth: false,
-});
+/**
+ * Datos de la publicación.
+ */
+const description = ref('');
+const boxesContent = ref([
+	{ order: 1, content: null },
+	{ order: 2, content: null },
+	{ order: 3, content: null },
+	{ order: 4, content: null },
+	{ order: 5, content: null },
+	{ order: 6, content: null },
+]);
 
 /**
  * Despliega el menú lateral.
@@ -107,24 +118,24 @@ const handleArcClick = (label) => {
 	const selectedLabel = label.toLowerCase();
 
 	const currentState = {
-		option1: footprintOptions.value.first,
-		option2: footprintOptions.value.second,
-		option3: footprintOptions.value.third,
-		option4: footprintOptions.value.fourth,
+		option1: footprintOptions.value.first.checked,
+		option2: footprintOptions.value.second.checked,
+		option3: footprintOptions.value.third.checked,
+		option4: footprintOptions.value.fourth.checked,
 	};
 
 	Object.keys(footprintOptions.value).forEach((key) => {
-		footprintOptions.value[key] = false;
+		footprintOptions.value[key].checked = false;
 	});
 
 	if (selectedLabel === 'option1') {
-		footprintOptions.value.first = !currentState.option1;
+		footprintOptions.value.first.checked = !currentState.option1;
 	} else if (selectedLabel === 'option2') {
-		footprintOptions.value.second = !currentState.option2;
+		footprintOptions.value.second.checked = !currentState.option2;
 	} else if (selectedLabel === 'option3') {
-		footprintOptions.value.third = !currentState.option3;
+		footprintOptions.value.third.checked = !currentState.option3;
 	} else if (selectedLabel === 'option4') {
-		footprintOptions.value.fourth = !currentState.option4;
+		footprintOptions.value.fourth.checked = !currentState.option4;
 	}
 };
 
@@ -139,6 +150,8 @@ const openModal = () => {
  * Cierra el modal.
  */
 const closeModal = () => {
+	description.value = '';
+	boxesContent.value.forEach((box) => (box.content = null));
 	showModal.value = false;
 };
 
@@ -148,20 +161,86 @@ const closeModal = () => {
 const getUser = async () => {
 	try {
 		const { data } = await api.setMethod('get').setEndpoint(`users/${store.user.id}`).send();
-		console.log(data);
+
 		followers.value = data.user.followers_nu;
 		following.value = data.user.following_nu;
+
+		posts.value = data.posts
+			.filter((post) => post.caption !== 'REPORTE')
+			.map((post) => {
+				return {
+					value: post.id,
+					content: post.caption,
+					icon: post.images[0],
+					name: `${data.user.fname} ${data.user.lname}`,
+					username: `@${data.user.username.toLowerCase()}`,
+					likes: post.likes,
+					comments: post.comments,
+					liked: false,
+				};
+			});
+
+		const directEmissions = data.user.direct_emissions / 1000;
+		const indirectEmissions = data.user.indirect_emissions / 1000;
+		const otherEmissions = data.user.other_emissions / 1000;
+
+		sphereOptions.value = {
+			option1: directEmissions,
+			option2: indirectEmissions,
+			option3: otherEmissions,
+			option4: data.user.option4 || 0,
+		};
+
+		footprintOptions.value.first.value = directEmissions.toFixed(2);
+		footprintOptions.value.second.value = indirectEmissions.toFixed(2);
+		footprintOptions.value.third.value = otherEmissions.toFixed(2);
 	} catch (error) {
 		console.log(error);
 	}
 };
 
 /**
+ * Realiza una solicitud de red para crear una publicación.
+ */
+const post = async () => {
+	if (!description.value) return;
+
+	const images = boxesContent.value.filter((box) => box.content !== null).map((box) => box.content);
+	if (images.length === 0) return;
+
+	try {
+		const formData = new FormData();
+
+		for (const [index, imagePath] of images.entries()) {
+			const imageBlob = await fetch(imagePath).then((res) => res.blob());
+			r;
+			formData.append('file', imageBlob, `post-image-${index}.jpg`);
+		}
+
+		const { fileNames } = await fileUploaderApi.setMethod('post').send(formData);
+
+		const payload = {
+			caption: description.value,
+			content: description.value,
+			images: fileNames,
+		};
+
+		await api.setMethod('post').setEndpoint('posts').send(payload);
+
+		closeModal();
+		await getPosts();
+	} catch (error) {
+		console.error('Error al enviar la publicación:', error);
+	}
+};
+
+/**
  * Fuerza la actualización del componente Sphere al entrar a la vista.
  */
-onIonViewWillEnter(() => {
+onIonViewWillEnter(async () => {
+	await getUser();
+	emissions.value = parseFloat(footprintOptions.value.first.value) + parseFloat(footprintOptions.value.second.value) + parseFloat(footprintOptions.value.third.value) + parseFloat(footprintOptions.value.fourth.value);
 	sphereKey.value += 1;
-	getUser();
 });
 </script>
 
