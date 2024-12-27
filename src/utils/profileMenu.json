@@ -2,21 +2,25 @@
 	{
 		"label": "Calculadora de huella de carbono",
 		"icon": "CALCULATOR",
-		"to": "/tabs/maps"
+		"type": "router",
+		"to": "/carbon-footprint"
 	},
 	{
 		"label": "Editar perfil",
 		"icon": "EDIT",
-		"to": "/tabs/activities"
+		"type": "modal",
+		"ref": "editProfile"
 	},
 	{
 		"label": "Borrar cuenta",
 		"icon": "TRASH",
-		"to": "/tabs/chats"
+		"type": "modal",
+		"tef": "deleteAccount"
 	},
 	{
 		"label": "Cerrar sesión",
 		"icon": "LOGOUT",
-		"to": "/tabs/profile"
+		"type": "alert",
+		"ref": "logout"
 	}
 ]

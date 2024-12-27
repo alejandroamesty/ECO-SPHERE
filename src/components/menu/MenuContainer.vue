@@ -3,7 +3,7 @@
 		<div class="menu-options" :class="{ 'menu-open': isOpen }">
 			<slot name="menu"></slot>
 			<div class="options">
-				<div v-for="(item, index) in menuWithIcons" :key="index" class="option">
+				<div v-for="(item, index) in menuWithIcons" :key="index" class="option" @click="handleClick(item)">
 					<img class="option-icon" :src="item.icon" :alt="item.label" />
 					<span class="option-label">{{ item.label }}</span>
 				</div>
@@ -18,10 +18,12 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import menuItems from '../../utils/profileMenu.json';
 import { iconsMap } from '../../utils/icons.js';
 
 const isOpen = ref(false);
+const router = useRouter();
 
 /**
  * Agrega los iconos a las opciones del menú.
@@ -36,6 +38,19 @@ const menuWithIcons = menuItems.map((item) => ({
  */
 const toggleMenu = () => {
 	isOpen.value = !isOpen.value;
+};
+
+/**
+ * Maneja el clic en los elementos del menú.
+ */
+const handleClick = (item) => {
+	if (item.type === 'router') {
+		router.push(item.to);
+	} else if (item.type === 'modal') {
+		console.log(`Abrir modal: ${item.ref}`);
+	} else if (item.type === 'alert') {
+		console.log(`Mostrar alerta: ${item.ref}`);
+	}
 };
 
 defineExpose({ isOpen, toggleMenu });
