@@ -15,7 +15,7 @@
 			<Slider :currentIndex="toggleValue" @update:currentIndex="toggleValue = $event" :fullscreen="true">
 				<template #slide1>
 					<div class="leaf-map">
-						<LeafletMap :lat="lat" :lng="lng" :zoom="zoom" :shouldInitialize="viewEntered" :locations="locations" @onPinClick="handlePinClick" />
+						<LeafletMap :lat="lat" :lng="lng" :zoom="zoom" :shouldInitialize="viewEntered" :locations="locations" @onPinClick="openReport" />
 					</div>
 				</template>
 				<template #slide2>
@@ -29,26 +29,32 @@
 		</ion-content>
 		<ReportCard
 			ref="report"
-			description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec
-                    ultricies."
-			latitude="19.432"
-			longitude="99.13"
-			date="12/12/2021"
-			icon="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"
-			name="Alejandro Ávila"
-			username="@alejandroamesty"
+			:description="reportInfo.description"
+			:latitude="reportInfo.latitude"
+			:longitude="reportInfo.longitude"
+			:date="reportInfo.date"
+			:image="reportInfo.image"
+			:icon="reportInfo.icon"
+			:name="reportInfo.name"
+			:username="reportInfo.username"
 			:is-modal="true"
 		/>
-		<Modal title="Crear reporte" :isOpen="showModal" :onClose="closeModal" :backButton="closeModal" :nextButton="closeModal">
+		<Modal title="Crear reporte" :isOpen="showModal" :onClose="closeModal" :backButton="closeModal" :nextButton="insertReport">
 			<div class="modal-content">
-				<span class="label">Título</span>
-				<TextInput placeholder="Ingresa un título" :neumorphism="false" />
+				<!-- <span class="label">Título</span>
+				<TextInput v-model="reportTitle" placeholder="Ingresa un título" :neumorphism="false" /> -->
 				<span class="label">Descripción</span>
-				<TextInput placeholder="Ingresa una descripción" :neumorphism="false" :paragraph="true" />
+				<TextInput v-model="reportDescription" placeholder="Ingresa una descripción" :neumorphism="false" :paragraph="true" />
 				<span class="label">Imagen</span>
-				<div class="options">
+				<div v-if="!imageFile" class="options">
 					<BoxButton :icon="CAMERA" caption="Desde cámara del dispositivo" :onClick="openCamera" />
 					<BoxButton :icon="GALLERY" caption="Desde galería de fotos" :onClick="openGallery" />
+				</div>
+				<div v-if="imageFile" class="image-preview">
+					<div class="delete-button" @click="imageFile = null">
+						<img :src="TRASH" alt="Borrar imagen" />
+					</div>
+					<img :src="imageFile" alt="Imagen seleccionada" />
 				</div>
 			</div>
 		</Modal>
@@ -60,24 +66,28 @@ import { ref } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
 import { onIonViewWillEnter, onIonViewDidEnter, onIonViewWillLeave } from '@ionic/vue';
 import { Geolocation } from '@capacitor/geolocation';
-import { ADD, CAMERA, GALLERY } from '../../utils/icons';
+import { ADD, CAMERA, GALLERY, TRASH } from '../../utils/icons';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Header, RoundButton, ToggleButton, LeafletMap, ReportCard, Slider, Modal, ReportList, TextInput, BoxButton } from '../../components/index';
+import { api, fileUploaderApi, fileReaderApi } from '../../api/api';
 
-const lat = ref(51.505);
-const lng = ref(-0.09);
+const lat = ref(0);
+const lng = ref(0);
 const zoom = ref(13);
 const toggleValue = ref(false);
 const viewEntered = ref(false);
+
 const report = ref();
+const reportInfo = ref({});
+
 const headerHeight = ref(0);
 const showModal = ref(false);
 
-const locations = [
-	{ value: 1, lat: 51.505, lng: -0.09, popupText: 'Ubicación 1' },
-	{ value: 2, lat: 51.515, lng: -0.1, popupText: 'Ubicación 2' },
-	{ value: 3, lat: 51.525, lng: -0.11, popupText: 'Ubicación 3' },
-];
+// const reportTitle = ref('');
+const reportDescription = ref('');
+const imageFile = ref(null); // Variable reactiva para almacenar la imagen
+
+const locations = ref([]);
 
 const reports = [
 	{
@@ -96,8 +106,8 @@ const reports = [
  */
 const printCurrentPosition = async () => {
 	const coordinates = await Geolocation.getCurrentPosition();
-	// lat.value = coordinates.coords.latitude;
-	// lng.value = coordinates.coords.longitude;
+	lat.value = coordinates.coords.latitude;
+	lng.value = coordinates.coords.longitude;
 };
 
 /**
@@ -105,6 +115,7 @@ const printCurrentPosition = async () => {
  */
 onIonViewDidEnter(async () => {
 	await printCurrentPosition();
+	await getReports();
 	viewEntered.value = true;
 });
 
@@ -114,14 +125,6 @@ onIonViewDidEnter(async () => {
 onIonViewWillLeave(() => {
 	viewEntered.value = false;
 });
-
-/**
- * Maneja el evento cuando se hace clic en un pin (marcador).
- */
-const handlePinClick = (pinValue) => {
-	report.value.showReportCard();
-	console.log('Pin seleccionado con valor:', pinValue);
-};
 
 /**
  * Muestra el modal para crear un reporte.
@@ -162,9 +165,10 @@ const openCamera = async () => {
 	try {
 		const image = await Camera.getPhoto({
 			quality: 90,
-			resultType: CameraResultType.Uri,
+			resultType: CameraResultType.DataUrl,
 			source: CameraSource.Camera,
 		});
+		imageFile.value = image.dataUrl;
 		console.log('Imagen desde la cámara:', image);
 	} catch (error) {
 		console.error('Error al abrir la cámara:', error);
@@ -178,12 +182,99 @@ const openGallery = async () => {
 	try {
 		const image = await Camera.getPhoto({
 			quality: 90,
-			resultType: CameraResultType.Uri,
+			resultType: CameraResultType.DataUrl,
 			source: CameraSource.Photos,
 		});
+		imageFile.value = image.dataUrl;
 		console.log('Imagen desde la galería:', image);
 	} catch (error) {
 		console.error('Error al abrir la galería:', error);
+	}
+};
+
+/**
+ * Realiza una solicitud de red para obtener los reportes.
+ */
+const getReports = async () => {
+	try {
+		const { data } = await api.setMethod('get').setEndpoint('reports').setParams({ x: lat.value, y: lng.value }).send();
+		locations.value = data.map((report) => ({
+			value: report.id,
+			lat: report.x,
+			lng: report.y,
+			popupText: report.caption,
+		}));
+	} catch (error) {
+		console.error('Error al obtener los reportes:', error);
+	}
+};
+
+/**
+ * Realiza una solicitud de red para obtener la información de un reporte.
+ */
+const openReport = async (id) => {
+	try {
+		const { data } = await api.setMethod('get').setEndpoint(`reports/${id}`).send();
+
+		const latitude = parseFloat(data.x).toFixed(2);
+		const longitude = parseFloat(data.y).toFixed(2);
+
+		const date = new Date(data.post_date);
+		const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+
+		const image = data.images[0];
+
+		reportInfo.value = {
+			description: data.content,
+			latitude,
+			longitude,
+			date: formattedDate,
+			name: `${data.fname} ${data.lname}`,
+			username: `@${data.username.toLowerCase()}`,
+			image: `${fileReaderApi}${image}`,
+			icon: data.image,
+		};
+		report.value.showReportCard();
+	} catch (error) {
+		console.error('Error al obtener el reporte:', error);
+	}
+};
+
+/**
+ * Realiza una solicitud de red para crear un reporte.
+ */
+const insertReport = async () => {
+	if (!lat.value || !lng.value) {
+		await printCurrentPosition();
+	}
+
+	if (!reportDescription.value) return;
+
+	const formData = new FormData();
+	const imageBlob = await fetch(imageFile.value).then((res) => res.blob());
+	formData.append('file', imageBlob, 'report-image.jpg');
+
+	try {
+		const { fileNames } = await fileUploaderApi.setMethod('post').send(formData);
+		console.log('Imagen subida:', fileNames);
+
+		await api
+			.setMethod('post')
+			.setEndpoint('reports')
+			.send({
+				caption: 'REPORTE',
+				content: reportDescription.value,
+				coordinates: {
+					x: lat.value,
+					y: lng.value,
+				},
+				images: fileNames,
+			});
+
+		closeModal();
+		await getReports();
+	} catch (error) {
+		console.log(error);
 	}
 };
 </script>
@@ -227,5 +318,42 @@ const openGallery = async () => {
 	display: flex;
 	justify-content: space-between;
 	gap: 20px;
+}
+
+.delete-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	top: 18px;
+	right: 18px;
+	background: #edeef0;
+	border-radius: 50%;
+	z-index: 1;
+}
+
+.image-preview .delete-button img {
+	width: 20px;
+	height: 20px;
+	filter: invert(1) brightness(255%) contrast(100%) grayscale(0);
+}
+
+.image-preview {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	width: 100%;
+	height: 248px;
+	border-radius: 30px;
+	overflow: hidden;
+}
+
+.image-preview img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 </style>
