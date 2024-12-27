@@ -8,6 +8,8 @@ const globalStore = useGlobalStore();
  */
 const isLocalhost = window.location.hostname === 'localhost';
 const backendHost = isLocalhost ? import.meta.env.VITE_API_LOCAL_URL : import.meta.env.VITE_API_BASE_URL;
+const fileReaderHost = isLocalhost ? import.meta.env.VITE_FILE_READER_LOCAL_URL : import.meta.env.VITE_FILE_READER_BASE_URL;
+const fileUploaderHost = isLocalhost ? import.meta.env.VITE_FILE_UPLOADER_LOCAL_URL : import.meta.env.VITE_FILE_UPLOADER_BASE_URL;
 
 /**
  * Inicializa una instancia de Communication con los valores de configuración.
@@ -27,3 +29,5 @@ const createInstance = (baseURL) => {
 
 export const api = createInstance(`${backendHost}`);
 export const authApi = createInstance(`${backendHost}auth/`);
+export const fileReaderApi = `${fileReaderHost}`;
+export const fileUploaderApi = createInstance(`${fileUploaderHost}`);
