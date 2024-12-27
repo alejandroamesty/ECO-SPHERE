@@ -1,0 +1,96 @@
+{
+	"categories": [
+		{
+			"value": 1,
+			"option": "Transporte",
+			"description": null,
+			"icon": "CAR",
+			"activities": [
+				{
+					"value": 1,
+					"option": "Usar transporte público"
+				},
+				{
+					"value": 2,
+					"option": "Usar bicicleta para trayectos cortos"
+				},
+				{
+					"value": 3,
+					"option": "Compartir coche (carpooling) al trabajo"
+				},
+				{
+					"value": 4,
+					"option": "Caminar en lugar de usar vehículo motorizado"
+				},
+				{
+					"value": 5,
+					"option": "Usar vehículos eléctricos o híbridos"
+				}
+			]
+		},
+		{
+			"value": 2,
+			"option": "Energía",
+			"description": null,
+			"icon": "ENERGY",
+			"activities": [
+				{
+					"value": 1,
+					"option": "Apagar las luces al salir de una habitación",
+					"checked": false
+				},
+				{
+					"value": 2,
+					"option": "Usar bombillas LED en casa"
+				},
+				{
+					"value": 3,
+					"option": "Desconectar electrodomésticos cuando no se usan"
+				},
+				{
+					"value": 4,
+					"option": "Reducir el uso de la calefacción"
+				},
+				{
+					"value": 5,
+					"option": "Reducir el uso del aire acondicionado"
+				}
+			]
+		},
+		{
+			"value": 3,
+			"option": "Alimentación",
+			"description": null,
+			"icon": "FOOD",
+			"activities": [
+				{
+					"value": 1,
+					"option": "Consumir alimentos locales y de temporada"
+				},
+				{
+					"value": 2,
+					"option": "Reducir el consumo de carne en la dieta semanal"
+				},
+				{
+					"value": 3,
+					"option": "Evitar el desperdicio de comida"
+				},
+				{
+					"value": 4,
+					"option": "Usar envases reutilizables para alimentos"
+				},
+				{
+					"value": 5,
+					"option": "Usar bolsas reutilizables para la compra"
+				}
+			]
+		},
+		{
+			"value": 4,
+			"option": "Personalizada",
+			"description": "Sin sugerencias",
+			"icon": "CUSTOM",
+			"activities": null
+		}
+	]
+}
