@@ -15,12 +15,12 @@
 			<Slider :currentIndex="toggleValue" @update:currentIndex="toggleValue = $event">
 				<template #slide1>
 					<div class="body">
-						<GraphicCard name="Alejandro" :value="100" :actualValue="80" />
+						<GraphicCard name="Alejandro" :value="100" :actualValue="percentage" />
 						<div class="section">
 							<div class="title">Agenda de actividades</div>
 							<div class="subtitle">Mes de {{ month }}</div>
 						</div>
-						<ActivityList :options="options" />
+						<ActivityList :options="registeredActivities" @select:option="updateActivity" />
 						<div class="section">
 							<div class="title">Historial de actividades</div>
 							<div class="subtitle">Año {{ year }}</div>
@@ -41,11 +41,11 @@
 				</div>
 				<div v-else-if="currentStep === 2" key="step2" class="modal-content">
 					<span class="label">Selecciona una actividad</span>
-					<ActivityList :options="options" />
+					<ActivityList :options="activities" @update:options="selectActivity" />
 				</div>
 				<div v-else-if="currentStep === 3" key="step3" class="modal-content">
 					<span class="label">Ingresa una actividad personalizada</span>
-					<TextInput placeholder="Escribe una actividad" :neumorphism="false" />
+					<TextInput v-model="customActivity" placeholder="Escribe una actividad" :neumorphism="false" />
 				</div>
 			</transition>
 		</Modal>
@@ -54,106 +54,94 @@
 
 <script setup>
 import { ref } from 'vue';
-import { IonPage, IonContent } from '@ionic/vue';
-import { ADD } from '../../utils/icons';
+import { IonPage, IonContent, onIonViewDidEnter } from '@ionic/vue';
 import { Header, RoundButton, ToggleButton, Slider, GraphicCard, GraphicBar, ActivityList, Modal, TextInput, CategoryBoxes } from '../../components/index';
-import { CAR, ENERGY, FOOD, CUSTOM } from '../../utils/icons';
+import { ADD } from '../../utils/icons';
+import { iconsMap } from '../../utils/icons.js';
+import { api } from '../../api/api';
+import activitiesJson from '../../utils/activities.json';
 
 const toggleValue = ref(false);
 const showModal = ref(false);
 const currentStep = ref(1);
 const isAnimating = ref(false);
 
-const month = 'Septiembre';
-const year = '2021';
+const categories = ref([]);
+const selectedCategory = ref(null);
 
-const options = ref([
-	{
-		value: 1,
-		option: 'Usa el carro menos',
-		checked: true,
-		category: 'Transporte',
-	},
-	{
-		value: 2,
-		option: 'Usa transporte público',
-		checked: false,
-		category: 'Transporte',
-	},
-]);
+const activities = ref([]);
+const customActivity = ref('');
+const selectedActivities = ref([]);
+const registeredActivities = ref([]);
 
-const months = {
-	enero: 10,
-	febrero: 20,
-	marzo: 30,
-	abril: 40,
-	mayo: 50,
-	junio: 60,
-	julio: 70,
-	agosto: 80,
-	septiembre: 90,
-	octubre: 100,
-	noviembre: 100,
-	diciembre: 100,
-};
+const month = ref('');
+const year = ref('');
 
-const categories = [
-	{
-		value: 1,
-		option: 'Transporte',
-		description: '16 sugerencias',
-		icon: CAR,
-	},
-	{
-		value: 2,
-		option: 'Energía',
-		description: '16 sugerencias',
-		icon: ENERGY,
-	},
-	{
-		value: 3,
-		option: 'Alimentación',
-		description: '16 sugerencias',
-		icon: FOOD,
-	},
-	{
-		value: 4,
-		option: 'Personalizada',
-		description: '16 sugerencias',
-		icon: CUSTOM,
-	},
-];
+const percentage = ref(0);
+const months = ref({});
 
-const openModal = () => {
-	showModal.value = true;
-};
+/**
+ * Agrega íconos a las categorías y actividades.
+ */
+categories.value = activitiesJson.categories.map((category) => ({
+	...category,
+	icon: iconsMap[category.icon],
+	description: category.description ?? `${category.activities?.length || 0} sugerencias`,
+}));
 
-const closeModal = () => {
-	showModal.value = false;
+month.value = new Date().toLocaleString('es-ES', { month: 'long' });
+year.value = new Date().getFullYear();
+
+/**
+ * Maneja la selección de categorías y actividades.
+ */
+const handleClick = (category) => {
+	selectedCategory.value = category;
+	const selected = categories.value.find((cat) => cat.option === category.option);
+
+	if (selected?.activities) {
+		activities.value = selected.activities.map((activity) => ({
+			...activity,
+			checked: false,
+			category: category.option,
+		}));
+	} else {
+		activities.value = [];
+	}
+
+	currentStep.value = activities.value.length > 0 ? 2 : 3;
+	triggerAnimation();
 };
 
 /**
  * Avanza al siguiente paso del modal.
  */
 const nextStep = () => {
-	if (currentStep.value < 3) {
-		currentStep.value++;
-		triggerAnimation();
+	if (currentStep.value === 1) {
+		if (activities.value && activities.value.length > 0) {
+			currentStep.value = 2;
+		} else {
+			resetModal();
+		}
 	} else {
+		insertActivities();
 		closeModal();
 	}
+	triggerAnimation();
 };
 
 /**
  * Retrocede al paso anterior del modal.
  */
 const previousStep = () => {
-	if (currentStep.value > 1) {
-		currentStep.value--;
-		triggerAnimation();
-	} else {
-		closeModal();
+	if (currentStep.value === 3 && activities.value && activities.value.length > 0) {
+		currentStep.value = 2;
+	} else if (currentStep.value > 1) {
+		currentStep.value = 1;
+	} else if (currentStep.value === 1) {
+		resetModal();
 	}
+	triggerAnimation();
 };
 
 /**
@@ -161,6 +149,8 @@ const previousStep = () => {
  */
 const resetModal = () => {
 	currentStep.value = 1;
+	selectedCategory.value = null;
+	activities.value = [];
 	closeModal();
 };
 
@@ -174,10 +164,137 @@ const triggerAnimation = () => {
 	}, 500);
 };
 
-const handleClick = (category) => {
-	console.log(category);
-	nextStep();
+/**
+ * Captura las actividades seleccionadas.
+ */
+const selectActivity = (selected) => {
+	selectedActivities.value = selected;
 };
+
+/**
+ * Obtiene las actividades completadas por mes.
+ */
+const getMonthlyActivities = (activities) => {
+	const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+	const monthlyActivities = activities.reduce((acc, activity) => {
+		if (activity.checked && activity.completedAt && activity.completedAt.getFullYear() === year.value) {
+			const month = activity.completedAt.getMonth();
+			acc[month] = (acc[month] || 0) + 1;
+		}
+		return acc;
+	}, {});
+
+	months.value = monthNames.reduce((acc, month, index) => {
+		acc[month] = monthlyActivities[index] || 0;
+		return acc;
+	}, {});
+};
+
+/**
+ * Realiza una solicitud de red para obtener las actividades registradas.
+ */
+const getActivities = async () => {
+	try {
+		const { data } = await api.setMethod('get').setEndpoint('activities').send();
+
+		const activitiesWithCategory = data.map((activity) => {
+			const category = activitiesJson.categories?.find((cat) => cat.activities?.some((act) => act.option === activity.activity_description));
+
+			return {
+				value: activity.id,
+				option: activity.activity_description,
+				checked: activity.completed,
+				category: category ? category.option : 'Personalizada',
+				registeredAt: new Date(activity.registered_at),
+				completedAt: activity.completed ? new Date(activity.completed_at) : null,
+			};
+		});
+
+		const currentDate = new Date();
+		const currentMonth = currentDate.getMonth();
+
+		// Filtrar actividades no completadas
+		const notCompleted = activitiesWithCategory.filter((act) => !act.checked);
+
+		// Filtrar actividades completadas en el mes actual
+		const completedThisMonth = activitiesWithCategory.filter((act) => act.checked && act.completedAt && act.completedAt.getMonth() === currentMonth && act.completedAt.getFullYear() === year.value);
+
+		// Ordenar actividades no completadas por fecha de registro
+		notCompleted.sort((a, b) => a.registeredAt - b.registeredAt);
+
+		// Ordenar actividades completadas en el mes actual por fecha de finalización
+		completedThisMonth.sort((a, b) => a.completedAt - b.completedAt);
+
+		// Concatenar las listas
+		registeredActivities.value = [...notCompleted, ...completedThisMonth];
+
+		// Calcular el porcentaje de actividades completadas
+		const totalActivities = activitiesWithCategory.length;
+		const completedActivities = completedThisMonth.length;
+		percentage.value = (completedActivities / totalActivities) * 100;
+
+		getMonthlyActivities(activitiesWithCategory);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+/**
+ * Realiza una solicitud de red para insertar las actividades seleccionadas.
+ */
+const insertActivities = async () => {
+	if (!selectedActivities.value.length && !customActivity.value) {
+		return;
+	}
+
+	const activitiesToInsert = [];
+	if (customActivity.value) {
+		activitiesToInsert.push(customActivity.value);
+	} else {
+		activitiesToInsert.push(...selectedActivities.value.filter((activity) => activity.checked).map((activity) => activity.option));
+	}
+
+	try {
+		const requestBody = {
+			activity_description: activitiesToInsert,
+		};
+
+		await api.setMethod('post').setEndpoint('activities').send(requestBody);
+		await getActivities();
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+/**
+ * Realiza una solicitud de red para actualizar el estado de una actividad.
+ */
+const updateActivity = async (updated) => {
+	try {
+		await api.setMethod('put').setEndpoint(`activities/${updated.value}`).send({ completed: updated.checked });
+		await getActivities();
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+/**
+ * Abre y cierra el modal.
+ */
+const openModal = () => {
+	showModal.value = true;
+};
+const closeModal = () => {
+	showModal.value = false;
+};
+
+/**
+ * Actualiza las actividades registradas.
+ */
+onIonViewDidEnter(() => {
+	getActivities();
+});
 </script>
 
 <style scoped>
