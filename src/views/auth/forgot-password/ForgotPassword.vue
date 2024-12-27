@@ -33,6 +33,7 @@ import { BACK } from '../../../utils/icons';
 import { RoundButton, TextInput, BigButton } from '../../../components/index';
 import { useRouter } from 'vue-router';
 import { authApi } from '../../../api/api';
+import { handleError } from '../../../services/errorHandler';
 
 const router = useRouter();
 
@@ -53,7 +54,7 @@ const forgotPassword = async () => {
 		await authApi.setMethod('post').setEndpoint('forgot-password').send({ email: email.value });
 		router.push({ path: '/auth/verify-code', query: { email: email.value } });
 	} catch (error) {
-		console.log(error);
+		handleError(error);
 	}
 };
 

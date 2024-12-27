@@ -59,6 +59,7 @@ import { Header, RoundButton, ToggleButton, Slider, GraphicCard, GraphicBar, Act
 import { ADD } from '../../utils/icons';
 import { iconsMap } from '../../utils/icons.js';
 import { api } from '../../api/api';
+import { handleError } from '../../services/errorHandler.js';
 import activitiesJson from '../../utils/activities.json';
 
 const toggleValue = ref(false);
@@ -236,7 +237,7 @@ const getActivities = async () => {
 
 		getMonthlyActivities(activitiesWithCategory);
 	} catch (error) {
-		console.error(error);
+		handleError(error);
 	}
 };
 
@@ -263,7 +264,7 @@ const insertActivities = async () => {
 		await api.setMethod('post').setEndpoint('activities').send(requestBody);
 		await getActivities();
 	} catch (error) {
-		console.error(error);
+		handleError(error);
 	}
 };
 
@@ -275,7 +276,7 @@ const updateActivity = async (updated) => {
 		await api.setMethod('put').setEndpoint(`activities/${updated.value}`).send({ completed: updated.checked });
 		await getActivities();
 	} catch (error) {
-		console.error(error);
+		handleError(error);
 	}
 };
 

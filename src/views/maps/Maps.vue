@@ -41,8 +41,6 @@
 		/>
 		<Modal title="Crear reporte" :isOpen="showModal" :onClose="closeModal" :backButton="closeModal" :nextButton="insertReport">
 			<div class="modal-content">
-				<!-- <span class="label">Título</span>
-				<TextInput v-model="reportTitle" placeholder="Ingresa un título" :neumorphism="false" /> -->
 				<span class="label">Descripción</span>
 				<TextInput v-model="reportDescription" placeholder="Ingresa una descripción" :neumorphism="false" :paragraph="true" />
 				<span class="label">Imagen</span>
@@ -70,6 +68,7 @@ import { ADD, CAMERA, GALLERY, TRASH } from '../../utils/icons';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Header, RoundButton, ToggleButton, LeafletMap, ReportCard, Slider, Modal, ReportList, TextInput, BoxButton } from '../../components/index';
 import { api, fileUploaderApi, fileReaderApi } from '../../api/api';
+import { handleError } from '../../services/errorHandler';
 
 const lat = ref(0);
 const lng = ref(0);
@@ -83,9 +82,8 @@ const reportInfo = ref({});
 const headerHeight = ref(0);
 const showModal = ref(false);
 
-// const reportTitle = ref('');
 const reportDescription = ref('');
-const imageFile = ref(null); // Variable reactiva para almacenar la imagen
+const imageFile = ref(null);
 
 const locations = ref([]);
 
@@ -169,9 +167,8 @@ const openCamera = async () => {
 			source: CameraSource.Camera,
 		});
 		imageFile.value = image.dataUrl;
-		console.log('Imagen desde la cámara:', image);
 	} catch (error) {
-		console.error('Error al abrir la cámara:', error);
+		handleError(error);
 	}
 };
 
@@ -186,9 +183,8 @@ const openGallery = async () => {
 			source: CameraSource.Photos,
 		});
 		imageFile.value = image.dataUrl;
-		console.log('Imagen desde la galería:', image);
 	} catch (error) {
-		console.error('Error al abrir la galería:', error);
+		handleError(error);
 	}
 };
 
@@ -205,7 +201,7 @@ const getReports = async () => {
 			popupText: report.caption,
 		}));
 	} catch (error) {
-		console.error('Error al obtener los reportes:', error);
+		handleError(error);
 	}
 };
 
@@ -236,7 +232,7 @@ const openReport = async (id) => {
 		};
 		report.value.showReportCard();
 	} catch (error) {
-		console.error('Error al obtener el reporte:', error);
+		handleError(error);
 	}
 };
 
@@ -256,7 +252,6 @@ const insertReport = async () => {
 
 	try {
 		const { fileNames } = await fileUploaderApi.setMethod('post').send(formData);
-		console.log('Imagen subida:', fileNames);
 
 		await api
 			.setMethod('post')
@@ -274,7 +269,7 @@ const insertReport = async () => {
 		closeModal();
 		await getReports();
 	} catch (error) {
-		console.log(error);
+		handleError(error);
 	}
 };
 </script>

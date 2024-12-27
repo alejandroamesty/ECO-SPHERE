@@ -63,6 +63,7 @@ import { ADD, HAMBURGER } from '../../utils/icons';
 import { Header, RoundButton, ToggleButton, MenuContainer, Slider, Stats, Sphere, PostList, FootprintList, Modal, TextInput, ContentBoxes } from '../../components/index';
 import { useGlobalStore } from '../../stores/globalStore';
 import { api, fileUploaderApi, fileReaderApi } from '../../api/api';
+import { handleError } from '../../services/errorHandler';
 
 const store = useGlobalStore();
 
@@ -195,7 +196,7 @@ const getUser = async () => {
 		footprintOptions.value.second.value = indirectEmissions.toFixed(2);
 		footprintOptions.value.third.value = otherEmissions.toFixed(2);
 	} catch (error) {
-		console.log(error);
+		handleError(error);
 	}
 };
 
@@ -230,7 +231,7 @@ const post = async () => {
 		closeModal();
 		await getPosts();
 	} catch (error) {
-		console.error('Error al enviar la publicación:', error);
+		handleError(error);
 	}
 };
 

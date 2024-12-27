@@ -32,6 +32,7 @@ import { BACK } from '../../../utils/icons';
 import { RoundButton, VerificationInput, BigButton } from '../../../components/index';
 import { useRoute, useRouter } from 'vue-router';
 import { authApi } from '../../../api/api';
+import { handleError } from '../../../services/errorHandler';
 
 const route = useRoute();
 const router = useRouter();
@@ -48,7 +49,7 @@ const verifyCode = async () => {
 		await authApi.setMethod('post').setEndpoint('verify-key').send(body);
 		router.push({ path: '/auth/reset-password', query: body });
 	} catch (error) {
-		console.log(error);
+		handleError(error);
 	}
 };
 

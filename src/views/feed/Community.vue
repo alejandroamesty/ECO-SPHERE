@@ -36,6 +36,7 @@ import { onIonViewWillEnter } from '@ionic/vue';
 import { ADD } from '../../utils/icons';
 import { Header, RoundButton, ToggleButton, Breadcrumb, Slider, Stats } from '../../components/index';
 import { api } from '../../api/api';
+import { handleError } from '../../services/errorHandler';
 import { useRouter, useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -62,11 +63,10 @@ const getCommunity = async () => {
 
 	try {
 		const { data } = await api.setMethod('get').setEndpoint(`communities/${community}`).send();
-		console.log(data);
 		name.value = data.name;
 		username.value = `Comunidad`;
 	} catch (error) {
-		console.log(error);
+		handleError(error);
 	}
 };
 

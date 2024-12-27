@@ -34,6 +34,7 @@ import { BACK } from '../../utils/icons';
 import { RoundButton, TextInput, BigButton } from '../../components/index';
 import { useRouter } from 'vue-router';
 import { authApi } from '../../api/api';
+import { handleError } from '../../services/errorHandler';
 import { useGlobalStore } from '../../stores/globalStore';
 
 const router = useRouter();
@@ -52,7 +53,7 @@ const login = async () => {
 		store.setToken(data.token);
 		store.setUser(data.user);
 	} catch (error) {
-		console.log(error);
+		handleError(error);
 	}
 };
 

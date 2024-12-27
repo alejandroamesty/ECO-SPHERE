@@ -28,6 +28,7 @@ import { onIonViewWillLeave } from '@ionic/vue';
 import { FILTER, PROFILE, COMMUNITY } from '../../utils/icons';
 import { RoundButton, ContextMenu, SearchInput, Breadcrumb, ProfileList } from '../../components/index';
 import { api } from '../../api/api';
+import { handleError } from '../../services/errorHandler';
 import { useGlobalStore } from '../../stores/globalStore';
 
 const router = useRouter();
@@ -127,7 +128,7 @@ const search = async () => {
 			filteredProfiles.value = profilesData;
 		}
 	} catch (error) {
-		console.log(error);
+		handleError(error);
 	}
 };
 

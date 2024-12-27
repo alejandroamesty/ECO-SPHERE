@@ -34,6 +34,7 @@ import { BACK } from '../../../utils/icons';
 import { RoundButton, TextInput, BigButton } from '../../../components/index';
 import { useRoute, useRouter } from 'vue-router';
 import { authApi } from '../../../api/api';
+import { handleError } from '../../../services/errorHandler';
 
 const route = useRoute();
 const router = useRouter();
@@ -56,7 +57,7 @@ const resetPassword = async () => {
 			.send({ email: route.query.email, key: Number(route.query.key), password: password.value });
 		router.push('/auth/login');
 	} catch (error) {
-		console.log(error);
+		handleError(error);
 	}
 };
 

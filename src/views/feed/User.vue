@@ -49,6 +49,7 @@ import { onIonViewWillEnter } from '@ionic/vue';
 import { ADD } from '../../utils/icons';
 import { Header, RoundButton, ToggleButton, Breadcrumb, Slider, Stats, Sphere, Post, FootprintList } from '../../components/index';
 import { api } from '../../api/api';
+import { handleError } from '../../services/errorHandler';
 import { useRouter, useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -127,7 +128,7 @@ const getUser = async () => {
 		followers.value = data.user.followers_nu;
 		following.value = data.user.following_nu;
 	} catch (error) {
-		console.log(error);
+		handleError(error);
 	}
 };
 
