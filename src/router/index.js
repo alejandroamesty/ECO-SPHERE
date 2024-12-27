@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
+import { useGlobalStore } from '../stores/globalStore';
 import { NavBar } from '../components/index';
 
 const routes = [
@@ -69,6 +70,10 @@ const routes = [
 		],
 	},
 	{
+		path: '/post',
+		component: () => import('@/views/feed/Post.vue'),
+	},
+	{
 		path: '/private-chat',
 		component: () => import('@/views/chats/PrivateChat.vue'),
 	},
@@ -89,6 +94,24 @@ const routes = [
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes,
+});
+
+/**
+ * Autentifica el usuario antes de acceder a las rutas protegidas.
+ */
+router.beforeEach((to, from, next) => {
+	const globalStore = useGlobalStore();
+
+	if (globalStore.isAuthenticated) {
+		if (to.path.startsWith('/auth')) {
+			return next('/tabs/feed');
+		}
+	} else {
+		if (!to.path.startsWith('/auth') && to.path !== '/auth/on-boarding') {
+			return next('/auth/on-boarding');
+		}
+	}
+	next();
 });
 
 export default router;
