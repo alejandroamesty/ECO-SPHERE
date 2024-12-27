@@ -68,3 +68,42 @@ ion-content {
 	right: 25px;
 	gap: 8px;
 }
+
+/* Estilos de los mensajes de alerta */
+
+ion-toast {
+	--border-radius: 100px;
+	--width: 330px;
+}
+
+ion-toast::part(message) {
+	font-family: 'Stolzl Regular';
+	font-size: 13px;
+	padding: 5px 0px !important;
+	color: #fff;
+}
+
+ion-toast::part(icon) {
+	padding-left: 5px;
+	color: #fff;
+}
+
+ion-toast.primary {
+	--background: #006769;
+}
+
+ion-toast.danger {
+	--background: #f4385a;
+}
+
+ion-toast.success {
+	--background: #40a578;
+}
+
+ion-toast.warning {
+	--background: #f4b400;
+}
+
+ion-toast.warning::part(message) {
+	color: #000;
+}
