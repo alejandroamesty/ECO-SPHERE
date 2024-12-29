@@ -35,6 +35,9 @@ export const CAR = `${VITE_SVG_ROUTE}/activities/car.svg`;
 export const ENERGY = `${VITE_SVG_ROUTE}/activities/energy.svg`;
 export const FOOD = `${VITE_SVG_ROUTE}/activities/food.svg`;
 export const CUSTOM = `${VITE_SVG_ROUTE}/activities/custom.svg`;
+export const REPORT = `${VITE_SVG_ROUTE}/map/report.svg`;
+export const EVENT = `${VITE_SVG_ROUTE}/map/event.svg`;
+export const MIXED = `${VITE_SVG_ROUTE}/map/mixed.svg`;
 
 export const iconsMap = {
 	HOME,
@@ -72,4 +75,7 @@ export const iconsMap = {
 	ENERGY,
 	FOOD,
 	CUSTOM,
+	REPORT,
+	EVENT,
+	MIXED,
 };
