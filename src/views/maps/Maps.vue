@@ -3,42 +3,36 @@
 		<Header ref="header">
 			<template #header-layout>
 				<div class="header-layout">
-					<span class="title-1">Reportes</span>
+					<span class="title-1">Mapa</span>
 					<div class="buttons">
 						<RoundButton :icon="ADD" :size="40" :onClick="handleClick" />
 					</div>
 				</div>
-				<ToggleButton v-model="toggleValue" leftLabel="Mapa" rightLabel="Lista" />
+				<ToggleButton v-model="toggleValue" leftLabel="Global" rightLabel="Lista" />
 			</template>
 		</Header>
 		<ion-content :fullscreen="true">
 			<Slider :currentIndex="toggleValue" @update:currentIndex="toggleValue = $event" :fullscreen="true">
 				<template #slide1>
 					<div class="leaf-map">
-						<LeafletMap :lat="lat" :lng="lng" :zoom="zoom" :shouldInitialize="viewEntered" :locations="locations" @onPinClick="openReport" />
+						<LeafletMap :lat="lat" :lng="lng" :zoom="zoom" :shouldInitialize="viewEntered" :reports="reportLocations" :events="eventLocations" @onPinClick="openLocation" />
 					</div>
 				</template>
 				<template #slide2>
 					<div class="content" :style="{ marginTop: headerHeight + 'px' }">
 						<div class="report-list">
+							<div class="section">
+								<div class="title">Lista de reportes</div>
+								<div class="subtitle">Administra los reportes que has creado</div>
+							</div>
 							<ReportList :reports="reports" />
 						</div>
 					</div>
 				</template>
 			</Slider>
 		</ion-content>
-		<ReportCard
-			ref="report"
-			:description="reportInfo.description"
-			:latitude="reportInfo.latitude"
-			:longitude="reportInfo.longitude"
-			:date="reportInfo.date"
-			:image="reportInfo.image"
-			:icon="reportInfo.icon"
-			:name="reportInfo.name"
-			:username="reportInfo.username"
-			:is-modal="true"
-		/>
+		<ContextMenu ref="createMenu" :options="menuOptions" @selected="selectCreation" />
+		<LocationList ref="list" :options="options" :is-modal="true" />
 		<Modal title="Crear reporte" :isOpen="showModal" :onClose="closeModal" :backButton="closeModal" :nextButton="insertReport">
 			<div class="modal-content">
 				<span class="label">Descripción</span>
@@ -56,6 +50,18 @@
 				</div>
 			</div>
 		</Modal>
+		<Modal title="Crear evento" :isOpen="showEventModal" :onClose="closeEventModal" :backButton="closeEventModal" :nextButton="insertEvent">
+			<div class="modal-content">
+				<span class="label">Comunidad</span>
+				<Select v-model="community" :options="communities" :neumorphism="false" />
+				<span class="label">Nombre</span>
+				<TextInput v-model="eventName" placeholder="Ingresa un nombre" :neumorphism="false" />
+				<span class="label">Descripción</span>
+				<TextInput v-model="eventDescription" placeholder="Ingresa una descripción" :neumorphism="false" :paragraph="true" />
+				<span class="label">Fecha</span>
+				<CalendarInput v-model="eventDate" :neumorphism="false" />
+			</div>
+		</Modal>
 	</ion-page>
 </template>
 
@@ -66,9 +72,12 @@ import { onIonViewWillEnter, onIonViewDidEnter, onIonViewWillLeave } from '@ioni
 import { Geolocation } from '@capacitor/geolocation';
 import { ADD, CAMERA, GALLERY, TRASH } from '../../utils/icons';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { Header, RoundButton, ToggleButton, LeafletMap, ReportCard, Slider, Modal, ReportList, TextInput, BoxButton } from '../../components/index';
+import { Header, RoundButton, ToggleButton, LeafletMap, ContextMenu, LocationList, Slider, Modal, ReportList, TextInput, BoxButton, EventCard, Select, CalendarInput } from '../../components/index';
+import { useGlobalStore } from '../../stores/globalStore';
 import { api, fileUploaderApi, fileReaderApi } from '../../api/api';
 import { handleError } from '../../services/errorHandler';
+
+const store = useGlobalStore();
 
 const lat = ref(0);
 const lng = ref(0);
@@ -81,23 +90,29 @@ const reportInfo = ref({});
 
 const headerHeight = ref(0);
 const showModal = ref(false);
+const showEventModal = ref(false);
 
 const reportDescription = ref('');
 const imageFile = ref(null);
 
+const list = ref(null);
+const options = ref([]);
 const locations = ref([]);
+const reportLocations = ref([]);
+const eventLocations = ref([]);
+const reports = ref([]);
 
-const reports = [
-	{
-		description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec ultricies.',
-		latitude: '19.432',
-		longitude: '99.13',
-		date: '12/12/2021',
-		icon: 'https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png',
-		name: 'Alejandro Ávila',
-		username: '@alejandroamesty',
-	},
+const createMenu = ref(null);
+const menuOptions = [
+	{ label: 'Reporte', icon: ADD },
+	{ label: 'Evento', icon: ADD },
 ];
+
+const communities = ref([]);
+const community = ref('');
+const eventName = ref('');
+const eventDescription = ref('');
+const eventDate = ref('');
 
 /**
  * Obtiene la posición actual del usuario y la muestra en el mapa.
@@ -113,7 +128,9 @@ const printCurrentPosition = async () => {
  */
 onIonViewDidEnter(async () => {
 	await printCurrentPosition();
-	await getReports();
+	await getLocations();
+	await getUserReports();
+	await getCommunities();
 	viewEntered.value = true;
 });
 
@@ -129,7 +146,16 @@ onIonViewWillLeave(() => {
  */
 const handleClick = (event) => {
 	event.stopPropagation();
-	showModal.value = true;
+	if (createMenu.value.isVisible) {
+		createMenu.value.hideMenu();
+		return;
+	}
+
+	const rect = event.currentTarget.getBoundingClientRect();
+	const menuWidth = 160;
+	const x = window.innerWidth - menuWidth + 10;
+	const y = rect.bottom + 10;
+	createMenu.value.showMenu({ x, y });
 };
 
 /**
@@ -137,6 +163,24 @@ const handleClick = (event) => {
  */
 const closeModal = () => {
 	showModal.value = false;
+};
+
+/**
+ * Cierra el modal de eventos.
+ */
+const closeEventModal = () => {
+	showEventModal.value = false;
+};
+
+/**
+ * Filtra la búsqueda.
+ */
+const selectCreation = (option) => {
+	if (option.label === 'Reporte') {
+		showModal.value = true;
+	} else if (option.label === 'Evento') {
+		showEventModal.value = true;
+	}
 };
 
 /**
@@ -191,14 +235,62 @@ const openGallery = async () => {
 /**
  * Realiza una solicitud de red para obtener los reportes.
  */
-const getReports = async () => {
+const getLocations = async () => {
 	try {
-		const { data } = await api.setMethod('get').setEndpoint('reports').setParams({ x: lat.value, y: lng.value }).send();
-		locations.value = data.map((report) => ({
+		const [reportsResponse, eventsResponse] = await Promise.all([api.setMethod('get').setEndpoint('reports').setParams({ x: lat.value, y: lng.value, radius: 2 }).send(), api.setMethod('get').setEndpoint('events').send()]);
+
+		const reportsData = reportsResponse.data;
+		const eventsData = eventsResponse.data;
+
+		locations.value = [...reportsData, ...eventsData];
+
+		reportLocations.value = reportsData.map((report) => ({
 			value: report.id,
 			lat: report.x,
 			lng: report.y,
 			popupText: report.caption,
+		}));
+
+		eventLocations.value = eventsData.map((event) => ({
+			value: event.id,
+			lat: event.event_location.x,
+			lng: event.event_location.y,
+			popupText: event.name,
+		}));
+	} catch (error) {
+		handleError(error);
+	}
+};
+
+const getUserReports = async () => {
+	try {
+		const { data } = await api.setMethod('get').setEndpoint(`users/${store.user.id}`).send();
+
+		console.log(data);
+
+		reports.value = data.posts
+			.filter((post) => post.caption.toLowerCase() === 'reporte')
+			.map((report) => ({
+				description: report.caption,
+				latitude: parseFloat(report.latitude).toFixed(2),
+				longitude: parseFloat(report.longitude).toFixed(2),
+				date: `${String(new Date(report.post_date).getDate()).padStart(2, '0')}/${String(new Date(report.post_date).getMonth() + 1).padStart(2, '0')}/${new Date(report.post_date).getFullYear()}`,
+				icon: report.images?.[0] || null,
+				name: `${data.user.fname} ${data.user.lname}`,
+				username: `@${data.user.username.toLowerCase()}`,
+				image: report.images?.[0] ? `${fileReaderApi}${report.images[0]}` : null,
+			}));
+	} catch (error) {
+		handleError(error);
+	}
+};
+
+const getCommunities = async () => {
+	try {
+		const { data } = await api.setMethod('get').setEndpoint('communities').send();
+		communities.value = data.map((community) => ({
+			value: community.id,
+			label: community.name,
 		}));
 	} catch (error) {
 		handleError(error);
@@ -206,34 +298,48 @@ const getReports = async () => {
 };
 
 /**
- * Realiza una solicitud de red para obtener la información de un reporte.
+ * Realiza una solicitud de red para obtener la información de un reporte o evento.
  */
-const openReport = async (id) => {
-	try {
-		const { data } = await api.setMethod('get').setEndpoint(`reports/${id}`).send();
+const openLocation = async (pin) => {
+	options.value = [];
 
-		const latitude = parseFloat(data.x).toFixed(2);
-		const longitude = parseFloat(data.y).toFixed(2);
+	const eventIds = pin.value.events;
+	const reportIds = pin.value.reports;
 
-		const date = new Date(data.post_date);
-		const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+	reportIds.forEach((reportId) => {
+		const report = locations.value.find((location) => location.id === reportId);
+		if (report) {
+			options.value.push({
+				value: report.id,
+				type: 'report',
+				description: report.content,
+				latitude: parseFloat(report.x).toFixed(2),
+				longitude: parseFloat(report.y).toFixed(2),
+				date: new Date(report.post_date).toLocaleDateString(),
+				name: report.fname + ' ' + report.lname,
+				username: '@' + report.username,
+				image: report.images ? fileReaderApi + report.images[0] : null,
+			});
+		}
+	});
 
-		const image = data.images[0];
+	eventIds.forEach((eventId) => {
+		const event = locations.value.find((location) => location.id === eventId);
+		if (event) {
+			options.value.push({
+				value: event.id,
+				type: 'event',
+				description: event.description,
+				latitude: parseFloat(event.event_location.x).toFixed(2),
+				longitude: parseFloat(event.event_location.y).toFixed(2),
+				date: new Date(event.event_date).toLocaleDateString(),
+				// name: 'Undefined',
+				username: '@' + event.username,
+			});
+		}
+	});
 
-		reportInfo.value = {
-			description: data.content,
-			latitude,
-			longitude,
-			date: formattedDate,
-			name: `${data.fname} ${data.lname}`,
-			username: `@${data.username.toLowerCase()}`,
-			image: `${fileReaderApi}${image}`,
-			icon: data.image,
-		};
-		report.value.showReportCard();
-	} catch (error) {
-		handleError(error);
-	}
+	list.value.showLocationList();
 };
 
 /**
@@ -267,7 +373,40 @@ const insertReport = async () => {
 			});
 
 		closeModal();
-		await getReports();
+		await getLocations();
+	} catch (error) {
+		handleError(error);
+	}
+};
+
+/**
+ * Realiza una solicitud de red para crear un evento.
+ */
+const insertEvent = async () => {
+	if (!lat.value || !lng.value) {
+		await printCurrentPosition();
+	}
+
+	if (!eventName.value || !eventDescription.value || !eventDate.value) return;
+
+	const communityId = community.value.value;
+
+	try {
+		await api
+			.setMethod('post')
+			.setEndpoint(`events/${communityId}`)
+			.send({
+				name: eventName.value,
+				description: eventDescription.value,
+				event_date: new Date(eventDate.value).toISOString(),
+				event_location: {
+					x: lat.value,
+					y: lng.value,
+				},
+			});
+
+		closeEventModal();
+		await getLocations();
 	} catch (error) {
 		handleError(error);
 	}
@@ -286,10 +425,13 @@ const insertReport = async () => {
 	display: flex;
 	justify-content: center;
 	overflow: hidden;
-	padding: 30px;
+	padding-top: 30px;
 }
 
 .report-list {
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
 	width: 100%;
 	margin-bottom: 70px;
 }
@@ -350,5 +492,31 @@ const insertReport = async () => {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+}
+
+.section {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+}
+
+.title {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	font-family: 'Stolzl Medium';
+	font-size: 16px;
+	color: #292b2e;
+}
+
+.subtitle {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	font-family: 'Stolzl Regular';
+	font-size: 13px;
+	color: #a0a0a0;
 }
 </style>
