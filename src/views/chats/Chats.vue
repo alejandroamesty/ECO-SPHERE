@@ -6,7 +6,6 @@
 					<span class="title-1">Chats</span>
 					<div class="buttons">
 						<RoundButton :icon="ADD" :size="40" :onClick="openModal" />
-						<RoundButton :icon="SEARCH" :size="40" />
 					</div>
 				</div>
 				<ToggleButton v-model="toggleValue" leftLabel="Amigos" rightLabel="Comunidades" />
@@ -51,12 +50,16 @@
 
 <script setup>
 import { ref } from 'vue';
-import { IonPage, IonContent } from '@ionic/vue';
-import { ADD, SEARCH, CIRCLE_ADD } from '../../utils/icons';
+import { IonPage, IonContent, onIonViewWillEnter } from '@ionic/vue';
+import { ADD, CIRCLE_ADD } from '../../utils/icons';
 import { Header, RoundButton, ToggleButton, ChatList, Slider, Modal, TextInput, CheckList } from '../../components/index';
 import { useRouter } from 'vue-router';
+import { useGlobalStore } from '../../stores/globalStore';
+import { api } from '../../api/api';
+import { handleError } from '../../services/errorHandler';
 
 const router = useRouter();
+const { user } = useGlobalStore();
 
 const toggleValue = ref(false);
 const showModal = ref(false);
@@ -80,12 +83,8 @@ const chatData = [
 	},
 ];
 
-const options = ref([
-	{ value: 1, option: 'Option', checked: false },
-	{ value: 2, option: 'Option', checked: false },
-	{ value: 3, option: 'Apple', checked: false },
-	{ value: 4, option: 'Banana', checked: false },
-]);
+const options = ref([]);
+const members = ref([]);
 
 /**
  * Abre la vista de chat privado.
@@ -93,6 +92,22 @@ const options = ref([
 const handleChatClick = (chat) => {
 	console.log('Chat clicked:', chat);
 	router.push('/private-chat');
+};
+
+const getFollowing = async () => {
+	try {
+		const { data } = await api.setMethod('get').setEndpoint(`followers/following/${user.id}`).send();
+
+		options.value = data.following.map((option) => ({
+			value: option.id,
+			option: `${option.fname} ${option.lname}`,
+			checked: false,
+		}));
+
+		console.log('Following:', options.value);
+	} catch (error) {
+		handleError(error);
+	}
 };
 
 /**
@@ -113,13 +128,15 @@ const closeModal = () => {
  * Maneja las opciones chequeadas.
  */
 const handleCheckedOptions = (checkedOptions) => {
-	console.log('Opciones chequeadas:', checkedOptions);
+	members.value = checkedOptions;
 };
 
 /**
  * Avanza al siguiente paso del modal.
  */
 const nextStep = () => {
+	if (members.value.length === 0) return;
+
 	if (currentStep.value < 2) {
 		currentStep.value++;
 		triggerAnimation();
@@ -157,6 +174,10 @@ const triggerAnimation = () => {
 		isAnimating.value = false;
 	}, 500);
 };
+
+onIonViewWillEnter(() => {
+	getFollowing();
+});
 </script>
 
 <style scoped>
