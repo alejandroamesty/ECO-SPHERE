@@ -11,6 +11,7 @@
 			:likes="post.likes"
 			:comments="post.comments"
 			:liked="post.liked"
+			:images="post.images"
 			@update:liked="(value) => handleLikedChange(index, value)"
 			:onClick="handlePostClick"
 		/>
@@ -48,5 +49,6 @@ function handlePostClick(event) {
 	display: flex;
 	flex-direction: column;
 	gap: 22px;
+	margin-bottom: 70px;
 }
 </style>
