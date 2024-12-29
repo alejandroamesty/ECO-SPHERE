@@ -102,7 +102,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 	const globalStore = useGlobalStore();
 
-	if (globalStore.isAuthenticated) {
+	if (globalStore.isAuthenticated()) {
 		if (to.path.startsWith('/auth')) {
 			return next('/tabs/feed');
 		}
