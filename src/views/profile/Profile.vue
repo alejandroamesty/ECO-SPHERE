@@ -13,7 +13,7 @@
 								</div>
 							</div>
 							<div class="bottom-layout">
-								<Stats icon="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png" :name="name" :username="username" :followers="followers" :following="followers" reduced="4.8 tons" />
+								<Stats icon="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png" :name="name" :username="username" :followers="followers" :following="following" reduced="4.8 tons" />
 								<ToggleButton v-model="toggleValue" leftLabel="MySphere" rightLabel="Publicaciones" />
 							</div>
 						</template>
