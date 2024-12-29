@@ -35,12 +35,13 @@
 			</div>
 		</div>
 	</Teleport>
-	<div v-else class="card-container neumorphism">
+	<div v-else class="card-container" :class="{ neumorphism: neumorphism }">
 		<div class="report-image">
 			<div class="report-badge">
 				<Badge text="REPORTE" :icon="ASTERISK" />
 			</div>
-			<img :src="image" alt="Report Image" />
+			<div v-if="isImageLoading" class="skeleton-image"></div>
+			<img v-else :src="image" alt="Report Image" @load="handleImageLoad" />
 		</div>
 		<div class="report-container">
 			<div class="report-description">{{ description }}</div>
@@ -85,11 +86,20 @@ const props = defineProps({
 	name: { type: String, required: true },
 	username: { type: String, required: true },
 	isModal: { type: Boolean, default: false },
+	neumorphism: { type: Boolean, default: true },
 });
 
 const { image, description, latitude, longitude, date, icon, name, username, isModal } = toRefs(props);
 
 const isVisible = ref(false);
+const isImageLoading = ref(false);
+
+/**
+ * Maneja el evento cuando la imagen ha cargado.
+ */
+const handleImageLoad = () => {
+	isImageLoading.value = false;
+};
 
 /**
  * Muestra la tarjeta de reporte.
@@ -124,6 +134,7 @@ defineExpose({
 .card-container {
 	display: flex;
 	flex-direction: column;
+	position: relative;
 	background-color: #ffffff;
 	border-radius: 30px;
 }
@@ -254,6 +265,23 @@ defineExpose({
 	font-family: 'Stolzl Regular';
 	font-size: 11px;
 	color: #949799;
+}
+
+.skeleton-image {
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+	background-size: 200% 100%;
+	animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+	0% {
+		background-position: 200% 0;
+	}
+	100% {
+		background-position: -200% 0;
+	}
 }
 
 @keyframes slideUp {
