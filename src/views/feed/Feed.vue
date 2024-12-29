@@ -15,12 +15,12 @@
 			<Slider :currentIndex="toggleValue" @update:currentIndex="toggleValue = $event">
 				<template #slide1>
 					<div class="discover">
-						<PostList :posts="posts" />
+						<PostList :posts="popularPosts" :clicked="openPost" />
 					</div>
 				</template>
 				<template #slide2>
 					<div class="following">
-						<PostList :posts="posts" />
+						<PostList :posts="followingPosts" />
 					</div>
 				</template>
 			</Slider>
@@ -31,29 +31,18 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { IonPage, IonContent } from '@ionic/vue';
+import { IonPage, IonContent, onIonViewWillEnter } from '@ionic/vue';
 import { SEARCH } from '../../utils/icons';
 import { Header, RoundButton, ToggleButton, PostList, Slider } from '../../components/index';
+import { api, fileReaderApi } from '../../api/api';
+import { handleError } from '../../services/errorHandler';
 
 const toggleValue = ref(false);
 const router = useRouter();
 
-const posts = ref([
-	{
-		content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et sapien at purus.',
-		icon: 'https://via.placeholder.com/48',
-		name: 'John Doe',
-		username: '@johndoe',
-		liked: true,
-	},
-	{
-		content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et sapien at purus.',
-		icon: 'https://via.placeholder.com/48',
-		name: 'Jane Doe',
-		username: '@janedoe',
-		liked: false,
-	},
-]);
+const popularPosts = ref([]);
+const followingPosts = ref([]);
+const page = ref(1);
 
 /**
  * Navega a la vista de búsqueda.
@@ -61,6 +50,70 @@ const posts = ref([
 const handleSearch = () => {
 	router.push('/tabs/feed/search');
 };
+
+/**
+ * Abre la publicación.
+ */
+const openPost = (id) => {
+	router.push({ path: '/post', query: id });
+};
+
+/**
+ * Recorre los datos de las publicaciones y los procesa.
+ */
+const processPosts = (data) => {
+	return data
+		.filter((post) => post.caption !== 'REPORTE')
+		.map((post) => {
+			const images = post.images && post.images.every((image) => image === null) ? [] : post.images.map((image) => (image ? `${fileReaderApi}${image}` : ''));
+
+			const postData = {
+				value: post.id,
+				content: post.caption,
+				icon: post.image,
+				name: `${post.fname} ${post.lname}`,
+				username: `@${post.username.toLowerCase()}`,
+				likes: post.likes,
+				comments: post.comments,
+				liked: false,
+			};
+
+			if (images.length > 0) {
+				postData.images = images;
+			}
+
+			return postData;
+		});
+};
+
+/**
+ * Realiza una solicitud de red para obtener las publicaciones populares.
+ */
+const getPopularPosts = async () => {
+	try {
+		const { data } = await api.setMethod('get').setEndpoint(`posts/popular?page=${page.value}`).send();
+		popularPosts.value = processPosts(data);
+	} catch (error) {
+		handleError(error);
+	}
+};
+
+/**
+ * Realiza una solicitud de red para obtener las publicaciones de los seguidos.
+ */
+const getFollowingPosts = async () => {
+	try {
+		const { data } = await api.setMethod('get').setEndpoint(`posts/following?page=${page.value}`).send();
+		followingPosts.value = processPosts(data);
+	} catch (error) {
+		handleError(error);
+	}
+};
+
+onIonViewWillEnter(() => {
+	getPopularPosts();
+	getFollowingPosts();
+});
 </script>
 
 <style scoped>
