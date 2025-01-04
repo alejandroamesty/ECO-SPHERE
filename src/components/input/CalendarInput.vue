@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 
 const props = defineProps({
 	modelValue: {
@@ -24,6 +24,11 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 const value = ref(props.modelValue);
+
+onMounted(() => {
+	const today = new Date().toISOString().split('T')[0]; // Formats the date as YYYY-MM-DD
+	value.value = today;
+});
 
 watch(value, (newValue) => {
 	emit('update:modelValue', newValue);
@@ -62,7 +67,7 @@ const handleInput = (event) => {
 	background: none;
 	border: none;
 	outline: none;
-	appearance: none; /* Elimina el estilo de los navegadores para el input tipo date */
+	appearance: none;
 }
 
 .calendar-input::placeholder {

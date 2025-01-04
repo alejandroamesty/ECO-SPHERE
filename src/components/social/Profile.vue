@@ -77,7 +77,7 @@ const handleClick = () => {
 .name {
 	display: flex;
 	align-items: center;
-	width: 114px;
+	/* width: 114px; */
 	height: 16px;
 	top: 0;
 	font-family: 'Stolzl Medium';
@@ -88,7 +88,7 @@ const handleClick = () => {
 .username {
 	display: flex;
 	align-items: center;
-	width: 129px;
+	/* width: 129px; */
 	height: 16px;
 	font-family: 'Stolzl Regular';
 	font-size: 11px;

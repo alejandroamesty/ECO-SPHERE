@@ -12,14 +12,14 @@
 		</div>
 		<div v-if="images.length > 0" class="carousel-container">
 			<div class="carousel-button prev" @click="prevImage" :class="{ disabled: currentImage === 0 }">
-				<img :src="COMMENT" alt="previous image" />
+				<img :src="ARROW_LEFT" alt="previous image" />
 			</div>
 			<div class="carousel-image-container">
 				<div v-if="!imageLoaded" class="skeleton-loader"></div>
 				<img :src="images[currentImage]" :class="{ loading: !imageLoaded }" alt="carousel image" class="carousel-image" @load="handleImageLoad" />
 			</div>
 			<div class="carousel-button next" @click="nextImage" :class="{ disabled: currentImage === images.length - 1 }">
-				<img :src="COMMENT" alt="next image" />
+				<img :src="ARROW_LEFT" alt="next image" />
 			</div>
 		</div>
 		<div class="interactions-container">
@@ -32,7 +32,7 @@
 <script setup>
 import { ref, toRefs } from 'vue';
 import { Badge } from '../index';
-import { COMMENT } from '../../utils/icons';
+import { COMMENT, ARROW_LEFT } from '../../utils/icons';
 
 const props = defineProps({
 	value: { type: Number, required: true },
@@ -155,7 +155,6 @@ const handleClick = () => {
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	height: 100%;
 }
 
 .content-text {
@@ -206,11 +205,10 @@ const handleClick = () => {
 	justify-content: center;
 	align-items: center;
 	position: absolute;
+	height: 100%;
 	top: 50%;
 	transform: translateY(-50%);
-	background-color: rgba(0, 0, 0, 0.5);
 	padding: 10px;
-	border-radius: 50%;
 	cursor: pointer;
 	opacity: 1;
 	transition: opacity 0.3s;
@@ -222,12 +220,18 @@ const handleClick = () => {
 }
 
 .carousel-button.prev {
-	left: 10px;
+	left: 0px;
 	z-index: 1;
+	border-radius: 20px 0 0 20px;
 }
 
 .carousel-button.next {
-	right: 10px;
+	right: 0px;
+	border-radius: 0 20px 20px 0;
+}
+
+.carousel-button.next img {
+	transform: rotate(180deg);
 }
 
 .interactions-container {

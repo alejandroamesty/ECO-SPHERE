@@ -1,9 +1,12 @@
 <template>
 	<div class="custom-select" :tabindex="tabindex" @blur="open = false">
-		<div class="selected" :class="{ open: open }" @click="open = !open">
+		<div class="selected" :class="{ border: open }" @click="open = !open">
 			{{ selected.label }}
+			<div class="dropdown" :class="{ open: open }">
+				<img :src="ARROW_LEFT" alt="" />
+			</div>
 		</div>
-		<div class="items" :class="{ selectHide: !open }">
+		<div class="items" :class="{ open: open }" :style="{ height: open ? `${options.length * 55}px` : '0px' }">
 			<div v-for="(option, i) of options" :key="i" @click="selectOption(option)">
 				{{ option.label }}
 			</div>
@@ -12,7 +15,8 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
+import { ARROW_LEFT } from '../../utils/icons';
 
 const props = defineProps({
 	options: {
@@ -38,6 +42,23 @@ const open = ref(false);
 watch(selected, (newValue) => {
 	emit('update:modelValue', newValue);
 });
+
+onMounted(() => {
+	console.log(props.options);
+	console.log(props.modelValue);
+	if (!props.modelValue && props.options.length > 0) {
+		selected.value = props.options[0];
+	}
+});
+
+watch(
+	() => props.options,
+	(newOptions) => {
+		if (!props.modelValue && newOptions.length > 0) {
+			selected.value = newOptions[0];
+		}
+	},
+);
 
 const selectOption = (option) => {
 	selected.value = option;
@@ -72,46 +93,65 @@ const selectOption = (option) => {
 	font-size: 13px;
 }
 
-.custom-select .selected:after {
-	position: absolute;
-	content: '';
-	top: 50%;
-	right: 1em;
-	width: 0;
-	height: 0;
-	border: 5px solid transparent;
-	border-color: #292b2e transparent transparent transparent;
-	transform: translateY(-50%);
+.custom-select .selected .dropdown {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.custom-select .selected.border {
+	border-radius: 32px;
+}
+
+.custom-select .selected img {
+	width: 16px;
+	height: 16px;
+	transform: rotate(-90deg);
+	transition: transform 0.3s;
+	filter: invert(1) brightness(255%) contrast(40%) grayscale(0);
+}
+
+.custom-select .selected.open img {
+	transform: rotate(90deg);
 }
 
 .custom-select .items {
 	color: #292b2e;
-	border-radius: 10px;
+	border-radius: 32px;
 	overflow: hidden;
-	position: absolute;
+	position: relative;
 	width: 100%;
 	background-color: #edeef0;
+	top: 10px;
 	left: 0;
 	z-index: 1;
 	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-	max-height: 150px;
+	/* box-shadow:
+		-5px 5px 10px rgba(213, 214, 216, 0.2),
+		5px -5px 10px rgba(213, 214, 216, 0.2),
+		-5px -5px 10px rgba(255, 255, 255, 0.9),
+		5px 5px 13px rgba(213, 214, 216, 0.9),
+		inset 1px 1px 2px rgba(255, 255, 255, 0.3),
+		inset -1px -1px 2px rgba(213, 214, 216, 0.5); */
+	height: 0;
 	overflow-y: auto;
+	transition: height 0.3s ease-in-out;
 }
 
 .custom-select .items div {
 	color: #292b2e;
-	padding-left: 1em;
-	padding-right: 1em;
+	padding-left: 17px;
+	padding-right: 17px;
 	cursor: pointer;
 	user-select: none;
-	height: 40px;
+	height: 55px;
 	display: flex;
 	align-items: center;
 	font-family: 'Stolzl Regular';
 	font-size: 13px;
 }
 
-.selectHide {
-	display: none;
+.custom-select .items div:hover {
+	background-color: #d5d6d850;
 }
 </style>

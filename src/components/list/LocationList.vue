@@ -21,14 +21,24 @@
 					/>
 					<EventCard v-if="option.type === 'event'" :description="option.description" :latitude="option.latitude" :longitude="option.longitude" :date="option.date" :icon="option.icon" :name="option.name" :username="option.username" />
 				</div>
+				<div class="suggestion" v-if="onlyReports" @click="handleSuggestionClick">
+					<div class="icon">
+						<img :src="CHECK" alt="Crear" />
+					</div>
+					<div class="text">
+						<div class="title">Crear un nuevo evento</div>
+						<div class="subtitle">Invita a tu comunidad</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</Teleport>
 </template>
 
 <script setup>
-import { defineProps, ref, toRefs } from 'vue';
+import { defineProps, defineEmits, ref, toRefs, computed } from 'vue';
 import { ReportCard, EventCard, Breadcrumb } from '..';
+import { CHECK } from '../../utils/icons';
 
 const props = defineProps({
 	options: {
@@ -41,8 +51,17 @@ const props = defineProps({
 	},
 });
 
+const emit = defineEmits(['suggestionClick']);
+
 const { options, isModal } = toRefs(props);
 const isVisible = ref(false);
+
+/**
+ * Comprobar si solo hay reportes en la lista.
+ */
+const onlyReports = computed(() => {
+	return options.value.every((option) => option.type === 'report');
+});
 
 /**
  * Mostrar la lista de localizaciones en el modal.
@@ -56,6 +75,18 @@ const showLocationList = () => {
  */
 const handleOutsideClick = () => {
 	isVisible.value = false;
+};
+
+/**
+ * Manejar el clic en el contenedor de sugerencia.
+ */
+const handleSuggestionClick = () => {
+	const coordinates = options.value.map((option) => ({
+		latitude: option.latitude,
+		longitude: option.longitude,
+	}));
+	handleOutsideClick();
+	emit('suggestionClick', coordinates);
 };
 
 defineExpose({
@@ -98,6 +129,7 @@ defineExpose({
 	overflow: auto;
 	scrollbar-width: none;
 	padding-bottom: 20px;
+	gap: 20px;
 	animation: slideUp 0.5s forwards;
 }
 
@@ -108,7 +140,59 @@ defineExpose({
 .card-item {
 	display: flex;
 	justify-content: center;
-	padding: 8px 0;
+	/* padding: 8px 0; */
+}
+
+.suggestion {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
+	min-height: 80px;
+	border-radius: 30px;
+	gap: 20px;
+	padding: 20px;
+	background: #ffffff;
+}
+
+.icon {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 40px;
+	height: 40px;
+	background: #edeef0;
+	border-radius: 50%;
+}
+
+.icon img {
+	width: 18px;
+	height: 18px;
+	filter: invert(1) brightness(255%) contrast(100%) grayscale(0);
+}
+
+.text {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.title {
+	height: 17px;
+	font-family: 'Stolzl Medium';
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+	color: #292b2e;
+}
+
+.subtitle {
+	height: 17px;
+	font-family: 'Stolzl Regular';
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+	color: #949799;
 }
 
 @keyframes slideUp {

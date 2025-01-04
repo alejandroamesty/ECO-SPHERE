@@ -1,5 +1,5 @@
 <template>
-	<div class="text-input-container" :class="{ neumorphism: neumorphism, paragraph: paragraph }">
+	<div class="text-input-container" :class="{ neumorphism: neumorphism, paragraph: paragraph }" :style="{ height: height }">
 		<template v-if="paragraph">
 			<textarea class="text-input paragraph" :placeholder="placeholder" v-model="value" @input="handleInput"></textarea>
 		</template>
@@ -28,6 +28,10 @@ const props = defineProps({
 	paragraph: {
 		type: Boolean,
 		default: false,
+	},
+	height: {
+		type: String,
+		default: '55px',
 	},
 });
 

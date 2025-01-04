@@ -18,6 +18,7 @@ const { lat, lng, zoom, shouldInitialize, reports, events } = defineProps({
 
 const emit = defineEmits(['onPinClick']);
 const map = ref(null);
+let currentMarker = null;
 
 /**
  * Procesa las ubicaciones para determinar los tipos de marcadores y agrupar valores.
@@ -83,7 +84,7 @@ const initMap = () => {
 	// 	.addTo(map.value)
 	// 	.bindPopup('Estás aquí.')
 	// 	.openPopup();
-
+	
 	markers.value.forEach((markerData) => {
 		const icon = L.icon({
 			iconUrl: markerData.type === 'report' ? REPORT : markerData.type === 'event' ? EVENT : MIXED,
@@ -104,7 +105,42 @@ const initMap = () => {
 			emit('onPinClick', { ...markerData, value: formattedValue });
 		});
 	});
+
+	map.value.on('click', (e) => {
+		const { lat, lng } = e.latlng;
+
+		if (currentMarker) {
+			map.value.removeLayer(currentMarker);
+		}
+
+		const icon = L.icon({
+			iconUrl: EVENT,
+			iconSize: [32, 32],
+			iconAnchor: [16, 32],
+			popupAnchor: [0, -32],
+		});
+
+		currentMarker = L.marker([lat, lng], { icon }).addTo(map.value);
+
+		currentMarker.bindPopup('NUEVO').openPopup();
+
+		emit('onPinClick', { lat, lng, type: 'custom', value: {} });
+	});
 };
+
+/**
+ * Elimina el marcador personalizado si está presente.
+ */
+const removeCustomMarker = () => {
+	if (currentMarker) {
+		map.value.removeLayer(currentMarker);
+		currentMarker = null;
+	}
+};
+
+defineExpose({
+	removeCustomMarker,
+});
 
 /**
  * Observa si se debe inicializar el mapa.
