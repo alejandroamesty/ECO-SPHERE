@@ -40,6 +40,7 @@ export { default as Sphere } from './social/Sphere.vue';
 export { default as Message } from './social/Message.vue';
 export { default as GraphicCard } from './social/GraphicCard.vue';
 export { default as EventCard } from './social/EventCard.vue';
+export { default as Comment } from './social/Comment.vue';
 
 /* Lists */
 
@@ -55,6 +56,7 @@ export { default as ActivityList } from './list/ActivityList.vue';
 export { default as CategoryBoxes } from './list/CategoryBoxes.vue';
 export { default as LocationList } from './list/LocationList.vue';
 export { default as EventList } from './list/EventList.vue';
+export { default as MemberList } from './list/MemberList.vue';
 
 /* General */
 
@@ -64,3 +66,4 @@ export { default as ProgressBar } from './general/ProgressBar.vue';
 export { default as GraphicBar } from './general/GraphicBar.vue';
 export { default as Modal } from './general/Modal.vue';
 export { default as Select } from './general/Select.vue';
+export { default as Carousel } from './general/Carousel.vue';
